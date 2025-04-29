@@ -5,11 +5,8 @@ import Navbar from './Navbar';
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen bg-black text-white flex flex-col">
-      {/* Navbar */}
-      <Navbar />
-      
-      {/* Main headline */}
-      <div className="flex-1 flex flex-col justify-center items-center text-center px-4">
+      {/* Main headline - adjusted for fixed navbar */}
+      <div className="flex-1 flex flex-col justify-center items-center text-center px-4 pt-16">
         <h1 className="font-sans font-semibold text-[32px] md:text-[56px] leading-[1.1] tracking-[-0.02em] max-w-4xl">
           <span className="block">Vercel's one-day</span>
           <span className="block">event for developers</span>

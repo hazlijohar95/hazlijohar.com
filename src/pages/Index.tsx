@@ -2,6 +2,7 @@
 import React from 'react';
 import HeroSection from '../components/HeroSection';
 import ExpectSection from '../components/ExpectSection';
+import FeaturedSpeakers from '../components/FeaturedSpeakers';
 import Navbar from '../components/Navbar';
 
 const Index = () => {
@@ -11,6 +12,7 @@ const Index = () => {
       <Navbar />
       <HeroSection />
       <ExpectSection />
+      <FeaturedSpeakers />
     </div>
   );
 };

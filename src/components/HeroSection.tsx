@@ -5,8 +5,8 @@ import Navbar from './Navbar';
 const HeroSection = () => {
   return (
     <section className="relative min-h-screen bg-black text-white flex flex-col">
-      {/* Navbar */}
-      <Navbar />
+      {/* Navbar is now fixed, so we add padding to prevent content from hiding underneath */}
+      <div className="pt-20"></div>
       
       {/* Main headline */}
       <div className="flex-1 flex flex-col justify-center items-center text-center px-4">

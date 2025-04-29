@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { MessageSquare, Users, Wrench, Calendar } from 'lucide-react';
+import { MessageSquare, Users, Wrench, Cube } from 'lucide-react';
 
 interface CardProps {
   icon: React.ReactNode;
@@ -51,7 +51,7 @@ const ExpectSection = () => {
                 description="Bring your laptop for live sessions led by the creators of Next.js, v0, and Vercel."
               />
               <Card 
-                icon={<Calendar className="stroke-[1.5]" />}
+                icon={<Cube className="stroke-[1.5]" />}
                 title="Interactive experiences"
                 description="Engage with our sponsors and try the v0 booth to build an app live."
               />

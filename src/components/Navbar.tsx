@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useScrollObserver } from '../hooks/useScrollObserver';
@@ -114,7 +113,7 @@ const Navbar = () => {
                   <img 
                     src="/public/lovable-uploads/f757621e-0869-4b8d-997f-982e149145c6.png" 
                     alt="Hazli Johar & Co. Logo" 
-                    className="h-8"
+                    className="h-8 mix-blend-lighten"
                   />
                 </div>
                 <button onClick={() => setIsMenuOpen(false)} aria-label="Close menu">
@@ -150,7 +149,7 @@ const Navbar = () => {
           <img 
             src="/public/lovable-uploads/f757621e-0869-4b8d-997f-982e149145c6.png" 
             alt="Hazli Johar & Co. Logo" 
-            className="h-8 mr-3"
+            className="h-8 mr-3 mix-blend-lighten"
           />
           {isDashboard && <span className="text-sm font-medium ml-3 opacity-70">Client Portal</span>}
         </Link>

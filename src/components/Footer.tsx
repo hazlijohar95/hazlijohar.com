@@ -9,7 +9,7 @@ const Footer = () => {
           <img 
             src="/public/lovable-uploads/f757621e-0869-4b8d-997f-982e149145c6.png" 
             alt="Hazli Johar & Co. Logo" 
-            className="h-16"
+            className="h-16 mix-blend-lighten"
           />
         </div>
         <h1 className="text-3xl font-semibold mb-6">

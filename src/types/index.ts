@@ -29,6 +29,7 @@ export interface BackgroundPathsProps {
   subtitle?: string;
   ctaText?: string;
   ctaLink?: string;
+  onBookCall?: () => void;
 }
 
 export interface FormProps {

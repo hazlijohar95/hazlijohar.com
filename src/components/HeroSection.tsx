@@ -39,7 +39,10 @@ const HeroSection = () => {
 
   return (
     <div className="relative">
-      <BackgroundPaths {...heroProps} />
+      <BackgroundPaths 
+        {...heroProps}
+        onBookCall={handleOpenCalendar}
+      />
       
       {/* Cal.com Calendar Modal */}
       {showCalendar && (

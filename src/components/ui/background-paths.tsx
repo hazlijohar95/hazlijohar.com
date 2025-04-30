@@ -4,6 +4,7 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+
 function FloatingPaths({
   position
 }: {
@@ -47,6 +48,43 @@ export function BackgroundPaths({
   ctaLink?: string;
 }) {
   const words = title.split(" ");
+
+  // Access the parent component's state via function passed as prop
+  const handleOpenCalendar = () => {
+    if (window.Cal) {
+      window.Cal("init", "30min", {origin:"https://cal.com"});
+      window.Cal.ns["30min"]("inline", {
+        elementOrSelector:"#my-cal-inline",
+        config: {"layout":"month_view"},
+        calLink: "hazli-johar-cynco/30min",
+      });
+      window.Cal.ns["30min"]("ui", {"hideEventTypeDetails":false,"layout":"month_view"});
+      
+      // Create modal element
+      const modal = document.createElement('div');
+      modal.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50';
+      modal.innerHTML = `
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl h-[90vh] flex flex-col">
+          <div class="flex items-center justify-between border-b p-4">
+            <h3 class="text-xl font-bold">Schedule a Call</h3>
+            <button class="p-2 hover:bg-gray-100 rounded-full">✕</button>
+          </div>
+          <div class="flex-1 p-4 overflow-hidden">
+            <div style="width:100%;height:100%;overflow:scroll" id="my-cal-inline"></div>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(modal);
+      
+      // Add close functionality
+      const closeButton = modal.querySelector('button');
+      closeButton?.addEventListener('click', () => {
+        document.body.removeChild(modal);
+      });
+    }
+  };
+
   return <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-black text-white">
             <div className="absolute inset-0">
                 <FloatingPaths position={1} />
@@ -93,23 +131,6 @@ export function BackgroundPaths({
         }} className="text-xl md:text-2xl mb-12 max-w-3xl mx-auto">
                         {subtitle}
                       </motion.p>}
-
-                    <motion.div initial={{
-          opacity: 0,
-          y: 20
-        }} animate={{
-          opacity: 1,
-          y: 0
-        }} transition={{
-          delay: 1.5,
-          duration: 1
-        }} className="mt-8">
-                      <Link to={ctaLink} className="inline-flex items-center gap-2 bg-white text-black px-8 py-3 font-semibold 
-                          text-lg rounded-sm hover:bg-gray-100 transition-colors">
-                            {ctaText}
-                            <span className="text-lg">→</span>
-                      </Link>
-                    </motion.div>
                 </motion.div>
             </div>
             
@@ -139,9 +160,20 @@ export function BackgroundPaths({
       duration: 1
     }} className="absolute bottom-8 right-8 text-right font-mono">
               <p className="text-xs tracking-wide text-[#CCCCCC] mb-1">START WITH A FREE CONSULTATION</p>
-              <Link to={ctaLink} className="bg-white text-black px-5 py-2 font-semibold text-sm hover:bg-[#E5E5E5] rounded-none inline-block" aria-label="Start with a free consultation">
+              <button 
+                onClick={handleOpenCalendar}
+                className="bg-white text-black px-5 py-2 font-semibold text-sm hover:bg-[#E5E5E5] rounded-none inline-block" 
+                aria-label="Start with a free consultation"
+              >
                 {ctaText} →
-              </Link>
+              </button>
             </motion.div>
         </div>;
+}
+
+// Add the Cal.com type definition for TypeScript
+declare global {
+  interface Window {
+    Cal?: any;
+  }
 }

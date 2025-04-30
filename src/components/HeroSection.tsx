@@ -40,16 +40,7 @@ const HeroSection = () => {
   return (
     <div className="relative">
       <BackgroundPaths {...heroProps} />
-      <div className="absolute bottom-12 left-0 w-full flex justify-center">
-        <Button 
-          variant="outline" 
-          className="bg-white text-black border-white hover:bg-black hover:text-white hover:border-white transition-colors"
-          onClick={handleOpenCalendar}
-        >
-          {heroProps.ctaText}
-        </Button>
-      </div>
-
+      
       {/* Cal.com Calendar Modal */}
       {showCalendar && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">

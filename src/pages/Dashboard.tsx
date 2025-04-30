@@ -26,6 +26,8 @@ const Dashboard = () => {
     // Fetch user profile if available
     const fetchProfile = async () => {
       try {
+        if (!user.id) return;
+        
         const { data, error } = await supabase
           .from('profiles')
           .select('first_name, last_name')

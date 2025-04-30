@@ -34,9 +34,9 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
 };
 
 // Layout for pages that need the standard footer
-const StandardLayout = ({ children }: { children: React.ReactNode }) => (
+const StandardLayout = () => (
   <>
-    {children}
+    <Outlet />
     <Footer />
   </>
 );
@@ -58,51 +58,37 @@ const AppRoutes = () => {
 
   return (
     <Routes>
-      <Route path="/" element={
-        <StandardLayout>
-          <Index />
-        </StandardLayout>
-      } />
-      <Route path="/contact" element={
-        <StandardLayout>
-          <Contact />
-        </StandardLayout>
-      } />
-      <Route 
-        path="/login" 
-        element={
-          user ? (
-            <Navigate to="/dashboard" replace />
-          ) : (
-            <StandardLayout>
+      <Route path="/" element={<StandardLayout />}>
+        <Route index element={<Index />} />
+        <Route path="contact" element={<Contact />} />
+        <Route 
+          path="login" 
+          element={
+            user ? (
+              <Navigate to="/dashboard" replace />
+            ) : (
               <Login />
-            </StandardLayout>
-          )
-        }
-      />
-      <Route 
-        path="/register" 
-        element={
-          user ? (
-            <Navigate to="/dashboard" replace />
-          ) : (
-            <StandardLayout>
+            )
+          }
+        />
+        <Route 
+          path="register" 
+          element={
+            user ? (
+              <Navigate to="/dashboard" replace />
+            ) : (
               <Register />
-            </StandardLayout>
-          )
-        }
-      />
+            )
+          }
+        />
+        <Route path="*" element={<NotFound />} />
+      </Route>
       <Route path="/dashboard" element={<DashboardLayout />}>
         <Route index element={<Outlet />} />
         <Route path="profile" element={<ProfilePage />} />
         <Route path="settings" element={<SettingsPage />} />
         <Route path="notifications" element={<NotificationsPage />} />
       </Route>
-      <Route path="*" element={
-        <StandardLayout>
-          <NotFound />
-        </StandardLayout>
-      } />
     </Routes>
   );
 };

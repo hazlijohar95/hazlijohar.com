@@ -8,7 +8,6 @@ import GetTicketsCTA from '../components/GetTicketsCTA';
 import FAQSection from '../components/FAQSection';
 import LastYearSection from '../components/LastYearSection';
 import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 
 const Index = () => {
   // Add smooth scrolling behavior
@@ -63,7 +62,6 @@ const Index = () => {
       <div id="culture">
         <LastYearSection />
       </div>
-      <Footer />
     </div>
   );
 };

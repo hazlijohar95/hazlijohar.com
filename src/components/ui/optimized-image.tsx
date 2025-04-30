@@ -38,7 +38,7 @@ export const OptimizedImage = ({
         className
       )}
       style={{ 
-        backgroundColor: placeholderColor,
+        backgroundColor: "#000000",
         width: width ? `${width}px` : '100%',
         height: height ? `${height}px` : 'auto',
       }}
@@ -46,7 +46,7 @@ export const OptimizedImage = ({
       {/* Placeholder/background */}
       <div
         className={cn(
-          "absolute inset-0 bg-gray-100",
+          "absolute inset-0 bg-black",
           isLoaded ? "opacity-0" : "opacity-100"
         )}
         style={{ 
@@ -64,7 +64,7 @@ export const OptimizedImage = ({
         onLoad={() => setIsLoaded(true)}
         onError={() => setError(true)}
         className={cn(
-          "w-full h-full object-cover transition-opacity duration-500",
+          "w-full h-full object-cover transition-opacity duration-500 grayscale",
           isLoaded ? "opacity-100" : "opacity-0",
           error ? "hidden" : "block"
         )}
@@ -73,7 +73,7 @@ export const OptimizedImage = ({
       
       {/* Error fallback */}
       {error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-100 text-gray-500">
+        <div className="absolute inset-0 flex items-center justify-center bg-black text-white">
           <span className="text-sm">Failed to load image</span>
         </div>
       )}

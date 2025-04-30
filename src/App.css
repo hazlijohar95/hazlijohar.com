@@ -24,6 +24,14 @@
   scroll-snap-align: start;
 }
 
+/* Black and white theme overrides */
+.text-gradient {
+  background: linear-gradient(to bottom, #ffffff, #aaaaaa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 /* Mobile optimization */
 @media (max-width: 768px) {
   .mobile-full-height {
@@ -85,7 +93,7 @@ html {
 /* Mobile-friendly touch feedback */
 @media (hover: none) {
   .hover-effect {
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
   }
 }
 
@@ -106,7 +114,7 @@ html {
 /* Improved focus ring for accessibility */
 .focus-ring:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px white, 0 0 0 4px #9b87f5;
+  box-shadow: 0 0 0 2px white, 0 0 0 4px black;
 }
 
 /* Subtle hover effect for cards */
@@ -116,27 +124,20 @@ html {
 
 .hover-lift:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 20px -10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 12px 20px -10px rgba(255, 255, 255, 0.1);
 }
 
 /* Grainy background texture */
 .bg-grainy {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cg fill='%23000000' fill-opacity='0.05'%3E%3Cpath d='M0 0h1v1H0V0zm1 1h1v1H1V1zM0 39h1v1H0v-1zm1 1h1v1H1v-1zm38-1h1v1h-1v-1zm1 1h1v1h-1v-1zM39 0h1v1h-1V0zm1 1h1v1h-1V1z'/%3E%3C/g%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M0 0h1v1H0V0zm1 1h1v1H1V1zM0 39h1v1H0v-1zm1 1h1v1H1v-1zm38-1h1v1h-1v-1zm1 1h1v1h-1v-1zM39 0h1v1h-1V0zm1 1h1v1h-1V1z'/%3E%3C/g%3E%3C/svg%3E");
 }
 
-/* Advanced glass morphism effect */
+/* Advanced glass morphism effect - now in black and white */
 .glassmorphism {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.7);
   border-radius: 16px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 30px rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Display text with gradient */
-.text-gradient {
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }

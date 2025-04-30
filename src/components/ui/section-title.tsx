@@ -11,8 +11,8 @@ export function SectionTitle({
 }: SectionTitleProps & { hasGradient?: boolean }) {
   return (
     <Component className={cn(
-      "text-7xl md:text-8xl font-medium leading-[0.95] font-heading",
-      hasGradient && "gradient-text",
+      "text-7xl md:text-8xl font-medium leading-[0.95] font-sans",
+      hasGradient && "text-gradient",
       className
     )}>
       {children}

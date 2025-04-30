@@ -37,7 +37,7 @@ const FAQSection = () => {
     },
     {
       question: 'Can I request an accommodation to attend the event?',
-      answer: 'Yes, we're committed to making Ship accessible to all attendees. Please contact us at accessibility@vercel.com at least 2 weeks prior to the event with any specific accommodation needs you may have.'
+      answer: "Yes, we're committed to making Ship accessible to all attendees. Please contact us at accessibility@vercel.com at least 2 weeks prior to the event with any specific accommodation needs you may have."
     }
   ];
 

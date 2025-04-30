@@ -63,7 +63,7 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-                // New brand colors
+                // Brand colors
                 brand: {
                     DEFAULT: '#9b87f5',
                     light: '#b3a4f7',
@@ -101,11 +101,27 @@ export default {
 					to: {
 						height: '0'
 					}
-				}
+				},
+                // Adding new animations
+                'fade-in-up': {
+                    '0%': { opacity: '0', transform: 'translateY(10px)' },
+                    '100%': { opacity: '1', transform: 'translateY(0)' }
+                },
+                'float': {
+                    '0%, 100%': { transform: 'translateY(0)' },
+                    '50%': { transform: 'translateY(-5px)' }
+                },
+                'pulse-subtle': {
+                    '0%, 100%': { opacity: 1 },
+                    '50%': { opacity: 0.85 }
+                }
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+                'fade-in-up': 'fade-in-up 0.5s ease-out',
+                'float': 'float 6s ease-in-out infinite',
+                'pulse-subtle': 'pulse-subtle 3s ease-in-out infinite'
 			},
             // Typography system improvements
             fontSize: {
@@ -123,7 +139,8 @@ export default {
             fontFamily: {
                 sans: ['Inter', 'ui-sans-serif', 'system-ui'],
                 mono: ['JetBrains Mono', 'monospace'],
-                heading: ['Inter', 'ui-sans-serif', 'system-ui'],
+                display: ['Playfair Display', 'serif'],
+                heading: ['Playfair Display', 'serif'],
             },
 		}
 	},

@@ -8,6 +8,7 @@ import GetTicketsCTA from '../components/GetTicketsCTA';
 import FAQSection from '../components/FAQSection';
 import LastYearSection from '../components/LastYearSection';
 import Navbar from '../components/Navbar';
+import ScrollToTop from '../components/ui/ScrollToTop';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 const Index = () => {
@@ -16,7 +17,36 @@ const Index = () => {
 
   // Add smooth scrolling behavior with optimized performance
   useEffect(() => {
-    let lastScrollPosition = 0;
+    // Track sections for animation triggers
+    const observedSections = document.querySelectorAll('section');
+    
+    // Create intersection observer for scroll animations
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          // Add animation classes when section comes into view
+          if (entry.isIntersecting) {
+            entry.target.classList.add('animate-fade-in-up');
+            // Stop observing after animation is triggered
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+      }
+    );
+    
+    // Observe all sections except hero (which is already visible)
+    observedSections.forEach((section) => {
+      if (section.id !== 'hero') {
+        observer.observe(section);
+      }
+    });
+    
+    // Handle smooth scroll for anchor links
     const handleHashClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       const anchor = target.closest('a');
@@ -46,6 +76,7 @@ const Index = () => {
     
     return () => {
       document.removeEventListener('click', handleHashClick);
+      observer.disconnect();
     };
   }, []);
   
@@ -73,6 +104,16 @@ const Index = () => {
           <LastYearSection />
         </div>
       </div>
+      
+      {/* Scroll to top button */}
+      <ScrollToTop />
+      
+      {/* Preload critical assets for better performance */}
+      {!isMobile && (
+        <div className="hidden">
+          <link rel="preload" as="image" href="/placeholder.svg" />
+        </div>
+      )}
     </div>
   );
 };

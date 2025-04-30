@@ -43,8 +43,9 @@
   
   /* Improve tap target sizes on mobile */
   .mobile-tap-target {
-    min-height: 44px;
-    min-width: 44px;
+    min-height: 48px;
+    min-width: 48px;
+    padding: 12px;
   }
   
   /* Prevent text size adjustments */
@@ -86,4 +87,56 @@ html {
   .hover-effect {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
   }
+}
+
+/* New high-quality animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Improved focus ring for accessibility */
+.focus-ring:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px white, 0 0 0 4px #9b87f5;
+}
+
+/* Subtle hover effect for cards */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 20px -10px rgba(0, 0, 0, 0.1);
+}
+
+/* Grainy background texture */
+.bg-grainy {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cg fill='%23000000' fill-opacity='0.05'%3E%3Cpath d='M0 0h1v1H0V0zm1 1h1v1H1V1zM0 39h1v1H0v-1zm1 1h1v1H1v-1zm38-1h1v1h-1v-1zm1 1h1v1h-1v-1zM39 0h1v1h-1V0zm1 1h1v1h-1V1z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Advanced glass morphism effect */
+.glassmorphism {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Display text with gradient */
+.text-gradient {
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }

@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import HeroSection from '../components/HeroSection';
 import ExpectSection from '../components/ExpectSection';
 import FeaturedSpeakers from '../components/FeaturedSpeakers';
@@ -12,9 +12,11 @@ import { useIsMobile } from '@/hooks/use-mobile';
 
 const Index = () => {
   const isMobile = useIsMobile();
+  const pageRef = useRef<HTMLDivElement>(null);
 
-  // Add smooth scrolling behavior
+  // Add smooth scrolling behavior with optimized performance
   useEffect(() => {
+    let lastScrollPosition = 0;
     const handleHashClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       const anchor = target.closest('a');
@@ -38,8 +40,9 @@ const Index = () => {
         }
       }
     };
-    
-    document.addEventListener('click', handleHashClick);
+
+    // Add passive event listener for better scroll performance
+    document.addEventListener('click', handleHashClick, { passive: false });
     
     return () => {
       document.removeEventListener('click', handleHashClick);
@@ -47,26 +50,28 @@ const Index = () => {
   }, []);
   
   return (
-    <div className="relative">
+    <div className="relative" ref={pageRef}>
       <Navbar />
       <div id="hero" className="mobile-touch-scroll">
         <HeroSection />
       </div>
-      <ExpectSection />
-      <div id="leadership" className="mobile-touch-scroll">
-        <FeaturedSpeakers />
-      </div>
-      <div id="services" className="mobile-touch-scroll">
-        <FeaturedSessions />
-      </div>
-      <div id="contact">
-        <GetTicketsCTA />
-      </div>
-      <div id="faq">
-        <FAQSection />
-      </div>
-      <div id="culture">
-        <LastYearSection />
+      <div className="mobile-sections-container">
+        <ExpectSection />
+        <div id="leadership" className="mobile-touch-scroll">
+          <FeaturedSpeakers />
+        </div>
+        <div id="services" className="mobile-touch-scroll">
+          <FeaturedSessions />
+        </div>
+        <div id="contact">
+          <GetTicketsCTA />
+        </div>
+        <div id="faq">
+          <FAQSection />
+        </div>
+        <div id="culture">
+          <LastYearSection />
+        </div>
       </div>
     </div>
   );

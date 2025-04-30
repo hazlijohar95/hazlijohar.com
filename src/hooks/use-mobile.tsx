@@ -5,24 +5,25 @@ const MOBILE_BREAKPOINT = 768
 
 export function useIsMobile() {
   const [isMobile, setIsMobile] = React.useState<boolean | null>(null)
+  const mqlRef = React.useRef<MediaQueryList | null>(null)
 
   React.useEffect(() => {
-    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
+    // Use MediaQueryList for better performance
+    mqlRef.current = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
     
     const handleResize = () => {
-      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
+      setIsMobile(mqlRef.current?.matches ?? false)
     }
     
     // Set initial value
     handleResize()
     
-    // Add event listener
-    window.addEventListener("resize", handleResize)
-    mql.addEventListener("change", handleResize)
+    // Use the more efficient listener for MediaQueryList
+    const currentMql = mqlRef.current
+    currentMql.addEventListener("change", handleResize)
     
     return () => {
-      window.removeEventListener("resize", handleResize)
-      mql.removeEventListener("change", handleResize)
+      currentMql.removeEventListener("change", handleResize)
     }
   }, [])
 

@@ -24,19 +24,28 @@ const GetTicketsCTA = () => {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
     
-    // Wave properties
+    // Wave properties - simplified on mobile for better performance
     const waves = {
       y: canvas.height / (2 * (window.devicePixelRatio || 1)),
-      length: 0.01,
-      amplitude: 12,
-      frequency: 0.01
+      length: isMobile ? 0.015 : 0.01,
+      amplitude: isMobile ? 8 : 12,
+      frequency: isMobile ? 0.015 : 0.01
     };
     
     let increment = waves.frequency;
     let animationFrameId: number;
+    let lastTimestamp: number;
     
-    // Animation function
-    const animate = () => {
+    // Optimized animation function with throttling for mobile
+    const animate = (timestamp: number) => {
+      // Skip frames on mobile for better performance
+      if (isMobile && lastTimestamp && timestamp - lastTimestamp < 32) { // ~30fps on mobile
+        animationFrameId = requestAnimationFrame(animate);
+        return;
+      }
+      
+      lastTimestamp = timestamp;
+      
       // Throttle animation when not visible
       if (document.visibilityState === 'hidden' || !document.contains(canvas)) {
         return;
@@ -44,12 +53,13 @@ const GetTicketsCTA = () => {
       
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      // Draw the waves
+      // Draw the waves - simplified on mobile
       ctx.beginPath();
       ctx.moveTo(0, canvas.height);
       
       // First wave
-      for (let i = 0; i <= canvas.offsetWidth; i++) {
+      const step = isMobile ? 2 : 1; // Less detailed on mobile
+      for (let i = 0; i <= canvas.offsetWidth; i += step) {
         ctx.lineTo(
           i, 
           waves.y + Math.sin(i * waves.length + increment) * waves.amplitude
@@ -60,23 +70,25 @@ const GetTicketsCTA = () => {
       ctx.lineWidth = 1;
       ctx.stroke();
       
-      // Second wave - slightly offset
-      ctx.beginPath();
-      ctx.moveTo(0, canvas.height);
-      
-      for (let i = 0; i <= canvas.offsetWidth; i++) {
-        ctx.lineTo(
-          i, 
-          waves.y + Math.sin(i * waves.length + increment * 1.5) * waves.amplitude * 0.8
-        );
+      // Second wave - slightly offset (skip on low-end devices)
+      if (!isMobile || window.deviceMemory === undefined || window.deviceMemory > 2) {
+        ctx.beginPath();
+        ctx.moveTo(0, canvas.height);
+        
+        for (let i = 0; i <= canvas.offsetWidth; i += step) {
+          ctx.lineTo(
+            i, 
+            waves.y + Math.sin(i * waves.length + increment * 1.5) * waves.amplitude * 0.8
+          );
+        }
+        
+        // Fill the area below the wave
+        ctx.lineTo(canvas.offsetWidth, canvas.height);
+        ctx.lineTo(0, canvas.height);
+        ctx.closePath();
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+        ctx.fill();
       }
-      
-      // Fill the area below the wave
-      ctx.lineTo(canvas.offsetWidth, canvas.height);
-      ctx.lineTo(0, canvas.height);
-      ctx.closePath();
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
-      ctx.fill();
       
       // Moving the waves
       increment += waves.frequency;
@@ -84,13 +96,13 @@ const GetTicketsCTA = () => {
       animationFrameId = requestAnimationFrame(animate);
     };
     
-    animate();
+    animationFrameId = requestAnimationFrame(animate);
     
     return () => {
       window.removeEventListener('resize', resizeCanvas);
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  }, [isMobile]);
   
   return (
     <section id="contact" className="bg-black py-16 sm:py-20 md:py-32 px-4 md:px-8 flex justify-center items-center">
@@ -110,7 +122,7 @@ const GetTicketsCTA = () => {
         <div className="absolute -bottom-[10px] left-0 w-full h-[50px] overflow-hidden">
           <canvas 
             ref={canvasRef} 
-            className="w-full h-full absolute bottom-0 left-0 opacity-80 transition-opacity duration-300 group-hover:opacity-100" 
+            className="w-full h-full absolute bottom-0 left-0 opacity-80 transition-opacity duration-300 group-hover:opacity-100 mobile-optimize" 
             aria-hidden="true"
           />
         </div>

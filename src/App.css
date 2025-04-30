@@ -38,6 +38,7 @@
   
   .mobile-touch-scroll {
     -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
   }
   
   /* Improve tap target sizes on mobile */
@@ -50,9 +51,39 @@
   html {
     -webkit-text-size-adjust: 100%;
   }
+  
+  /* Mobile sections container for better performance */
+  .mobile-sections-container {
+    contain: content;
+    content-visibility: auto;
+  }
+  
+  /* Optimize paint and layout operations */
+  .mobile-optimize {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+  
+  /* Reduce motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
 
-/* Add smooth scrolling to the whole page */
+/* Add smooth scrolling to the whole page but optimize for mobile */
 html {
   scroll-behavior: smooth;
+}
+
+/* Mobile-friendly touch feedback */
+@media (hover: none) {
+  .hover-effect {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  }
 }

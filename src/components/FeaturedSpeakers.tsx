@@ -1,70 +1,20 @@
 
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
-
-interface Speaker {
-  id: string;
-  name: string;
-  title: string;
-  company: string;
-  image: string;
-}
-
-const speakers: Speaker[] = [
-  {
-    id: "guillermo-rauch",
-    name: "GUILLERMO RAUCH",
-    title: "CEO",
-    company: "VERCEL",
-    image: "/lovable-uploads/c631f8c1-8c6f-4b77-82f4-126643be43be.png"
-  },
-  {
-    id: "luba-kravchenko",
-    name: "LUBA KRAVCHENKO",
-    title: "SOFTWARE ENGINEER - INFRASTRUCTURE",
-    company: "VERCEL",
-    image: "/lovable-uploads/79657baf-f82d-4c01-b1a9-712971f5fcae.png"
-  },
-  {
-    id: "pepijn-senders",
-    name: "PEPIJN SENDERS",
-    title: "STAFF ENGINEER",
-    company: "VERCEL",
-    image: "/lovable-uploads/b80405d0-8500-4bb0-9154-897328cbbfbf.png"
-  },
-  {
-    id: "malavika-balachandran-tadeusz",
-    name: "MALAVIKA BALACHANDRAN TADEUSZ",
-    title: "SENIOR PRODUCT DESIGNER",
-    company: "VERCEL",
-    image: "/lovable-uploads/1eac89fc-27bd-46d7-a428-adf1dff6a9b0.png"
-  },
-  {
-    id: "tomas-jansson",
-    name: "TOMAS JANSSON",
-    title: "PRINCIPAL ENGINEER",
-    company: "VERCEL",
-    image: "/lovable-uploads/4f2a7b8a-2b07-4571-b4d2-2c2ffe9d80ba.png"
-  },
-  {
-    id: "joe-zeng",
-    name: "JOE ZENG",
-    title: "PRODUCT MANAGER",
-    company: "VERCEL",
-    image: "/lovable-uploads/8be56735-e3f5-40a9-bee4-cc84c7227998.png"
-  }
-];
+import { speakers } from '../data/speakers';
+import { SectionContainer } from './ui/section-container';
+import { SectionTitle } from './ui/section-title';
 
 const FeaturedSpeakers = () => {
-  const [selectedSpeaker, setSelectedSpeaker] = useState<Speaker | null>(null);
+  const [selectedSpeaker, setSelectedSpeaker] = useState(speakers[0]);
 
   return (
-    <section id="speakers" className="bg-black py-20 px-8 md:px-20">
+    <SectionContainer id="speakers" bgColor="black">
       <div className="container mx-auto">
-        <h2 className="text-white text-[56px] md:text-[72px] font-semibold leading-tight mb-10">
+        <SectionTitle>
           Featured Speakers
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+        </SectionTitle>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start mt-10">
           {/* Left side - Speaker list */}
           <div className="flex flex-col w-full space-y-[1px] border-t border-[#222222]">
             {speakers.map(speaker => (
@@ -93,7 +43,7 @@ const FeaturedSpeakers = () => {
               <div className="relative">
                 <button 
                   className="absolute top-4 right-4 text-[#AAAAAA] hover:text-white z-10"
-                  onClick={() => setSelectedSpeaker(null)}
+                  onClick={() => setSelectedSpeaker(speakers[0])}
                 >
                   <X size={20} />
                 </button>
@@ -113,7 +63,7 @@ const FeaturedSpeakers = () => {
           </div>
         </div>
       </div>
-    </section>
+    </SectionContainer>
   );
 };
 

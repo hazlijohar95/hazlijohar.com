@@ -1,52 +1,28 @@
 
 import React, { useState, useEffect } from 'react';
+import { useScrollObserver } from '../hooks/useScrollObserver';
 
 const Navbar = () => {
   const [isWhiteBackground, setIsWhiteBackground] = useState(false);
+  const { isIntersecting } = useScrollObserver(['hero', 'speakers', 'sessions', 'tickets']);
   
   useEffect(() => {
-    const handleScroll = () => {
-      // Get the hero section height
-      const heroSection = document.querySelector('#hero');
-      const speakersSection = document.querySelector('#speakers');
-      const sessionsSection = document.querySelector('#sessions');
-      const ticketsSection = document.querySelector('#tickets');
-      
-      if (heroSection && speakersSection && sessionsSection && ticketsSection) {
-        const heroHeight = heroSection.getBoundingClientRect().height;
-        const speakersSectionTop = speakersSection.getBoundingClientRect().top;
-        const sessionsSectionTop = sessionsSection.getBoundingClientRect().top;
-        const ticketsSectionTop = ticketsSection.getBoundingClientRect().top;
-        
-        // Switch to white background when:
-        // 1. Between hero and speakers section
-        // 2. When in the sessions section (white background)
-        // And switch to black when:
-        // 1. In the speakers section (black background)
-        // 2. In the tickets section (black background)
-        if ((speakersSectionTop <= 0 && sessionsSectionTop > 0) || 
-            (ticketsSectionTop <= 0 && ticketsSectionTop > -800)) {
-          // We're in the speakers section or tickets section (black background)
-          setIsWhiteBackground(false);
-        } else if (sessionsSectionTop <= 0 && ticketsSectionTop > 0) {
-          // We're in the sessions section (white background)
-          setIsWhiteBackground(true);
-        } else if (window.scrollY > heroHeight - 100) {
-          // We're past the hero section but not yet at speakers section
-          setIsWhiteBackground(true);
-        } else {
-          // We're in the hero section
-          setIsWhiteBackground(false);
-        }
-      }
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    // Initial check
-    handleScroll();
-    
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    // Use the intersection data to determine navbar background
+    if ((isIntersecting['speakers'] && !isIntersecting['sessions']) || 
+        (isIntersecting['tickets'])) {
+      // We're in the speakers section or tickets section (black background)
+      setIsWhiteBackground(false);
+    } else if (isIntersecting['sessions']) {
+      // We're in the sessions section (white background)
+      setIsWhiteBackground(true);
+    } else if (!isIntersecting['hero']) {
+      // We're past the hero section but not yet at speakers section
+      setIsWhiteBackground(true);
+    } else {
+      // We're in the hero section
+      setIsWhiteBackground(false);
+    }
+  }, [isIntersecting]);
   
   return (
     <nav 
@@ -58,9 +34,9 @@ const Navbar = () => {
     >
       {/* Left menu items */}
       <div className="hidden md:flex space-x-6 font-mono uppercase tracking-wide text-sm">
-        <a href="#schedule" className="hover:opacity-80">Schedule</a>
-        <a href="#speakers" className="hover:opacity-80">Speakers</a>
-        <a href="#faq" className="hover:opacity-80">FAQ</a>
+        <a href="#schedule" className="hover:opacity-80 transition-opacity">Schedule</a>
+        <a href="#speakers" className="hover:opacity-80 transition-opacity">Speakers</a>
+        <a href="#faq" className="hover:opacity-80 transition-opacity">FAQ</a>
       </div>
       
       {/* Mobile menu button */}
@@ -80,8 +56,8 @@ const Navbar = () => {
       
       {/* Right menu items */}
       <div className="hidden md:flex space-x-6 font-mono uppercase tracking-wide text-sm">
-        <a href="#signup" className="hover:opacity-80">Sign Up</a>
-        <a href="#login" className="hover:opacity-80">Login</a>
+        <a href="#signup" className="hover:opacity-80 transition-opacity">Sign Up</a>
+        <a href="#login" className="hover:opacity-80 transition-opacity">Login</a>
       </div>
       
       {/* Mobile empty div for flex spacing */}

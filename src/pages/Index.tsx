@@ -13,7 +13,6 @@ import Footer from '../components/Footer';
 const Index = () => {
   return (
     <div className="relative">
-      {/* Navbar is now fixed position and appears above all content */}
       <Navbar />
       <div id="hero">
         <HeroSection />
@@ -25,7 +24,9 @@ const Index = () => {
       <div id="sessions">
         <FeaturedSessions />
       </div>
-      <GetTicketsCTA />
+      <div id="tickets">
+        <GetTicketsCTA />
+      </div>
       <FAQSection />
       <LastYearSection />
       <Footer />

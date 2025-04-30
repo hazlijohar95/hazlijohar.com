@@ -1,56 +1,18 @@
 
 import React from 'react';
-
-interface Speaker {
-  name: string;
-  company: string;
-  image: string;
-}
-
-interface Session {
-  title: string;
-  time: string;
-  description: string;
-  speakers: Speaker[];
-}
+import { sessions } from '../data/sessions';
+import { SectionContainer } from './ui/section-container';
+import { SectionTitle } from './ui/section-title';
 
 const FeaturedSessions = () => {
-  const sessions: Session[] = [
-    {
-      title: "Building agents with\nthe AI SDK",
-      time: "1:15 PM–1:55 PM",
-      description: "Learn the basics of building AI agents with the AI SDK.",
-      speakers: [
-        { name: "NICO ALBANESE", company: "VERCEL", image: "/public/lovable-uploads/9fa1e196-6516-4c96-b5fc-cc91548898e9.png" }
-      ]
-    },
-    {
-      title: "Dynamic content\nat scale",
-      time: "1:35 PM–1:55 PM",
-      description: "Get architectural strategies for scaling dynamic content globally while ensuring low latency.",
-      speakers: [
-        { name: "PEPIJN SENDERS", company: "HELLOFRESH", image: "/public/lovable-uploads/9fa1e196-6516-4c96-b5fc-cc91548898e9.png" }
-      ]
-    },
-    {
-      title: "Feature Flag success\nwith Vercel\nand Statsig",
-      time: "3:05 PM–3:45 PM",
-      description: "Learn how to use the Flags SDK to experiment without impacting site performance.",
-      speakers: [
-        { name: "DOMINIK FERBER", company: "VERCEL", image: "/public/lovable-uploads/9fa1e196-6516-4c96-b5fc-cc91548898e9.png" },
-        { name: "JOE ZENG", company: "STATSIG", image: "/public/lovable-uploads/9fa1e196-6516-4c96-b5fc-cc91548898e9.png" }
-      ]
-    }
-  ];
-
   return (
-    <section id="sessions" className="bg-white py-24 px-8 md:px-20 text-black">
+    <SectionContainer id="sessions" bgColor="white">
       <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-12 items-start">
         {/* Left Column: Section Title */}
         <div>
-          <h2 className="text-[56px] md:text-[72px] font-semibold leading-tight">
+          <SectionTitle>
             Featured<br />Sessions
-          </h2>
+          </SectionTitle>
         </div>
 
         {/* Right Column: List of Sessions */}
@@ -85,7 +47,7 @@ const FeaturedSessions = () => {
           ))}
         </div>
       </div>
-    </section>
+    </SectionContainer>
   );
 };
 

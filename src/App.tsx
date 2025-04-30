@@ -11,6 +11,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
+import Footer from "./components/Footer";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,21 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   return children;
 };
 
+// Layout for pages that need the standard footer
+const StandardLayout = ({ children }: { children: React.ReactNode }) => (
+  <>
+    {children}
+    <Footer />
+  </>
+);
+
+// Dashboard doesn't need the standard footer
+const DashboardLayout = ({ children }: { children: React.ReactNode }) => (
+  <>
+    {children}
+  </>
+);
+
 const AppRoutes = () => {
   const { user, isLoading } = useAuth();
 
@@ -39,25 +55,55 @@ const AppRoutes = () => {
 
   return (
     <Routes>
-      <Route path="/" element={<Index />} />
-      <Route path="/contact" element={<Contact />} />
+      <Route path="/" element={
+        <StandardLayout>
+          <Index />
+        </StandardLayout>
+      } />
+      <Route path="/contact" element={
+        <StandardLayout>
+          <Contact />
+        </StandardLayout>
+      } />
       <Route 
         path="/login" 
-        element={user ? <Navigate to="/dashboard" replace /> : <Login />}
+        element={
+          user ? (
+            <Navigate to="/dashboard" replace />
+          ) : (
+            <StandardLayout>
+              <Login />
+            </StandardLayout>
+          )
+        }
       />
       <Route 
         path="/register" 
-        element={user ? <Navigate to="/dashboard" replace /> : <Register />}
+        element={
+          user ? (
+            <Navigate to="/dashboard" replace />
+          ) : (
+            <StandardLayout>
+              <Register />
+            </StandardLayout>
+          )
+        }
       />
       <Route 
         path="/dashboard" 
         element={
           <ProtectedRoute>
-            <Dashboard />
+            <DashboardLayout>
+              <Dashboard />
+            </DashboardLayout>
           </ProtectedRoute>
         } 
       />
-      <Route path="*" element={<NotFound />} />
+      <Route path="*" element={
+        <StandardLayout>
+          <NotFound />
+        </StandardLayout>
+      } />
     </Routes>
   );
 };

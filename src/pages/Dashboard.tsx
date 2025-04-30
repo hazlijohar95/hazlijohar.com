@@ -10,11 +10,17 @@ import AskQuestion from '@/components/dashboard/AskQuestion';
 import BillingSection from '@/components/dashboard/BillingSection';
 import FutureFeature from '@/components/dashboard/FutureFeature';
 import { supabase } from '@/integrations/supabase/client';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
+import WelcomeBanner from '@/components/dashboard/WelcomeBanner';
+import DashboardCalendar from '@/components/dashboard/DashboardCalendar';
+import TaskManager from '@/components/dashboard/TaskManager';
 
 const Dashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [profile, setProfile] = useState<{ first_name?: string; last_name?: string } | null>(null);
+  const [activeTab, setActiveTab] = useState("overview");
   
   useEffect(() => {
     // If no user is logged in, redirect to login
@@ -53,27 +59,69 @@ const Dashboard = () => {
     <div className="min-h-screen bg-black text-white">
       <Navbar />
       
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16">
-        <div className="mb-12">
-          <h1 className="text-4xl font-medium mb-3">Welcome back, {clientName} 👋</h1>
-          <p className="text-[#CCCCCC] text-lg">Here's what's happening with your account.</p>
-        </div>
+      <div className="flex">
+        {/* Sidebar */}
+        <DashboardSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
         
-        <div className="space-y-16">
-          {/* Overview Cards */}
-          <OverviewCards />
+        {/* Main content */}
+        <div className="flex-1 pt-24 pb-16 px-6 lg:px-8">
+          {/* Welcome Banner */}
+          <WelcomeBanner clientName={clientName} />
           
-          {/* Document Vault */}
-          <DocumentVault />
-          
-          {/* Ask a Question */}
-          <AskQuestion />
-          
-          {/* Billing & Payments */}
-          <BillingSection />
-          
-          {/* Future Feature */}
-          <FutureFeature />
+          {/* Main Content */}
+          <div className="mt-8">
+            <Tabs 
+              value={activeTab} 
+              onValueChange={setActiveTab}
+              className="w-full"
+            >
+              <TabsList className="bg-[#111] border border-[#333] mb-6">
+                <TabsTrigger value="overview" className="data-[state=active]:bg-white data-[state=active]:text-black">
+                  Overview
+                </TabsTrigger>
+                <TabsTrigger value="documents" className="data-[state=active]:bg-white data-[state=active]:text-black">
+                  Documents
+                </TabsTrigger>
+                <TabsTrigger value="calendar" className="data-[state=active]:bg-white data-[state=active]:text-black">
+                  Calendar
+                </TabsTrigger>
+                <TabsTrigger value="tasks" className="data-[state=active]:bg-white data-[state=active]:text-black">
+                  Tasks
+                </TabsTrigger>
+                <TabsTrigger value="questions" className="data-[state=active]:bg-white data-[state=active]:text-black">
+                  Q&A
+                </TabsTrigger>
+                <TabsTrigger value="billing" className="data-[state=active]:bg-white data-[state=active]:text-black">
+                  Billing
+                </TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="overview" className="mt-4 space-y-12">
+                <OverviewCards />
+                <FutureFeature />
+              </TabsContent>
+              
+              <TabsContent value="documents" className="mt-4">
+                <DocumentVault />
+              </TabsContent>
+              
+              <TabsContent value="calendar" className="mt-4">
+                <DashboardCalendar />
+              </TabsContent>
+              
+              <TabsContent value="tasks" className="mt-4">
+                <TaskManager />
+              </TabsContent>
+              
+              <TabsContent value="questions" className="mt-4">
+                <AskQuestion />
+              </TabsContent>
+              
+              <TabsContent value="billing" className="mt-4">
+                <BillingSection />
+              </TabsContent>
+            </Tabs>
+          </div>
         </div>
       </div>
     </div>

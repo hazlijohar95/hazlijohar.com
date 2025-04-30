@@ -14,3 +14,12 @@
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
+
+.scroll-snap-x {
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scroll-snap-start {
+  scroll-snap-align: start;
+}

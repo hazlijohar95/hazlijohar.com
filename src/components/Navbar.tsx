@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useScrollObserver } from '../hooks/useScrollObserver';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
-import { Menu } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/components/ui/use-toast';
@@ -11,6 +11,7 @@ import { toast } from '@/components/ui/use-toast';
 const Navbar = () => {
   const [isWhiteBackground, setIsWhiteBackground] = useState(false);
   const [user, setUser] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -88,7 +89,10 @@ const Navbar = () => {
     </>
   ) : null;
 
-  return <nav className={`fixed top-0 left-0 right-0 z-50 flex justify-between items-center py-5 px-8 border-b transition-colors duration-300 ease-in-out ${isWhiteBackground && !isDashboard ? 'bg-white text-black border-[#EBEBEB]' : 'bg-black text-white border-[#1A1A1A]'}`}>
+  return <nav 
+      className={`fixed top-0 left-0 right-0 z-50 flex justify-between items-center py-5 px-8 border-b transition-colors duration-300 ease-in-out ${isWhiteBackground && !isDashboard ? 'bg-white text-black border-[#EBEBEB]' : 'bg-black text-white border-[#1A1A1A]'}`}
+      aria-label="Main navigation"
+    >
       {/* Left menu items */}
       <div className="hidden md:flex space-x-6 font-mono uppercase tracking-wide text-sm">
         {renderSectionLinks}
@@ -96,31 +100,37 @@ const Navbar = () => {
       
       {/* Mobile menu button */}
       <div className="md:hidden">
-        <Sheet>
-          <SheetTrigger aria-label="Open menu">
+        <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+          <SheetTrigger asChild aria-label="Open menu">
             <button className="font-mono uppercase tracking-wide text-sm flex items-center">
               <Menu className="mr-2" size={18} /> Menu
             </button>
           </SheetTrigger>
           <SheetContent side="left" className={`${isWhiteBackground && !isDashboard ? 'bg-white text-black' : 'bg-black text-white'} border-r-[1px] ${isWhiteBackground && !isDashboard ? 'border-[#EBEBEB]' : 'border-[#1A1A1A]'}`}>
             <div className="flex flex-col mt-10 space-y-6 font-mono uppercase tracking-wide text-sm">
+              <div className="flex justify-between items-center mb-8">
+                <span className="text-xl font-bold">ACME</span>
+                <button onClick={() => setIsMenuOpen(false)} aria-label="Close menu">
+                  <X size={24} />
+                </button>
+              </div>
               {isHomePage && (
                 <>
-                  <a href="#leadership" className="hover:opacity-80 transition-opacity">Team</a>
-                  <a href="#services" className="hover:opacity-80 transition-opacity">Services</a>
-                  <a href="#faq" className="hover:opacity-80 transition-opacity">FAQ</a>
+                  <a href="#leadership" className="hover:opacity-80 transition-opacity" onClick={() => setIsMenuOpen(false)}>Team</a>
+                  <a href="#services" className="hover:opacity-80 transition-opacity" onClick={() => setIsMenuOpen(false)}>Services</a>
+                  <a href="#faq" className="hover:opacity-80 transition-opacity" onClick={() => setIsMenuOpen(false)}>FAQ</a>
                 </>
               )}
               <div className="pt-6 border-t border-[#333333]">
-                <Link to="/contact" className="hover:opacity-80 transition-opacity">Contact Us</Link>
+                <Link to="/contact" className="hover:opacity-80 transition-opacity" onClick={() => setIsMenuOpen(false)}>Contact Us</Link>
               </div>
               {user ? (
                 <>
-                  <Link to="/dashboard" className="hover:opacity-80 transition-opacity">Dashboard</Link>
-                  <button onClick={handleLogout} className="hover:opacity-80 transition-opacity">Logout</button>
+                  <Link to="/dashboard" className="hover:opacity-80 transition-opacity" onClick={() => setIsMenuOpen(false)}>Dashboard</Link>
+                  <button onClick={() => {handleLogout(); setIsMenuOpen(false);}} className="hover:opacity-80 transition-opacity text-left">Logout</button>
                 </>
               ) : (
-                <Link to="/login" className="hover:opacity-80 transition-opacity">Client Login</Link>
+                <Link to="/login" className="hover:opacity-80 transition-opacity" onClick={() => setIsMenuOpen(false)}>Client Login</Link>
               )}
             </div>
           </SheetContent>

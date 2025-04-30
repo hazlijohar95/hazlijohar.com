@@ -1,3 +1,4 @@
+
 "use client";
 
 import { motion } from "framer-motion";
@@ -103,11 +104,11 @@ export function BackgroundPaths({
           delay: 1.5,
           duration: 1
         }} className="mt-8">
-                      <div className="inline-block group relative bg-gradient-to-b from-white/10 to-white/5
-                          p-px rounded-2xl backdrop-blur-lg 
-                          overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
-                          
-                      </div>
+                      <Link to={ctaLink} className="inline-flex items-center gap-2 bg-white text-black px-8 py-3 font-semibold 
+                          text-lg rounded-sm hover:bg-gray-100 transition-colors">
+                            {ctaText}
+                            <span className="text-lg">→</span>
+                      </Link>
                     </motion.div>
                 </motion.div>
             </div>
@@ -138,8 +139,8 @@ export function BackgroundPaths({
       duration: 1
     }} className="absolute bottom-8 right-8 text-right font-mono">
               <p className="text-xs tracking-wide text-[#CCCCCC] mb-1">START WITH A FREE CONSULTATION</p>
-              <Link to="/contact" className="bg-white text-black px-5 py-2 font-semibold text-sm hover:bg-[#E5E5E5] rounded-none inline-block" aria-label="Start with a free consultation">
-                BOOK A CALL →
+              <Link to={ctaLink} className="bg-white text-black px-5 py-2 font-semibold text-sm hover:bg-[#E5E5E5] rounded-none inline-block" aria-label="Start with a free consultation">
+                {ctaText} →
               </Link>
             </motion.div>
         </div>;

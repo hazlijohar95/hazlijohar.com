@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Button } from './ui/button';
 
 const LastYearSection = () => {
   // Use all the provided event images for the gallery
@@ -35,7 +36,7 @@ const LastYearSection = () => {
           className="inline-flex items-center gap-2 bg-white text-black font-mono text-sm tracking-wide uppercase px-4 py-2 hover:scale-105 transition-transform mb-16"
         >
           Explore Ship 2024
-          <span>↗</span>
+          <span className="text-xs">↗</span>
         </a>
 
         {/* Auto Scrolling Image Strip */}
@@ -47,12 +48,13 @@ const LastYearSection = () => {
             }}
           >
             {images.map((image, index) => (
-              <img 
-                key={index}
-                src={image}
-                alt={`Ship 2024 event image ${index + 1}`}
-                className="rounded-lg w-[300px] h-auto object-cover"
-              />
+              <div key={index} className="relative min-w-[300px] h-[450px]">
+                <img 
+                  src={image}
+                  alt={`Ship 2024 event image ${index + 1}`}
+                  className="rounded-lg w-full h-full object-cover grayscale"
+                />
+              </div>
             ))}
           </div>
         </div>

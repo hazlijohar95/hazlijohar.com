@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 const HeroSection = () => {
   const [showCalendar, setShowCalendar] = useState(false);
   const heroProps: BackgroundPathsProps = {
-    title: "ACME",
+    title: "HAZLI JOHAR & CO.",
     subtitle: "Helping modern businesses in Malaysia grow with clarity and confidence.",
     ctaText: "BOOK A CALL",
     ctaLink: "/contact"

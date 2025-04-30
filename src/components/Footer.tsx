@@ -5,8 +5,14 @@ const Footer = () => {
   return (
     <footer className="bg-black text-white text-center py-16 px-4 font-mono">
       <div className="max-w-6xl mx-auto">
-        <div className="text-2xl mb-4">▲</div>
-        <h1 className="text-4xl font-semibold mb-6">
+        <div className="flex justify-center mb-4">
+          <img 
+            src="/public/lovable-uploads/f757621e-0869-4b8d-997f-982e149145c6.png" 
+            alt="Hazli Johar & Co. Logo" 
+            className="h-16"
+          />
+        </div>
+        <h1 className="text-3xl font-semibold mb-6">
           Hazli Johar & Co. Chartered Accountants
           <sup className="inline-block bg-white text-black px-1.5 py-0.5 text-xs rounded align-super ml-1">NF1932</sup>
         </h1>

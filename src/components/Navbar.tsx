@@ -7,6 +7,7 @@ import { Menu, X } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/components/ui/use-toast';
+import { OptimizedImage } from './ui/optimized-image';
 
 const Navbar = () => {
   const [isWhiteBackground, setIsWhiteBackground] = useState(false);
@@ -109,7 +110,13 @@ const Navbar = () => {
           <SheetContent side="left" className={`${isWhiteBackground && !isDashboard ? 'bg-white text-black' : 'bg-black text-white'} border-r-[1px] ${isWhiteBackground && !isDashboard ? 'border-[#EBEBEB]' : 'border-[#1A1A1A]'}`}>
             <div className="flex flex-col mt-10 space-y-6 font-mono uppercase tracking-wide text-sm">
               <div className="flex justify-between items-center mb-8">
-                <span className="text-xl font-bold">ACME</span>
+                <div className="flex items-center">
+                  <img 
+                    src="/public/lovable-uploads/f757621e-0869-4b8d-997f-982e149145c6.png" 
+                    alt="Hazli Johar & Co. Logo" 
+                    className="h-8"
+                  />
+                </div>
                 <button onClick={() => setIsMenuOpen(false)} aria-label="Close menu">
                   <X size={24} />
                 </button>
@@ -139,8 +146,13 @@ const Navbar = () => {
       
       {/* Center logo */}
       <div className="flex items-center font-mono">
-        <Link to="/" className="text-xl font-bold">
-          {isDashboard ? "ACME - Client Portal" : "ACME"}
+        <Link to="/" className="flex items-center">
+          <img 
+            src="/public/lovable-uploads/f757621e-0869-4b8d-997f-982e149145c6.png" 
+            alt="Hazli Johar & Co. Logo" 
+            className="h-8 mr-3"
+          />
+          {isDashboard && <span className="text-sm font-medium ml-3 opacity-70">Client Portal</span>}
         </Link>
       </div>
       

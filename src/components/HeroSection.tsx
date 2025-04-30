@@ -7,7 +7,9 @@ const HeroSection = () => {
         <h1 className="font-sans font-semibold text-[32px] md:text-[56px] leading-[1.1] tracking-[-0.02em] max-w-4xl">
           
           <span className="block">Helping modern businesses in Malaysia</span>
-          <span className="block">grow with clarity and confidence.</span>
+          <span className="block">Grow with clarity and confidence.
+
+Work with experience accountants.</span>
         </h1>
       </div>
       

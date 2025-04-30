@@ -19,7 +19,7 @@ export function SectionContainer({
     <section
       id={id}
       className={cn(
-        "py-24 px-4 md:px-8 lg:px-12",
+        "py-24",
         bgColor === 'black' ? 'bg-black text-white' : 'bg-white text-black',
         className
       )}

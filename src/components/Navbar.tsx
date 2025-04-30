@@ -1,12 +1,16 @@
+
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useScrollObserver } from '../hooks/useScrollObserver';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 import { Menu } from 'lucide-react';
+
 const Navbar = () => {
   const [isWhiteBackground, setIsWhiteBackground] = useState(false);
   const {
     isIntersecting
   } = useScrollObserver(['hero', 'leadership', 'services', 'contact']);
+
   useEffect(() => {
     // Use the intersection data to determine navbar background
     if (isIntersecting['leadership'] && !isIntersecting['services'] || isIntersecting['contact']) {
@@ -23,6 +27,7 @@ const Navbar = () => {
       setIsWhiteBackground(false);
     }
   }, [isIntersecting]);
+
   return <nav className={`fixed top-0 left-0 right-0 z-50 flex justify-between items-center py-5 px-8 border-b transition-colors duration-300 ease-in-out ${isWhiteBackground ? 'bg-white text-black border-[#EBEBEB]' : 'bg-black text-white border-[#1A1A1A]'}`}>
       {/* Left menu items */}
       <div className="hidden md:flex space-x-6 font-mono uppercase tracking-wide text-sm">
@@ -45,9 +50,9 @@ const Navbar = () => {
               <a href="#services" className="hover:opacity-80 transition-opacity">Services</a>
               <a href="#faq" className="hover:opacity-80 transition-opacity">FAQ</a>
               <div className="pt-6 border-t border-[#333333]">
-                <a href="/contact" className="hover:opacity-80 transition-opacity">Contact Us</a>
+                <Link to="/contact" className="hover:opacity-80 transition-opacity">Contact Us</Link>
               </div>
-              <a href="/login" className="hover:opacity-80 transition-opacity">Client Login</a>
+              <Link to="/login" className="hover:opacity-80 transition-opacity">Client Login</Link>
             </div>
           </SheetContent>
         </Sheet>
@@ -55,18 +60,18 @@ const Navbar = () => {
       
       {/* Center logo */}
       <div className="flex items-center font-mono">
-        
-        
+        <Link to="/" className="text-xl font-bold">ACME</Link>
       </div>
       
       {/* Right menu items */}
       <div className="hidden md:flex space-x-6 font-mono uppercase tracking-wide text-sm">
-        <a href="/contact" className="hover:opacity-80 transition-opacity">Contact Us</a>
-        <a href="/login" className="hover:opacity-80 transition-opacity">Client Login</a>
+        <Link to="/contact" className="hover:opacity-80 transition-opacity">Contact Us</Link>
+        <Link to="/login" className="hover:opacity-80 transition-opacity">Client Login</Link>
       </div>
       
       {/* Mobile empty div for flex spacing */}
       <div className="md:hidden"></div>
     </nav>;
 };
+
 export default Navbar;

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import Navbar from './Navbar';
+import { Link } from 'react-router-dom';
 
 const HeroSection = () => {
   return (
@@ -30,9 +30,13 @@ const HeroSection = () => {
           <span className="text-white font-semibold text-lg">$350</span>
           <span className="line-through text-[#555555] ml-2">$600</span>
         </p>
-        <button className="bg-white text-black px-5 py-2 font-semibold text-sm hover:bg-[#E5E5E5] rounded-none">
+        <Link 
+          to="/ship/register"
+          className="bg-white text-black px-5 py-2 font-semibold text-sm hover:bg-[#E5E5E5] rounded-none inline-block"
+          aria-label="Get early bird tickets"
+        >
           GET TICKETS →
-        </button>
+        </Link>
       </div>
     </section>
   );

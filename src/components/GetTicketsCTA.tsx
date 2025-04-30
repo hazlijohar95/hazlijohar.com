@@ -33,6 +33,11 @@ const GetTicketsCTA = () => {
     
     // Animation function
     const animate = () => {
+      requestAnimationFrame(animate);
+      
+      // Throttle animation to improve performance
+      if (document.visibilityState === 'hidden') return;
+      
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.beginPath();
       
@@ -53,7 +58,7 @@ const GetTicketsCTA = () => {
       
       // Second wave - faster, slightly offset
       ctx.beginPath();
-      ctx.moveTo(0, canvas.height);
+      ctx.moveTo(0, canvas.width);
       
       for (let i = 0; i < canvas.width; i++) {
         ctx.lineTo(
@@ -71,8 +76,6 @@ const GetTicketsCTA = () => {
       
       // Moving the waves
       increment += waves.frequency;
-      
-      requestAnimationFrame(animate);
     };
     
     animate();
@@ -88,6 +91,7 @@ const GetTicketsCTA = () => {
         <Link 
           to="/ship/register" 
           className="bg-white text-black text-[48px] md:text-[64px] font-semibold tracking-tight px-16 py-8 w-full inline-flex items-center justify-between hover:scale-[1.03] transition-transform duration-300 ease-in-out"
+          aria-label="Get tickets for the event"
         >
           Get Tickets
           <span className="text-[48px]">→</span>
@@ -96,6 +100,7 @@ const GetTicketsCTA = () => {
           <canvas 
             ref={canvasRef} 
             className="w-full h-full absolute bottom-0 left-0 opacity-80 transition-opacity duration-300 group-hover:opacity-100" 
+            aria-hidden="true"
           />
         </div>
       </div>

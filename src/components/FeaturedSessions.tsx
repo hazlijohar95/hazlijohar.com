@@ -38,7 +38,12 @@ const FeaturedSessions = () => {
                       {session.speakers.map((speaker, idx) => (
                         <div key={idx} className="flex items-center gap-3">
                           <Avatar className="h-8 w-8">
-                            <AvatarImage src={speaker.image} alt={speaker.name} className="grayscale" />
+                            <AvatarImage 
+                              src={speaker.image} 
+                              alt={`${speaker.name} from ${speaker.company}`} 
+                              className="grayscale" 
+                              loading="lazy"
+                            />
                             <AvatarFallback>{speaker.name.substring(0, 2)}</AvatarFallback>
                           </Avatar>
                           <p className="text-sm font-mono">{speaker.name}, {speaker.company}</p>

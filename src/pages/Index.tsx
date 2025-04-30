@@ -48,19 +48,21 @@ const Index = () => {
         <HeroSection />
       </div>
       <ExpectSection />
-      <div id="speakers">
+      <div id="leadership">
         <FeaturedSpeakers />
       </div>
-      <div id="sessions">
+      <div id="services">
         <FeaturedSessions />
       </div>
-      <div id="tickets">
+      <div id="contact">
         <GetTicketsCTA />
       </div>
       <div id="faq">
         <FAQSection />
       </div>
-      <LastYearSection />
+      <div id="culture">
+        <LastYearSection />
+      </div>
       <Footer />
     </div>
   );

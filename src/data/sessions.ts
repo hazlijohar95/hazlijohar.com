@@ -14,28 +14,28 @@ export interface Session {
 
 export const sessions: Session[] = [
   {
-    title: "Building agents with\nthe AI SDK",
-    time: "10:15 AM–10:55 AM",
-    description: "Learn the basics of building AI agents with the AI SDK.",
+    title: "Accounting &\nFinancial Reporting",
+    time: "✔️",
+    description: "Monthly & annual accounts preparation, compliance-ready reporting.",
     speakers: [
-      { name: "NICO ALBANESE", company: "VERCEL", image: "/lovable-uploads/9fa1e196-6516-4c96-b5fc-cc91548898e9.png" }
+      { name: "HAZLI JOHAR", company: "CPA", image: "/lovable-uploads/9fa1e196-6516-4c96-b5fc-cc91548898e9.png" }
     ]
   },
   {
-    title: "Dynamic content\nat scale",
-    time: "11:35 AM–11:55 AM",
-    description: "Get architectural strategies for scaling dynamic content globally while ensuring low latency.",
+    title: "Tax Planning &\nCompliance",
+    time: "✔️",
+    description: "Corporate tax, SST, and advisory for local & international operations.",
     speakers: [
-      { name: "PEPIJN SENDERS", company: "HELLOFRESH", image: "/lovable-uploads/b80405d0-8500-4bb0-9154-897328cbbfbf.png" }
+      { name: "AMIRAH KHAIRUDDIN", company: "Tax Specialist", image: "/lovable-uploads/b80405d0-8500-4bb0-9154-897328cbbfbf.png" }
     ]
   },
   {
-    title: "Feature Flag success\nwith Vercel\nand Statsig",
-    time: "1:05 PM–1:45 PM",
-    description: "Learn how to use the Flags SDK to experiment without impacting site performance.",
+    title: "Tech implementation\n& Integrations",
+    time: "✔️",
+    description: "Automate invoicing, reconciliations, and reporting using platforms like Xero & Zoho.",
     speakers: [
-      { name: "DOMINIK FERBER", company: "VERCEL", image: "/lovable-uploads/9fa1e196-6516-4c96-b5fc-cc91548898e9.png" },
-      { name: "JOE ZENG", company: "STATSIG", image: "/lovable-uploads/8be56735-e3f5-40a9-bee4-cc84c7227998.png" }
+      { name: "SHAFIQ AZMAN", company: "Tech Lead", image: "/lovable-uploads/9fa1e196-6516-4c96-b5fc-cc91548898e9.png" },
+      { name: "DENISE LEE", company: "Integration Specialist", image: "/lovable-uploads/8be56735-e3f5-40a9-bee4-cc84c7227998.png" }
     ]
   }
 ];

@@ -86,14 +86,18 @@ const GetTicketsCTA = () => {
   }, []);
   
   return (
-    <section id="tickets" className="bg-black py-32 px-8 flex justify-center items-center">
+    <section id="contact" className="bg-black py-32 px-8 flex justify-center items-center">
       <div className="max-w-[720px] w-full relative overflow-hidden group">
+        <div className="text-white text-center mb-8">
+          <h2 className="text-3xl md:text-4xl font-medium mb-4">Let's get started</h2>
+          <p className="text-lg opacity-80 font-mono">👋 Begin your journey with Hazli Johar & Co. — no hard sell, just good advice.</p>
+        </div>
         <Link 
-          to="/ship/register" 
+          to="/contact" 
           className="bg-white text-black text-[48px] md:text-[64px] font-semibold tracking-tight px-16 py-8 w-full inline-flex items-center justify-between hover:scale-[1.03] transition-transform duration-300 ease-in-out"
-          aria-label="Get tickets for the event"
+          aria-label="Book a free call"
         >
-          Get Tickets
+          Book A Free Call
           <span className="text-[48px]">→</span>
         </Link>
         <div className="absolute -bottom-[10px] left-0 w-full h-[50px] overflow-hidden">

@@ -9,10 +9,10 @@ const FeaturedSpeakers = () => {
   const [selectedSpeaker, setSelectedSpeaker] = useState(speakers[0]);
 
   return (
-    <SectionContainer id="speakers" bgColor="black">
+    <SectionContainer id="leadership" bgColor="black">
       <div className="container mx-auto">
         <SectionTitle>
-          Featured Speakers
+          Our Leadership
         </SectionTitle>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start mt-10">
           {/* Left side - Speaker list */}
@@ -57,7 +57,7 @@ const FeaturedSpeakers = () => {
               </div>
             ) : (
               <div className="border border-[#333333] rounded-full w-[320px] h-[320px] flex items-center justify-center text-[#333333]">
-                <p className="font-mono text-sm">Select a speaker</p>
+                <p className="font-mono text-sm">Select a team member</p>
               </div>
             )}
           </div>

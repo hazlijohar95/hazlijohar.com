@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { MessageSquare, Users, Wrench, Cuboid } from 'lucide-react';
+import { BookText, BarChartBig, Wrench, Users } from 'lucide-react';
 import { SectionContainer } from './ui/section-container';
 import { SectionTitle } from './ui/section-title';
 import '../App.css';
@@ -25,24 +25,24 @@ const Card = ({ icon, title, description }: CardProps) => (
 
 const expectCards = [
   {
-    icon: <MessageSquare className="stroke-[1.5]" size={36} />,
-    title: "Keynotes and conversations",
-    description: "Hear the latest updates on AI, compute, and more."
+    icon: <BookText className="stroke-[1.5]" size={36} />,
+    title: "Expert-Led Advisory",
+    description: "Partner directly with licensed professionals who understand your industry inside out."
   },
   {
-    icon: <Users className="stroke-[1.5]" size={36} />,
-    title: "Community sessions",
-    description: "Get insights and lessons learned directly from experts and leading companies."
+    icon: <BarChartBig className="stroke-[1.5]" size={36} />,
+    title: "Accurate, Real-Time Reporting",
+    description: "We leverage cloud platforms to deliver reports you can act on — anytime, anywhere."
   },
   {
     icon: <Wrench className="stroke-[1.5]" size={36} />,
-    title: "Hands-on workshops",
-    description: "Bring your laptop for live sessions led by the creators of Next.js, v0, and Vercel."
+    title: "Workflow Automation",
+    description: "From bookkeeping to payroll, we help eliminate manual work using the right tools."
   },
   {
-    icon: <Cuboid className="stroke-[1.5]" size={36} />,
-    title: "Interactive experiences",
-    description: "Engage with our sponsors and try the v0 booth to build an app live."
+    icon: <Users className="stroke-[1.5]" size={36} />,
+    title: "Support That Grows With You",
+    description: "Start as a small business, scale confidently — we'll grow your finance stack with you."
   }
 ];
 

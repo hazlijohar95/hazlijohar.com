@@ -21,21 +21,20 @@ const LastYearSection = () => {
   ];
 
   return (
-    <section id="last-year" className="bg-black text-white py-32 px-6 md:px-20 overflow-hidden">
+    <section id="culture" className="bg-black text-white py-32 px-6 md:px-20 overflow-hidden">
       <div className="max-w-6xl mx-auto">
         {/* Heading Block */}
         <h2 className="text-[40px] md:text-[64px] font-medium leading-tight tracking-tight mb-8 max-w-4xl">
-          Last year, Vercel Ship 2024 was all about the power of the frontend cloud, highlighting the integrations, ecosystem, and teams building the web's best products.
+          Inside Hazli Johar & Co.
+          Go behind the scenes — meet the people, see the work, and hear what clients say.
         </h2>
 
         {/* Button */}
         <a 
-          href="https://vercel.com/ship/2024" 
-          target="_blank" 
-          rel="noopener noreferrer" 
+          href="/culture" 
           className="inline-flex items-center gap-2 bg-white text-black font-mono text-sm tracking-wide uppercase px-4 py-2 hover:scale-105 transition-transform mb-16"
         >
-          Explore Ship 2024
+          EXPLORE OUR CULTURE
           <span className="text-xs">↗</span>
         </a>
 
@@ -51,7 +50,7 @@ const LastYearSection = () => {
               <div key={index} className="relative min-w-[300px] h-[450px]">
                 <img 
                   src={image}
-                  alt={`Ship 2024 event image ${index + 1}`}
+                  alt={`Hazli Johar & Co. team and culture image ${index + 1}`}
                   className="rounded-lg w-full h-full object-cover grayscale"
                 />
               </div>

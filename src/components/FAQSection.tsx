@@ -6,7 +6,7 @@ import { SectionTitle } from './ui/section-title';
 
 const FAQSection = () => {
   const [openItems, setOpenItems] = useState<{ [key: string]: boolean }>({
-    'What is Ship?': true, // Open by default
+    'Who do you work with?': true, // Open by default
   });
 
   const toggleItem = (question: string) => {

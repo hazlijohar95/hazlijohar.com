@@ -4,6 +4,7 @@ import HeroSection from '../components/HeroSection';
 import ExpectSection from '../components/ExpectSection';
 import FeaturedSpeakers from '../components/FeaturedSpeakers';
 import FeaturedSessions from '../components/FeaturedSessions';
+import GetTicketsCTA from '../components/GetTicketsCTA';
 import Navbar from '../components/Navbar';
 
 const Index = () => {
@@ -18,7 +19,10 @@ const Index = () => {
       <div id="speakers">
         <FeaturedSpeakers />
       </div>
-      <FeaturedSessions />
+      <div id="sessions">
+        <FeaturedSessions />
+      </div>
+      <GetTicketsCTA />
     </div>
   );
 };

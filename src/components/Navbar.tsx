@@ -10,18 +10,25 @@ const Navbar = () => {
       const heroSection = document.querySelector('#hero');
       const speakersSection = document.querySelector('#speakers');
       const sessionsSection = document.querySelector('#sessions');
+      const ticketsSection = document.querySelector('#tickets');
       
-      if (heroSection && speakersSection && sessionsSection) {
+      if (heroSection && speakersSection && sessionsSection && ticketsSection) {
         const heroHeight = heroSection.getBoundingClientRect().height;
         const speakersSectionTop = speakersSection.getBoundingClientRect().top;
         const sessionsSectionTop = sessionsSection.getBoundingClientRect().top;
+        const ticketsSectionTop = ticketsSection.getBoundingClientRect().top;
         
-        // Switch to white background when between hero and speakers section
-        // or when in the sessions section (white background)
-        if (speakersSectionTop <= 0 && sessionsSectionTop > 0) {
-          // We're in the speakers section (black background)
+        // Switch to white background when:
+        // 1. Between hero and speakers section
+        // 2. When in the sessions section (white background)
+        // And switch to black when:
+        // 1. In the speakers section (black background)
+        // 2. In the tickets section (black background)
+        if ((speakersSectionTop <= 0 && sessionsSectionTop > 0) || 
+            (ticketsSectionTop <= 0 && ticketsSectionTop > -800)) {
+          // We're in the speakers section or tickets section (black background)
           setIsWhiteBackground(false);
-        } else if (sessionsSectionTop <= 0) {
+        } else if (sessionsSectionTop <= 0 && ticketsSectionTop > 0) {
           // We're in the sessions section (white background)
           setIsWhiteBackground(true);
         } else if (window.scrollY > heroHeight - 100) {

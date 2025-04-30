@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Index from "./pages/Index";
 import Contact from "./pages/Contact";
@@ -12,6 +12,9 @@ import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 import Dashboard from "./pages/Dashboard";
 import Footer from "./components/Footer";
+import ProfilePage from "./pages/dashboard/ProfilePage";
+import SettingsPage from "./pages/dashboard/SettingsPage";
+import NotificationsPage from "./pages/dashboard/NotificationsPage";
 
 const queryClient = new QueryClient();
 
@@ -38,11 +41,11 @@ const StandardLayout = ({ children }: { children: React.ReactNode }) => (
   </>
 );
 
-// Dashboard doesn't need the standard footer
-const DashboardLayout = ({ children }: { children: React.ReactNode }) => (
-  <>
-    {children}
-  </>
+// Dashboard layout with outlet for nested routes
+const DashboardLayout = () => (
+  <ProtectedRoute>
+    <Dashboard />
+  </ProtectedRoute>
 );
 
 const AppRoutes = () => {
@@ -89,16 +92,12 @@ const AppRoutes = () => {
           )
         }
       />
-      <Route 
-        path="/dashboard" 
-        element={
-          <ProtectedRoute>
-            <DashboardLayout>
-              <Dashboard />
-            </DashboardLayout>
-          </ProtectedRoute>
-        } 
-      />
+      <Route path="/dashboard" element={<DashboardLayout />}>
+        <Route index element={<Outlet />} />
+        <Route path="profile" element={<ProfilePage />} />
+        <Route path="settings" element={<SettingsPage />} />
+        <Route path="notifications" element={<NotificationsPage />} />
+      </Route>
       <Route path="*" element={
         <StandardLayout>
           <NotFound />

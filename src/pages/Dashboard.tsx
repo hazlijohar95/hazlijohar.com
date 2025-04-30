@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Outlet } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
 import Navbar from '../components/Navbar';
 import OverviewCards from '@/components/dashboard/OverviewCards';
@@ -15,12 +15,17 @@ import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
 import WelcomeBanner from '@/components/dashboard/WelcomeBanner';
 import DashboardCalendar from '@/components/dashboard/DashboardCalendar';
 import TaskManager from '@/components/dashboard/TaskManager';
+import { useLocation } from 'react-router-dom';
 
 const Dashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [profile, setProfile] = useState<{ first_name?: string; last_name?: string } | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
+  
+  // Check if we're on a nested route
+  const isNestedRoute = location.pathname !== "/dashboard";
   
   useEffect(() => {
     // If no user is logged in, redirect to login
@@ -55,6 +60,32 @@ const Dashboard = () => {
     ? `${profile.first_name || ''} ${profile.last_name || ''}`.trim() 
     : user?.email?.split('@')[0] || 'Client';
 
+  // If this is a nested route (profile, settings, notifications), render the Outlet
+  if (isNestedRoute) {
+    return (
+      <div className="min-h-screen bg-black text-white">
+        <Navbar />
+        
+        <div className="flex">
+          {/* Sidebar */}
+          <DashboardSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+          
+          {/* Main content */}
+          <div className="flex-1 pt-24 pb-16 px-6 lg:px-8">
+            {/* Welcome Banner */}
+            <WelcomeBanner clientName={clientName} />
+            
+            {/* Nested route content */}
+            <div className="mt-8">
+              <Outlet />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Main dashboard view
   return (
     <div className="min-h-screen bg-black text-white">
       <Navbar />

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { 
   LayoutDashboard, Files, Calendar, CheckSquare, 
   HelpCircle, CreditCard, Settings, User, 
@@ -19,6 +19,7 @@ interface DashboardSidebarProps {
 const DashboardSidebar = ({ activeTab, setActiveTab }: DashboardSidebarProps) => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
@@ -38,19 +39,28 @@ const DashboardSidebar = ({ activeTab, setActiveTab }: DashboardSidebarProps) =>
   };
 
   const navItems = [
-    { id: "overview", icon: <LayoutDashboard size={20} />, label: "Overview" },
-    { id: "documents", icon: <Files size={20} />, label: "Documents" },
-    { id: "calendar", icon: <Calendar size={20} />, label: "Calendar" },
-    { id: "tasks", icon: <CheckSquare size={20} />, label: "Tasks" },
-    { id: "questions", icon: <HelpCircle size={20} />, label: "Questions" },
-    { id: "billing", icon: <CreditCard size={20} />, label: "Billing" },
+    { id: "overview", icon: <LayoutDashboard size={20} />, label: "Overview", path: "/dashboard" },
+    { id: "documents", icon: <Files size={20} />, label: "Documents", path: "/dashboard" },
+    { id: "calendar", icon: <Calendar size={20} />, label: "Calendar", path: "/dashboard" },
+    { id: "tasks", icon: <CheckSquare size={20} />, label: "Tasks", path: "/dashboard" },
+    { id: "questions", icon: <HelpCircle size={20} />, label: "Questions", path: "/dashboard" },
+    { id: "billing", icon: <CreditCard size={20} />, label: "Billing", path: "/dashboard" },
   ];
 
   const accountItems = [
-    { id: "profile", icon: <User size={20} />, label: "Profile", link: "/profile" },
-    { id: "settings", icon: <Settings size={20} />, label: "Settings", link: "/settings" },
-    { id: "notifications", icon: <Bell size={20} />, label: "Notifications", link: "/notifications" },
+    { id: "profile", icon: <User size={20} />, label: "Profile", path: "/dashboard/profile" },
+    { id: "settings", icon: <Settings size={20} />, label: "Settings", path: "/dashboard/settings" },
+    { id: "notifications", icon: <Bell size={20} />, label: "Notifications", path: "/dashboard/notifications" },
   ];
+
+  // Check if the current location matches an account item path
+  const isAccountPage = (path: string) => location.pathname === path;
+
+  // Handle navigation between main dashboard tabs
+  const handleTabClick = (tabId: string) => {
+    setActiveTab(tabId);
+    navigate('/dashboard');
+  };
 
   return (
     <div className="hidden lg:block w-64 min-h-screen bg-[#111] border-r border-[#1A1A1A] pt-24">
@@ -61,11 +71,11 @@ const DashboardSidebar = ({ activeTab, setActiveTab }: DashboardSidebarProps) =>
             <button
               key={item.id}
               className={`flex items-center w-full px-4 py-2 rounded-md transition-colors ${
-                activeTab === item.id 
+                activeTab === item.id && location.pathname === "/dashboard"
                   ? "bg-white text-black" 
                   : "text-[#CCC] hover:bg-[#222] hover:text-white"
               }`}
-              onClick={() => setActiveTab(item.id)}
+              onClick={() => handleTabClick(item.id)}
             >
               <span className="mr-3">{item.icon}</span>
               {item.label}
@@ -82,8 +92,12 @@ const DashboardSidebar = ({ activeTab, setActiveTab }: DashboardSidebarProps) =>
             {accountItems.map((item) => (
               <Link
                 key={item.id}
-                to={item.link}
-                className="flex items-center w-full px-4 py-2 text-[#CCC] rounded-md transition-colors hover:bg-[#222] hover:text-white"
+                to={item.path}
+                className={`flex items-center w-full px-4 py-2 rounded-md transition-colors ${
+                  isAccountPage(item.path)
+                    ? "bg-white text-black" 
+                    : "text-[#CCC] hover:bg-[#222] hover:text-white"
+                }`}
               >
                 <span className="mr-3">{item.icon}</span>
                 {item.label}

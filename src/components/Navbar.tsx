@@ -73,6 +73,9 @@ const Navbar = () => {
     }
   };
 
+  // Check if we're on the dashboard
+  const isDashboard = location.pathname.startsWith('/dashboard');
+  
   // Check if we're on the home page
   const isHomePage = location.pathname === '/';
 
@@ -85,7 +88,7 @@ const Navbar = () => {
     </>
   ) : null;
 
-  return <nav className={`fixed top-0 left-0 right-0 z-50 flex justify-between items-center py-5 px-8 border-b transition-colors duration-300 ease-in-out ${isWhiteBackground ? 'bg-white text-black border-[#EBEBEB]' : 'bg-black text-white border-[#1A1A1A]'}`}>
+  return <nav className={`fixed top-0 left-0 right-0 z-50 flex justify-between items-center py-5 px-8 border-b transition-colors duration-300 ease-in-out ${isWhiteBackground && !isDashboard ? 'bg-white text-black border-[#EBEBEB]' : 'bg-black text-white border-[#1A1A1A]'}`}>
       {/* Left menu items */}
       <div className="hidden md:flex space-x-6 font-mono uppercase tracking-wide text-sm">
         {renderSectionLinks}
@@ -99,7 +102,7 @@ const Navbar = () => {
               <Menu className="mr-2" size={18} /> Menu
             </button>
           </SheetTrigger>
-          <SheetContent side="left" className={`${isWhiteBackground ? 'bg-white text-black' : 'bg-black text-white'} border-r-[1px] ${isWhiteBackground ? 'border-[#EBEBEB]' : 'border-[#1A1A1A]'}`}>
+          <SheetContent side="left" className={`${isWhiteBackground && !isDashboard ? 'bg-white text-black' : 'bg-black text-white'} border-r-[1px] ${isWhiteBackground && !isDashboard ? 'border-[#EBEBEB]' : 'border-[#1A1A1A]'}`}>
             <div className="flex flex-col mt-10 space-y-6 font-mono uppercase tracking-wide text-sm">
               {isHomePage && (
                 <>
@@ -112,7 +115,10 @@ const Navbar = () => {
                 <Link to="/contact" className="hover:opacity-80 transition-opacity">Contact Us</Link>
               </div>
               {user ? (
-                <button onClick={handleLogout} className="hover:opacity-80 transition-opacity">Logout</button>
+                <>
+                  <Link to="/dashboard" className="hover:opacity-80 transition-opacity">Dashboard</Link>
+                  <button onClick={handleLogout} className="hover:opacity-80 transition-opacity">Logout</button>
+                </>
               ) : (
                 <Link to="/login" className="hover:opacity-80 transition-opacity">Client Login</Link>
               )}
@@ -123,14 +129,19 @@ const Navbar = () => {
       
       {/* Center logo */}
       <div className="flex items-center font-mono">
-        <Link to="/" className="text-xl font-bold">ACME</Link>
+        <Link to="/" className="text-xl font-bold">
+          {isDashboard ? "ACME - Client Portal" : "ACME"}
+        </Link>
       </div>
       
       {/* Right menu items */}
       <div className="hidden md:flex space-x-6 font-mono uppercase tracking-wide text-sm">
         <Link to="/contact" className="hover:opacity-80 transition-opacity">Contact Us</Link>
         {user ? (
-          <button onClick={handleLogout} className="hover:opacity-80 transition-opacity">Logout</button>
+          <>
+            <Link to="/dashboard" className="hover:opacity-80 transition-opacity">Dashboard</Link>
+            <button onClick={handleLogout} className="hover:opacity-80 transition-opacity">Logout</button>
+          </>
         ) : (
           <Link to="/login" className="hover:opacity-80 transition-opacity">Client Login</Link>
         )}

@@ -26,7 +26,7 @@ export const sessions: Session[] = [
     time: "1:35 PM–1:55 PM",
     description: "Get architectural strategies for scaling dynamic content globally while ensuring low latency.",
     speakers: [
-      { name: "PEPIJN SENDERS", company: "HELLOFRESH", image: "/lovable-uploads/9fa1e196-6516-4c96-b5fc-cc91548898e9.png" }
+      { name: "PEPIJN SENDERS", company: "HELLOFRESH", image: "/lovable-uploads/b80405d0-8500-4bb0-9154-897328cbbfbf.png" }
     ]
   },
   {
@@ -35,7 +35,7 @@ export const sessions: Session[] = [
     description: "Learn how to use the Flags SDK to experiment without impacting site performance.",
     speakers: [
       { name: "DOMINIK FERBER", company: "VERCEL", image: "/lovable-uploads/9fa1e196-6516-4c96-b5fc-cc91548898e9.png" },
-      { name: "JOE ZENG", company: "STATSIG", image: "/lovable-uploads/9fa1e196-6516-4c96-b5fc-cc91548898e9.png" }
+      { name: "JOE ZENG", company: "STATSIG", image: "/lovable-uploads/8be56735-e3f5-40a9-bee4-cc84c7227998.png" }
     ]
   }
 ];

@@ -4,7 +4,6 @@ import HeroSection from '../components/HeroSection';
 import ExpectSection from '../components/ExpectSection';
 import FeaturedSpeakers from '../components/FeaturedSpeakers';
 import FeaturedSessions from '../components/FeaturedSessions';
-import ScheduleSection from '../components/ScheduleSection';
 import GetTicketsCTA from '../components/GetTicketsCTA';
 import FAQSection from '../components/FAQSection';
 import LastYearSection from '../components/LastYearSection';
@@ -51,9 +50,6 @@ const Index = () => {
       <ExpectSection />
       <div id="speakers">
         <FeaturedSpeakers />
-      </div>
-      <div id="schedule">
-        <ScheduleSection />
       </div>
       <div id="sessions">
         <FeaturedSessions />

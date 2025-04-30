@@ -9,25 +9,25 @@ import { Separator } from './ui/separator';
 const FeaturedSessions = () => {
   return (
     <SectionContainer id="sessions" bgColor="white">
-      <div className="container mx-auto px-0 max-w-[1400px]">
-        <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-12 items-start">
+      <div className="container mx-auto px-4 md:px-6 max-w-[1400px]">
+        <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-12 lg:gap-16 items-start">
           {/* Left Column: Section Title */}
-          <div className="pl-4 md:pl-0">
-            <SectionTitle as="h2" className="text-black">
+          <div className="pl-0">
+            <SectionTitle as="h2" className="text-black text-5xl md:text-6xl lg:text-7xl">
               Featured<br />Sessions
             </SectionTitle>
           </div>
 
           {/* Right Column: List of Sessions */}
-          <div className="flex flex-col">
+          <div className="flex flex-col space-y-4">
             {sessions.map((session, index) => (
               <div key={index}>
-                <div className="py-12 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="py-10 md:py-12 grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
-                    <h3 className="text-3xl md:text-4xl font-medium leading-tight whitespace-pre-line mb-2">
+                    <h3 className="text-2xl md:text-3xl lg:text-4xl font-medium leading-tight whitespace-pre-line mb-3">
                       {session.title}
                     </h3>
-                    <p className="font-mono text-sm text-black">{session.time}</p>
+                    <p className="font-mono text-sm text-black mt-2">{session.time}</p>
                   </div>
                   
                   <div>
@@ -37,23 +37,25 @@ const FeaturedSessions = () => {
                     <div className="flex flex-col gap-4">
                       {session.speakers.map((speaker, idx) => (
                         <div key={idx} className="flex items-center gap-3">
-                          <Avatar className="h-8 w-8">
+                          <Avatar className="h-8 w-8 rounded-full overflow-hidden">
                             <AvatarImage 
                               src={speaker.image} 
                               alt={`${speaker.name} from ${speaker.company}`} 
-                              className="grayscale" 
+                              className="grayscale object-cover" 
                               loading="lazy"
                             />
-                            <AvatarFallback>{speaker.name.substring(0, 2)}</AvatarFallback>
+                            <AvatarFallback className="bg-gray-100 text-gray-600 text-xs">
+                              {speaker.name.substring(0, 2)}
+                            </AvatarFallback>
                           </Avatar>
-                          <p className="text-sm font-mono">{speaker.name}, {speaker.company}</p>
+                          <p className="text-sm font-mono tracking-wide">{speaker.name}, {speaker.company}</p>
                         </div>
                       ))}
                     </div>
                   </div>
                 </div>
                 {index < sessions.length - 1 && (
-                  <Separator className="bg-[#DADADA] h-[1px] w-full" />
+                  <Separator className="bg-[#EBEBEB] h-px w-full" />
                 )}
               </div>
             ))}

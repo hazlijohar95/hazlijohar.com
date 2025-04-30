@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useScrollObserver } from '../hooks/useScrollObserver';
@@ -89,6 +90,14 @@ const Navbar = () => {
     </>
   ) : null;
 
+  // Minimalist HJ Logo component
+  const MinimalistHJLogo = ({ className = "" }) => (
+    <div className={`font-mono font-bold ${className}`}>
+      <span className="tracking-tighter">H</span>
+      <span className="tracking-tighter">J</span>
+    </div>
+  );
+
   return <nav 
       className={`fixed top-0 left-0 right-0 z-50 flex justify-between items-center py-5 px-8 border-b transition-colors duration-300 ease-in-out ${isWhiteBackground && !isDashboard ? 'bg-white text-black border-[#EBEBEB]' : 'bg-black text-white border-[#1A1A1A]'}`}
       aria-label="Main navigation"
@@ -110,11 +119,7 @@ const Navbar = () => {
             <div className="flex flex-col mt-10 space-y-6 font-mono uppercase tracking-wide text-sm">
               <div className="flex justify-between items-center mb-8">
                 <div className="flex items-center">
-                  <img 
-                    src="/public/lovable-uploads/f757621e-0869-4b8d-997f-982e149145c6.png" 
-                    alt="Hazli Johar & Co. Logo" 
-                    className="h-8 mix-blend-lighten"
-                  />
+                  <MinimalistHJLogo className="text-2xl" />
                 </div>
                 <button onClick={() => setIsMenuOpen(false)} aria-label="Close menu">
                   <X size={24} />
@@ -146,11 +151,7 @@ const Navbar = () => {
       {/* Center logo */}
       <div className="flex items-center font-mono">
         <Link to="/" className="flex items-center">
-          <img 
-            src="/public/lovable-uploads/f757621e-0869-4b8d-997f-982e149145c6.png" 
-            alt="Hazli Johar & Co. Logo" 
-            className="h-8 mr-3 mix-blend-lighten"
-          />
+          <MinimalistHJLogo className="text-3xl mr-3" />
           {isDashboard && <span className="text-sm font-medium ml-3 opacity-70">Client Portal</span>}
         </Link>
       </div>

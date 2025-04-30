@@ -2,15 +2,19 @@
 import React from 'react';
 
 const Footer = () => {
+  // Minimalist HJ Logo component
+  const MinimalistHJLogo = ({ className = "" }) => (
+    <div className={`font-mono font-bold ${className}`}>
+      <span className="tracking-tighter">H</span>
+      <span className="tracking-tighter">J</span>
+    </div>
+  );
+
   return (
     <footer className="bg-black text-white text-center py-16 px-4 font-mono">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-center mb-4">
-          <img 
-            src="/public/lovable-uploads/f757621e-0869-4b8d-997f-982e149145c6.png" 
-            alt="Hazli Johar & Co. Logo" 
-            className="h-16 mix-blend-lighten"
-          />
+          <MinimalistHJLogo className="text-5xl" />
         </div>
         <h1 className="text-3xl font-semibold mb-6">
           Hazli Johar & Co. Chartered Accountants

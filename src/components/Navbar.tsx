@@ -1,17 +1,15 @@
-
 import React, { useState, useEffect } from 'react';
 import { useScrollObserver } from '../hooks/useScrollObserver';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 import { Menu } from 'lucide-react';
-
 const Navbar = () => {
   const [isWhiteBackground, setIsWhiteBackground] = useState(false);
-  const { isIntersecting } = useScrollObserver(['hero', 'leadership', 'services', 'contact']);
-  
+  const {
+    isIntersecting
+  } = useScrollObserver(['hero', 'leadership', 'services', 'contact']);
   useEffect(() => {
     // Use the intersection data to determine navbar background
-    if ((isIntersecting['leadership'] && !isIntersecting['services']) || 
-        (isIntersecting['contact'])) {
+    if (isIntersecting['leadership'] && !isIntersecting['services'] || isIntersecting['contact']) {
       // We're in the speakers section or tickets section (black background)
       setIsWhiteBackground(false);
     } else if (isIntersecting['services']) {
@@ -25,15 +23,7 @@ const Navbar = () => {
       setIsWhiteBackground(false);
     }
   }, [isIntersecting]);
-  
-  return (
-    <nav 
-      className={`fixed top-0 left-0 right-0 z-50 flex justify-between items-center py-5 px-8 border-b transition-colors duration-300 ease-in-out ${
-        isWhiteBackground 
-          ? 'bg-white text-black border-[#EBEBEB]' 
-          : 'bg-black text-white border-[#1A1A1A]'
-      }`}
-    >
+  return <nav className={`fixed top-0 left-0 right-0 z-50 flex justify-between items-center py-5 px-8 border-b transition-colors duration-300 ease-in-out ${isWhiteBackground ? 'bg-white text-black border-[#EBEBEB]' : 'bg-black text-white border-[#1A1A1A]'}`}>
       {/* Left menu items */}
       <div className="hidden md:flex space-x-6 font-mono uppercase tracking-wide text-sm">
         <a href="#leadership" className="hover:opacity-80 transition-opacity">Team</a>
@@ -49,10 +39,7 @@ const Navbar = () => {
               <Menu className="mr-2" size={18} /> Menu
             </button>
           </SheetTrigger>
-          <SheetContent 
-            side="left" 
-            className={`${isWhiteBackground ? 'bg-white text-black' : 'bg-black text-white'} border-r-[1px] ${isWhiteBackground ? 'border-[#EBEBEB]' : 'border-[#1A1A1A]'}`}
-          >
+          <SheetContent side="left" className={`${isWhiteBackground ? 'bg-white text-black' : 'bg-black text-white'} border-r-[1px] ${isWhiteBackground ? 'border-[#EBEBEB]' : 'border-[#1A1A1A]'}`}>
             <div className="flex flex-col mt-10 space-y-6 font-mono uppercase tracking-wide text-sm">
               <a href="#leadership" className="hover:opacity-80 transition-opacity">Team</a>
               <a href="#services" className="hover:opacity-80 transition-opacity">Services</a>
@@ -68,12 +55,8 @@ const Navbar = () => {
       
       {/* Center logo */}
       <div className="flex items-center font-mono">
-        <a href="#hero" className="font-bold">Hazli Johar</a>
-        <span className={`ml-1 px-2 py-0.5 rounded-full text-xs font-mono ${
-          isWhiteBackground 
-            ? 'bg-[#F5F5F5] text-[#666666]'
-            : 'bg-[#0F0F0F] text-[#AAAAAA]'
-        }`}>& Co.</span>
+        
+        
       </div>
       
       {/* Right menu items */}
@@ -84,8 +67,6 @@ const Navbar = () => {
       
       {/* Mobile empty div for flex spacing */}
       <div className="md:hidden"></div>
-    </nav>
-  );
+    </nav>;
 };
-
 export default Navbar;

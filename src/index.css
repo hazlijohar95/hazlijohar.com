@@ -36,20 +36,17 @@
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Brand color variables */
+    --brand: 255 75% 75%;
+    --brand-foreground: 0 0% 100%;
   }
 
   .dark {
@@ -88,6 +85,10 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Brand color variables - dark mode */
+    --brand: 255 60% 60%;
+    --brand-foreground: 0 0% 100%;
   }
 }
 
@@ -97,7 +98,48 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+  }
+
+  /* Typography system */
+  h1, .h1 {
+    @apply text-3xl md:text-4xl font-bold tracking-tight mb-4;
+  }
+
+  h2, .h2 {
+    @apply text-2xl md:text-3xl font-semibold tracking-tight mb-3;
+  }
+
+  h3, .h3 {
+    @apply text-xl md:text-2xl font-medium tracking-tight mb-2;
+  }
+
+  h4, .h4 {
+    @apply text-lg md:text-xl font-medium mb-2;
+  }
+
+  p, .body-text {
+    @apply text-base leading-relaxed;
+  }
+
+  .body-large {
+    @apply text-lg leading-relaxed;
+  }
+
+  .body-small {
+    @apply text-sm leading-relaxed;
+  }
+
+  .caption {
+    @apply text-sm text-muted-foreground;
+  }
+
+  .label {
+    @apply text-sm font-medium leading-none mb-2;
+  }
+
+  .monospace {
+    @apply font-mono text-sm;
   }
 }
 
@@ -115,4 +157,19 @@
 @keyframes scrollX {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
+}
+
+/* Button variants */
+@layer components {
+  .btn-brand {
+    @apply bg-brand hover:bg-brand-dark text-white transition-colors;
+  }
+
+  .btn-outline-brand {
+    @apply border border-brand text-brand hover:bg-brand/10 transition-colors;
+  }
+
+  .btn-ghost-brand {
+    @apply text-brand hover:bg-brand/10 transition-colors;
+  }
 }

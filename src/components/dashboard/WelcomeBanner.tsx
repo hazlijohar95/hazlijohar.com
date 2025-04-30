@@ -2,6 +2,7 @@
 import React from 'react';
 import { Bell } from 'lucide-react';
 import { styles } from '@/styles/common-styles';
+import { Button } from '@/components/ui/button';
 
 interface WelcomeBannerProps {
   clientName: string;
@@ -34,21 +35,21 @@ const WelcomeBanner = ({ clientName }: WelcomeBannerProps) => {
       <div className={styles.cardContent}>
         <div className={styles.flexBetween}>
           <div>
-            <h1 className={styles.heading1}>
-              {getGreeting()}, {clientName} 👋
+            <h1 className="text-3xl font-bold">
+              {getGreeting()}, <span className="text-brand">{clientName}</span> 👋
             </h1>
-            <p className={`${styles.mono} text-[#999]`}>Today is {currentDate}</p>
+            <p className="font-mono text-sm text-[#999]">Today is {currentDate}</p>
           </div>
           
           <div className="relative">
-            <button className={styles.buttonIcon}>
+            <Button variant="outline" size="icon" className="rounded-full">
               <Bell size={20} />
               {notifications.length > 0 && (
-                <span className={styles.notification}>
+                <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-brand text-white text-xs flex items-center justify-center">
                   {notifications.length}
                 </span>
               )}
-            </button>
+            </Button>
           </div>
         </div>
         
@@ -56,7 +57,7 @@ const WelcomeBanner = ({ clientName }: WelcomeBannerProps) => {
           <div className="mt-6 space-y-2">
             <h3 className="text-sm font-medium text-[#CCC]">Important notifications:</h3>
             {notifications.map((notification) => (
-              <div key={notification.id} className="bg-[#1A1A1A] p-3 rounded-lg border-l-4 border-white">
+              <div key={notification.id} className="bg-[#1A1A1A] p-3 rounded-lg border-l-4 border-brand">
                 {notification.message}
               </div>
             ))}

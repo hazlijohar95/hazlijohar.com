@@ -10,6 +10,7 @@ import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 interface DashboardSidebarProps {
   activeTab: string;
@@ -72,7 +73,7 @@ const DashboardSidebar = ({ activeTab, setActiveTab }: DashboardSidebarProps) =>
               key={item.id}
               className={`flex items-center w-full px-4 py-2 rounded-md transition-colors ${
                 activeTab === item.id && location.pathname === "/dashboard"
-                  ? "bg-white text-black" 
+                  ? "bg-brand text-white" 
                   : "text-[#CCC] hover:bg-[#222] hover:text-white"
               }`}
               onClick={() => handleTabClick(item.id)}
@@ -95,7 +96,7 @@ const DashboardSidebar = ({ activeTab, setActiveTab }: DashboardSidebarProps) =>
                 to={item.path}
                 className={`flex items-center w-full px-4 py-2 rounded-md transition-colors ${
                   isAccountPage(item.path)
-                    ? "bg-white text-black" 
+                    ? "bg-brand text-white" 
                     : "text-[#CCC] hover:bg-[#222] hover:text-white"
                 }`}
               >
@@ -104,13 +105,14 @@ const DashboardSidebar = ({ activeTab, setActiveTab }: DashboardSidebarProps) =>
               </Link>
             ))}
             
-            <button
+            <Button
+              variant="ghost"
               onClick={handleLogout}
-              className="flex items-center w-full px-4 py-2 text-[#CCC] rounded-md transition-colors hover:bg-[#222] hover:text-white"
+              className="flex items-center w-full px-4 py-2 justify-start font-normal text-[#CCC] hover:bg-[#222] hover:text-white"
             >
               <span className="mr-3"><LogOut size={20} /></span>
               Sign Out
-            </button>
+            </Button>
           </nav>
         </div>
       </div>

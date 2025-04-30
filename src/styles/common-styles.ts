@@ -9,11 +9,11 @@ export const styles = {
   cardContent: "p-6",
   cardHover: "transition-all duration-200 hover:shadow-md hover:border-[#333]",
   
-  // Button patterns - standardized across the app
-  buttonPrimary: "bg-white text-black py-3 px-6 rounded-lg font-medium hover:bg-[#f2f2f2] transition-colors inline-flex items-center justify-center gap-2",
+  // Button patterns - standardized across the app to use shadcn button variants
+  buttonPrimary: "bg-brand text-white py-3 px-6 rounded-lg font-medium hover:bg-brand-dark transition-colors inline-flex items-center justify-center gap-2",
   buttonSecondary: "bg-[#1A1A1A] text-white py-3 px-6 rounded-lg font-medium hover:bg-[#222] transition-colors inline-flex items-center justify-center gap-2",
-  buttonOutline: "bg-transparent border border-[#333] text-white py-3 px-6 rounded-lg font-medium hover:bg-[#111] transition-colors inline-flex items-center justify-center gap-2",
-  buttonLink: "text-white underline hover:text-[#CCC] transition-colors inline-flex items-center justify-center gap-2",
+  buttonOutline: "border border-brand text-white py-3 px-6 rounded-lg font-medium hover:bg-brand/10 transition-colors inline-flex items-center justify-center gap-2",
+  buttonLink: "text-brand underline hover:text-brand-dark transition-colors inline-flex items-center justify-center gap-2",
   buttonIcon: "p-2 bg-[#1A1A1A] rounded-lg hover:bg-[#333] transition-colors inline-flex items-center justify-center",
   
   // Input patterns - standardized across the app
@@ -27,10 +27,10 @@ export const styles = {
   flexBetween: "flex items-center justify-between",
   flexColumn: "flex flex-col",
   
-  // Typography - standardized font system
-  heading1: "text-3xl md:text-4xl font-medium leading-tight",
-  heading2: "text-2xl md:text-3xl font-medium leading-tight",
-  heading3: "text-xl md:text-2xl font-medium leading-tight",
+  // Typography - using our new standardized system
+  heading1: "text-3xl md:text-4xl font-bold tracking-tight",
+  heading2: "text-2xl md:text-3xl font-semibold tracking-tight",
+  heading3: "text-xl md:text-2xl font-medium tracking-tight",
   subheading: "font-mono text-sm uppercase text-[#999]",
   bodyLarge: "text-lg leading-relaxed",
   bodyText: "text-base leading-relaxed",
@@ -42,8 +42,14 @@ export const styles = {
   
   // Special elements
   badge: "px-2 py-0.5 text-xs font-mono rounded-full",
-  notification: "absolute top-0 right-0 w-4 h-4 rounded-full bg-white text-black text-xs flex items-center justify-center",
+  notification: "absolute top-0 right-0 w-4 h-4 rounded-full bg-brand text-white text-xs flex items-center justify-center",
   divider: "border-t border-[#1A1A1A] my-6",
+  
+  // Brand color specific elements
+  brandText: "text-brand",
+  brandBg: "bg-brand",
+  brandBorder: "border-brand",
+  brandHover: "hover:text-brand",
 };
 
 // Helper to easily combine styles with Tailwind classes
@@ -59,15 +65,16 @@ export const combineStyles = (...styleClasses: string[]) => {
  * - Borders: #1A1A1A (light), #333333 (medium)
  * - Text: #FFFFFF (primary), #999999 (secondary), #CCCCCC (tertiary)
  * - Primary: #FFFFFF (white for buttons)
+ * - Brand: #9b87f5 (main purple), variants also available
  * 
  * Typography:
- * - Headings: font-medium, with responsive sizes (heading1, heading2, heading3)
+ * - Headings: Scaled sizes from text-xl to text-4xl with appropriate weights
  * - Body: Regular weight, with 3 sizes (bodyLarge, bodyText, bodySmall)
  * - Mono: Font-mono for labels, badges, and technical information
  * 
  * Components:
  * - Cards: Rounded corners (xl), dark background, subtle border
- * - Buttons: Consistent rounding (lg), padding, and hover states
+ * - Buttons: Consistent rounding (lg), padding, and hover states with brand colors
  * - Inputs: Matching the button rounding and padding for consistency
  * 
  * Usage Examples:

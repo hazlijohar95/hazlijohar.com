@@ -19,7 +19,7 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { user, isLoading } = useAuth();
   
   if (isLoading) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+    return <div className="min-h-screen bg-black flex items-center justify-center text-white">Loading...</div>;
   }
   
   if (!user) {
@@ -30,7 +30,12 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
 };
 
 const AppRoutes = () => {
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
+
+  // Don't render anything while checking auth state
+  if (isLoading) {
+    return <div className="min-h-screen bg-black flex items-center justify-center text-white">Loading...</div>;
+  }
 
   return (
     <Routes>

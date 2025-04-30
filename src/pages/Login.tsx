@@ -19,7 +19,7 @@ const Login = () => {
     const checkUser = async () => {
       const { data } = await supabase.auth.getSession();
       if (data?.session) {
-        navigate('/'); // Redirect to home page if already logged in
+        navigate('/dashboard'); // Redirect to dashboard if already logged in
       }
     };
     
@@ -53,7 +53,8 @@ const Login = () => {
         description: "Welcome back to your account.",
       });
       
-      navigate('/');
+      // Redirect to dashboard instead of homepage
+      navigate('/dashboard');
     } catch (error: any) {
       toast({
         title: "Login failed",

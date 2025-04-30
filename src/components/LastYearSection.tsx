@@ -20,7 +20,7 @@ const LastYearSection = () => {
       <div className="max-w-6xl mx-auto">
         {/* Heading Block */}
         <h2 className={`text-[40px] md:text-[64px] ${styles.heading1} mb-8 max-w-4xl`}>
-          Inside ACME
+          Inside HJC
           <span className="block mt-2 text-xl md:text-2xl font-normal">Go behind the scenes — meet the people, see the work, and hear what clients say.</span>
         </h2>
 
@@ -55,7 +55,7 @@ const LastYearSection = () => {
               >
                 <OptimizedImage 
                   src={image}
-                  alt={`ACME team and culture image ${index + 1}`}
+                  alt={`HJC team and culture image ${index + 1}`}
                   className="rounded-lg w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
                   width={360}
                   height={400}

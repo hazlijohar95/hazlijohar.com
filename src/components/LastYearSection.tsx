@@ -19,7 +19,7 @@ const LastYearSection = () => {
     <section id="culture" className={`bg-black text-white ${styles.sectionPadding} overflow-hidden`}>
       <div className="max-w-6xl mx-auto">
         {/* Heading Block */}
-        <h2 className={`text-[40px] md:text-[64px] ${styles.heading} mb-8 max-w-4xl`}>
+        <h2 className={`text-[40px] md:text-[64px] ${styles.heading1} mb-8 max-w-4xl`}>
           Inside ACME
           <span className="block mt-2 text-xl md:text-2xl font-normal">Go behind the scenes — meet the people, see the work, and hear what clients say.</span>
         </h2>

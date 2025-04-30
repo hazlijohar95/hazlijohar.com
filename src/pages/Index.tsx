@@ -10,7 +10,9 @@ const Index = () => {
     <div className="relative">
       {/* Navbar is now fixed position and appears above all content */}
       <Navbar />
-      <HeroSection />
+      <div id="hero">
+        <HeroSection />
+      </div>
       <ExpectSection />
       <FeaturedSpeakers />
     </div>

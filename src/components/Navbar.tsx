@@ -6,12 +6,33 @@ const Navbar = () => {
   
   useEffect(() => {
     const handleScroll = () => {
-      // Get hero height minus some offset to trigger the transition earlier
-      const heroHeight = window.innerHeight - 100;
-      setIsWhiteBackground(window.scrollY > heroHeight);
+      // Get the hero section height
+      const heroSection = document.querySelector('#hero');
+      const speakersSection = document.querySelector('#speakers');
+      
+      if (heroSection && speakersSection) {
+        const heroHeight = heroSection.getBoundingClientRect().height;
+        const speakersSectionTop = speakersSection.getBoundingClientRect().top;
+        
+        // Switch to white background when we've scrolled past the hero section
+        // but switch back to black when we reach the speakers section
+        if (speakersSectionTop <= 0) {
+          // We've scrolled to or past the speakers section
+          setIsWhiteBackground(false);
+        } else if (window.scrollY > heroHeight - 100) {
+          // We're past the hero section but not yet at speakers section
+          setIsWhiteBackground(true);
+        } else {
+          // We're in the hero section
+          setIsWhiteBackground(false);
+        }
+      }
     };
     
     window.addEventListener('scroll', handleScroll);
+    // Initial check
+    handleScroll();
+    
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
   

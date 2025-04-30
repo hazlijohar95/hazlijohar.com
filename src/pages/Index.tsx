@@ -8,8 +8,11 @@ import GetTicketsCTA from '../components/GetTicketsCTA';
 import FAQSection from '../components/FAQSection';
 import LastYearSection from '../components/LastYearSection';
 import Navbar from '../components/Navbar';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const Index = () => {
+  const isMobile = useIsMobile();
+
   // Add smooth scrolling behavior
   useEffect(() => {
     const handleHashClick = (e: MouseEvent) => {
@@ -22,8 +25,11 @@ const Index = () => {
         const targetElement = document.getElementById(targetId);
         
         if (targetElement) {
+          const navbarHeight = 70; // Approximate navbar height
+          const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
+          
           window.scrollTo({
-            top: targetElement.offsetTop,
+            top: targetPosition,
             behavior: 'smooth'
           });
           
@@ -43,14 +49,14 @@ const Index = () => {
   return (
     <div className="relative">
       <Navbar />
-      <div id="hero">
+      <div id="hero" className="mobile-touch-scroll">
         <HeroSection />
       </div>
       <ExpectSection />
-      <div id="leadership">
+      <div id="leadership" className="mobile-touch-scroll">
         <FeaturedSpeakers />
       </div>
-      <div id="services">
+      <div id="services" className="mobile-touch-scroll">
         <FeaturedSessions />
       </div>
       <div id="contact">

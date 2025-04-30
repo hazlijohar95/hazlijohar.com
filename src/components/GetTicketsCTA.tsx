@@ -1,9 +1,11 @@
 
 import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const GetTicketsCTA = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const isMobile = useIsMobile();
   
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -91,19 +93,19 @@ const GetTicketsCTA = () => {
   }, []);
   
   return (
-    <section id="contact" className="bg-black py-20 md:py-32 px-4 md:px-8 flex justify-center items-center">
+    <section id="contact" className="bg-black py-16 sm:py-20 md:py-32 px-4 md:px-8 flex justify-center items-center">
       <div className="max-w-[720px] w-full relative overflow-hidden group">
-        <div className="text-white text-center mb-8">
-          <h2 className="text-3xl md:text-4xl font-medium mb-4">Let's get started</h2>
-          <p className="text-lg opacity-80 font-mono">👋 Begin your journey with ACME — no hard sell, just good advice.</p>
+        <div className="text-white text-center mb-6 sm:mb-8">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-medium mb-3 sm:mb-4">Let's get started</h2>
+          <p className="text-base sm:text-lg opacity-80 font-mono">👋 Begin your journey with ACME — no hard sell, just good advice.</p>
         </div>
         <Link 
           to="/contact" 
-          className="bg-white text-black text-[36px] md:text-[48px] lg:text-[64px] font-semibold tracking-tight px-8 py-6 md:px-16 md:py-8 w-full inline-flex items-center justify-between hover:scale-[1.03] transition-transform duration-300 ease-in-out"
+          className="bg-white text-black text-[28px] sm:text-[36px] md:text-[48px] lg:text-[64px] font-semibold tracking-tight px-6 py-4 sm:px-8 sm:py-6 md:px-16 md:py-8 w-full inline-flex items-center justify-between hover:scale-[1.03] transition-transform duration-300 ease-in-out mobile-tap-target"
           aria-label="Book a free call"
         >
           Book A Free Call
-          <span className="text-[36px] md:text-[48px]">→</span>
+          <span className="text-[28px] sm:text-[36px] md:text-[48px]">→</span>
         </Link>
         <div className="absolute -bottom-[10px] left-0 w-full h-[50px] overflow-hidden">
           <canvas 

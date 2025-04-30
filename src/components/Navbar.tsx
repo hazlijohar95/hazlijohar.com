@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useScrollObserver } from '../hooks/useScrollObserver';
@@ -8,6 +7,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/components/ui/use-toast';
 import { OptimizedImage } from './ui/optimized-image';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const Navbar = () => {
   const [isWhiteBackground, setIsWhiteBackground] = useState(false);
@@ -15,6 +15,7 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const isMobile = useIsMobile();
   
   const {
     isIntersecting
@@ -99,7 +100,7 @@ const Navbar = () => {
   );
 
   return <nav 
-      className={`fixed top-0 left-0 right-0 z-50 flex justify-between items-center py-5 px-8 border-b transition-colors duration-300 ease-in-out ${isWhiteBackground && !isDashboard ? 'bg-white text-black border-[#EBEBEB]' : 'bg-black text-white border-[#1A1A1A]'}`}
+      className={`fixed top-0 left-0 right-0 z-50 flex justify-between items-center py-4 sm:py-5 px-4 sm:px-8 border-b transition-colors duration-300 ease-in-out ${isWhiteBackground && !isDashboard ? 'bg-white text-black border-[#EBEBEB]' : 'bg-black text-white border-[#1A1A1A]'}`}
       aria-label="Main navigation"
     >
       {/* Left menu items */}
@@ -115,9 +116,9 @@ const Navbar = () => {
               <Menu className="mr-2" size={18} /> Menu
             </button>
           </SheetTrigger>
-          <SheetContent side="left" className={`${isWhiteBackground && !isDashboard ? 'bg-white text-black' : 'bg-black text-white'} border-r-[1px] ${isWhiteBackground && !isDashboard ? 'border-[#EBEBEB]' : 'border-[#1A1A1A]'}`}>
-            <div className="flex flex-col mt-10 space-y-6 font-mono uppercase tracking-wide text-sm">
-              <div className="flex justify-between items-center mb-8">
+          <SheetContent side="left" className={`p-0 ${isWhiteBackground && !isDashboard ? 'bg-white text-black' : 'bg-black text-white'} border-r-[1px] ${isWhiteBackground && !isDashboard ? 'border-[#EBEBEB]' : 'border-[#1A1A1A]'}`}>
+            <div className="flex flex-col h-full">
+              <div className="flex justify-between items-center p-4 border-b border-[#333333]">
                 <div className="flex items-center">
                   <MinimalistHJLogo className="text-2xl" />
                 </div>
@@ -125,24 +126,28 @@ const Navbar = () => {
                   <X size={24} />
                 </button>
               </div>
-              {isHomePage && (
-                <>
-                  <a href="#leadership" className="hover:opacity-80 transition-opacity" onClick={() => setIsMenuOpen(false)}>Team</a>
-                  <a href="#services" className="hover:opacity-80 transition-opacity" onClick={() => setIsMenuOpen(false)}>Services</a>
-                  <a href="#faq" className="hover:opacity-80 transition-opacity" onClick={() => setIsMenuOpen(false)}>FAQ</a>
-                </>
-              )}
-              <div className="pt-6 border-t border-[#333333]">
-                <Link to="/contact" className="hover:opacity-80 transition-opacity" onClick={() => setIsMenuOpen(false)}>Contact Us</Link>
+              
+              <div className="flex-1 overflow-y-auto pt-4 px-4">
+                {isHomePage && (
+                  <div className="space-y-6 font-mono uppercase tracking-wide text-sm mb-6">
+                    <a href="#leadership" className="block hover:opacity-80 transition-opacity py-2" onClick={() => setIsMenuOpen(false)}>Team</a>
+                    <a href="#services" className="block hover:opacity-80 transition-opacity py-2" onClick={() => setIsMenuOpen(false)}>Services</a>
+                    <a href="#faq" className="block hover:opacity-80 transition-opacity py-2" onClick={() => setIsMenuOpen(false)}>FAQ</a>
+                  </div>
+                )}
+                
+                <div className="pt-6 border-t border-[#333333] space-y-6 font-mono uppercase tracking-wide text-sm">
+                  <Link to="/contact" className="block hover:opacity-80 transition-opacity py-2" onClick={() => setIsMenuOpen(false)}>Contact Us</Link>
+                  {user ? (
+                    <>
+                      <Link to="/dashboard" className="block hover:opacity-80 transition-opacity py-2" onClick={() => setIsMenuOpen(false)}>Dashboard</Link>
+                      <button onClick={() => {handleLogout(); setIsMenuOpen(false);}} className="block hover:opacity-80 transition-opacity text-left w-full py-2">Logout</button>
+                    </>
+                  ) : (
+                    <Link to="/login" className="block hover:opacity-80 transition-opacity py-2" onClick={() => setIsMenuOpen(false)}>Client Login</Link>
+                  )}
+                </div>
               </div>
-              {user ? (
-                <>
-                  <Link to="/dashboard" className="hover:opacity-80 transition-opacity" onClick={() => setIsMenuOpen(false)}>Dashboard</Link>
-                  <button onClick={() => {handleLogout(); setIsMenuOpen(false);}} className="hover:opacity-80 transition-opacity text-left">Logout</button>
-                </>
-              ) : (
-                <Link to="/login" className="hover:opacity-80 transition-opacity" onClick={() => setIsMenuOpen(false)}>Client Login</Link>
-              )}
             </div>
           </SheetContent>
         </Sheet>
@@ -151,8 +156,8 @@ const Navbar = () => {
       {/* Center logo */}
       <div className="flex items-center font-mono">
         <Link to="/" className="flex items-center">
-          <MinimalistHJLogo className="text-3xl mr-3" />
-          {isDashboard && <span className="text-sm font-medium ml-3 opacity-70">Client Portal</span>}
+          <MinimalistHJLogo className="text-2xl sm:text-3xl mr-3" />
+          {isDashboard && <span className="text-xs sm:text-sm font-medium ml-1 sm:ml-3 opacity-70">Client Portal</span>}
         </Link>
       </div>
       

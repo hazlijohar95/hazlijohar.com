@@ -23,3 +23,36 @@
 .scroll-snap-start {
   scroll-snap-align: start;
 }
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  .mobile-full-height {
+    min-height: 100vh;
+    height: auto;
+  }
+  
+  .mobile-padding {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .mobile-touch-scroll {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Improve tap target sizes on mobile */
+  .mobile-tap-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Prevent text size adjustments */
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+}
+
+/* Add smooth scrolling to the whole page */
+html {
+  scroll-behavior: smooth;
+}

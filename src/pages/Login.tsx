@@ -1,8 +1,10 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { styles } from '@/styles/common-styles';
 import { toast } from '@/components/ui/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import Navbar from '../components/Navbar';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -11,6 +13,18 @@ const Login = () => {
     password: '',
   });
   const [isLoading, setIsLoading] = useState(false);
+
+  // Check if user is already logged in
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (data?.session) {
+        navigate('/'); // Redirect to home page if already logged in
+      }
+    };
+    
+    checkUser();
+  }, [navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -24,21 +38,26 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simulate login request
     try {
-      // This is where you would make an actual API call
-      await new Promise(resolve => setTimeout(resolve, 800));
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      });
+      
+      if (error) {
+        throw error;
+      }
       
       toast({
         title: "Logged in successfully",
         description: "Welcome back to your account.",
       });
       
-      navigate('/dashboard');
-    } catch (error) {
+      navigate('/');
+    } catch (error: any) {
       toast({
         title: "Login failed",
-        description: "Please check your credentials and try again.",
+        description: error.message || "Please check your credentials and try again.",
         variant: "destructive",
       });
     } finally {
@@ -48,7 +67,8 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-black text-white p-4">
-      <div className="max-w-md w-full">
+      <Navbar />
+      <div className="max-w-md w-full mt-32">
         <h1 className="text-4xl font-bold mb-8">Client Login</h1>
         <p className="mb-8">Enter your credentials to access your financial documents and reports.</p>
         <form className="space-y-4" onSubmit={handleSubmit}>

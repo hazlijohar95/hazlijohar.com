@@ -3,6 +3,7 @@ import React from 'react';
 import HeroSection from '../components/HeroSection';
 import ExpectSection from '../components/ExpectSection';
 import FeaturedSpeakers from '../components/FeaturedSpeakers';
+import FeaturedSessions from '../components/FeaturedSessions';
 import Navbar from '../components/Navbar';
 
 const Index = () => {
@@ -14,7 +15,10 @@ const Index = () => {
         <HeroSection />
       </div>
       <ExpectSection />
-      <FeaturedSpeakers />
+      <div id="speakers">
+        <FeaturedSpeakers />
+      </div>
+      <FeaturedSessions />
     </div>
   );
 };

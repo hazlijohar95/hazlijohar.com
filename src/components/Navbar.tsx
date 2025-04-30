@@ -9,16 +9,21 @@ const Navbar = () => {
       // Get the hero section height
       const heroSection = document.querySelector('#hero');
       const speakersSection = document.querySelector('#speakers');
+      const sessionsSection = document.querySelector('#sessions');
       
-      if (heroSection && speakersSection) {
+      if (heroSection && speakersSection && sessionsSection) {
         const heroHeight = heroSection.getBoundingClientRect().height;
         const speakersSectionTop = speakersSection.getBoundingClientRect().top;
+        const sessionsSectionTop = sessionsSection.getBoundingClientRect().top;
         
-        // Switch to white background when we've scrolled past the hero section
-        // but switch back to black when we reach the speakers section
-        if (speakersSectionTop <= 0) {
-          // We've scrolled to or past the speakers section
+        // Switch to white background when between hero and speakers section
+        // or when in the sessions section (white background)
+        if (speakersSectionTop <= 0 && sessionsSectionTop > 0) {
+          // We're in the speakers section (black background)
           setIsWhiteBackground(false);
+        } else if (sessionsSectionTop <= 0) {
+          // We're in the sessions section (white background)
+          setIsWhiteBackground(true);
         } else if (window.scrollY > heroHeight - 100) {
           // We're past the hero section but not yet at speakers section
           setIsWhiteBackground(true);

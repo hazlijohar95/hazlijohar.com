@@ -2,15 +2,21 @@
 import React from 'react';
 
 const LastYearSection = () => {
-  // Create duplicate images for the continuous scroll effect
+  // Use all the provided event images for the gallery
   const images = [
-    "/lovable-uploads/d5df9344-b316-4fd4-9210-f1927d908e42.png",
-    "/lovable-uploads/d5df9344-b316-4fd4-9210-f1927d908e42.png",
-    "/lovable-uploads/d5df9344-b316-4fd4-9210-f1927d908e42.png",
-    // Duplicating the images to create a seamless loop
-    "/lovable-uploads/d5df9344-b316-4fd4-9210-f1927d908e42.png",
-    "/lovable-uploads/d5df9344-b316-4fd4-9210-f1927d908e42.png",
-    "/lovable-uploads/d5df9344-b316-4fd4-9210-f1927d908e42.png",
+    "/lovable-uploads/5f5d890e-a100-4297-b370-816b451001f4.png",
+    "/lovable-uploads/475501a4-73b7-45cd-bffb-1421996c89ee.png",
+    "/lovable-uploads/b80fa1aa-36a2-41cf-a757-778a3fca6268.png", 
+    "/lovable-uploads/1000ff1f-cecb-42b1-bf73-c77fcac101e1.png",
+    "/lovable-uploads/d6a39dce-eb67-429d-8a4d-8791de158f2e.png",
+    "/lovable-uploads/54066d34-8e3e-40cf-b02e-54271ca7839a.png",
+    // Duplicate the images to create a seamless infinite scroll effect
+    "/lovable-uploads/5f5d890e-a100-4297-b370-816b451001f4.png",
+    "/lovable-uploads/475501a4-73b7-45cd-bffb-1421996c89ee.png",
+    "/lovable-uploads/b80fa1aa-36a2-41cf-a757-778a3fca6268.png",
+    "/lovable-uploads/1000ff1f-cecb-42b1-bf73-c77fcac101e1.png",
+    "/lovable-uploads/d6a39dce-eb67-429d-8a4d-8791de158f2e.png",
+    "/lovable-uploads/54066d34-8e3e-40cf-b02e-54271ca7839a.png",
   ];
 
   return (

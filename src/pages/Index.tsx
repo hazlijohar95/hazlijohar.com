@@ -8,6 +8,7 @@ import GetTicketsCTA from '../components/GetTicketsCTA';
 import FAQSection from '../components/FAQSection';
 import LastYearSection from '../components/LastYearSection';
 import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 const Index = () => {
   return (
@@ -27,6 +28,7 @@ const Index = () => {
       <GetTicketsCTA />
       <FAQSection />
       <LastYearSection />
+      <Footer />
     </div>
   );
 };

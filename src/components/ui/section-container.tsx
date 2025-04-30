@@ -1,13 +1,7 @@
 
 import React from 'react';
 import { cn } from '@/lib/utils';
-
-interface SectionContainerProps {
-  id?: string;
-  className?: string;
-  children: React.ReactNode;
-  bgColor?: 'black' | 'white';
-}
+import { SectionContainerProps } from '@/types';
 
 export function SectionContainer({
   id,

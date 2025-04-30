@@ -3,13 +3,9 @@ import React from 'react';
 import { BookText, BarChartBig, Wrench, Users } from 'lucide-react';
 import { SectionContainer } from './ui/section-container';
 import { SectionTitle } from './ui/section-title';
+import { styles } from '@/styles/common-styles';
+import { CardProps } from '@/types';
 import '../App.css';
-
-interface CardProps {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-}
 
 const Card = ({ icon, title, description }: CardProps) => (
   <div className="scroll-snap-start min-w-[440px] bg-black text-white p-12 flex flex-col justify-between shrink-0 h-[540px]">
@@ -23,7 +19,7 @@ const Card = ({ icon, title, description }: CardProps) => (
   </div>
 );
 
-const expectCards = [
+const expectCards: CardProps[] = [
   {
     icon: <BookText className="stroke-[1.5]" size={36} />,
     title: "Expert-Led Advisory",

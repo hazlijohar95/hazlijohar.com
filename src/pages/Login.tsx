@@ -1,21 +1,67 @@
 
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { styles } from '@/styles/common-styles';
+import { toast } from '@/components/ui/use-toast';
 
 const Login = () => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [id]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+    
+    // Simulate login request
+    try {
+      // This is where you would make an actual API call
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      toast({
+        title: "Logged in successfully",
+        description: "Welcome back to your account.",
+      });
+      
+      navigate('/dashboard');
+    } catch (error) {
+      toast({
+        title: "Login failed",
+        description: "Please check your credentials and try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-black text-white p-4">
       <div className="max-w-md w-full">
         <h1 className="text-4xl font-bold mb-8">Client Login</h1>
         <p className="mb-8">Enter your credentials to access your financial documents and reports.</p>
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="email" className="block mb-1 font-mono text-sm">EMAIL</label>
             <input 
               type="email" 
               id="email" 
-              className="w-full px-4 py-3 bg-[#111] border border-[#333] focus:border-white outline-none transition-colors"
+              className={styles.input}
               placeholder="your@email.com"
+              value={formData.email}
+              onChange={handleChange}
+              required
             />
           </div>
           <div>
@@ -23,8 +69,11 @@ const Login = () => {
             <input 
               type="password" 
               id="password" 
-              className="w-full px-4 py-3 bg-[#111] border border-[#333] focus:border-white outline-none transition-colors"
+              className={styles.input}
               placeholder="••••••••"
+              value={formData.password}
+              onChange={handleChange}
+              required
             />
           </div>
           <div className="flex justify-end">
@@ -32,9 +81,10 @@ const Login = () => {
           </div>
           <button 
             type="submit" 
-            className="w-full bg-white text-black py-3 font-medium hover:bg-[#f2f2f2] transition-colors mt-4"
+            className={`${styles.buttonPrimary} w-full mt-4`}
+            disabled={isLoading}
           >
-            Log In
+            {isLoading ? 'Logging in...' : 'Log In'}
           </button>
         </form>
         <div className="mt-8 text-center space-y-4">

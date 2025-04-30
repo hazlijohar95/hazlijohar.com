@@ -1,6 +1,7 @@
-
 import React from 'react';
-import { Button } from './ui/button';
+import { OptimizedImage } from './ui/optimized-image';
+import { styles } from '@/styles/common-styles';
+import { Link } from 'react-router-dom';
 
 const LastYearSection = () => {
   // Use all the provided event images for the gallery
@@ -21,22 +22,22 @@ const LastYearSection = () => {
   ];
 
   return (
-    <section id="culture" className="bg-black text-white py-32 px-6 md:px-20 overflow-hidden">
+    <section id="culture" className={`bg-black text-white ${styles.sectionPadding} overflow-hidden`}>
       <div className="max-w-6xl mx-auto">
         {/* Heading Block */}
-        <h2 className="text-[40px] md:text-[64px] font-medium leading-tight tracking-tight mb-8 max-w-4xl">
+        <h2 className={`text-[40px] md:text-[64px] ${styles.heading} mb-8 max-w-4xl`}>
           Inside Hazli Johar & Co.
           Go behind the scenes — meet the people, see the work, and hear what clients say.
         </h2>
 
         {/* Button */}
-        <a 
-          href="/culture" 
+        <Link 
+          to="/culture" 
           className="inline-flex items-center gap-2 bg-white text-black font-mono text-sm tracking-wide uppercase px-4 py-2 hover:scale-105 transition-transform mb-16"
         >
           EXPLORE OUR CULTURE
           <span className="text-xs">↗</span>
-        </a>
+        </Link>
 
         {/* Auto Scrolling Image Strip */}
         <div className="overflow-hidden">
@@ -48,10 +49,11 @@ const LastYearSection = () => {
           >
             {images.map((image, index) => (
               <div key={index} className="relative min-w-[300px] h-[450px]">
-                <img 
+                <OptimizedImage 
                   src={image}
                   alt={`Hazli Johar & Co. team and culture image ${index + 1}`}
                   className="rounded-lg w-full h-full object-cover grayscale"
+                  loading={index < 4 ? "eager" : "lazy"}
                 />
               </div>
             ))}

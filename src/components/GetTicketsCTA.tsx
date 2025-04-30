@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -71,7 +70,7 @@ const GetTicketsCTA = () => {
       ctx.stroke();
       
       // Second wave - slightly offset (skip on low-end devices)
-      if (!isMobile || window.deviceMemory === undefined || window.deviceMemory > 2) {
+      if (!isMobile) {
         ctx.beginPath();
         ctx.moveTo(0, canvas.height);
         

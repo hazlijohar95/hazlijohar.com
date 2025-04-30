@@ -30,6 +30,7 @@ export interface BackgroundPathsProps {
   ctaText?: string;
   ctaLink?: string;
   onBookCall?: () => void;
+  reducedAnimations?: boolean; // Added the missing property
 }
 
 export interface FormProps {

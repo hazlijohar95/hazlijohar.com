@@ -5,6 +5,7 @@ import ExpectSection from '../components/ExpectSection';
 import FeaturedSpeakers from '../components/FeaturedSpeakers';
 import FeaturedSessions from '../components/FeaturedSessions';
 import GetTicketsCTA from '../components/GetTicketsCTA';
+import FAQSection from '../components/FAQSection';
 import Navbar from '../components/Navbar';
 
 const Index = () => {
@@ -23,6 +24,7 @@ const Index = () => {
         <FeaturedSessions />
       </div>
       <GetTicketsCTA />
+      <FAQSection />
     </div>
   );
 };

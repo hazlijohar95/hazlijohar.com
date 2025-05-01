@@ -73,7 +73,7 @@ const DashboardSidebar = ({ activeTab, setActiveTab }: DashboardSidebarProps) =>
               key={item.id}
               className={`flex items-center w-full px-4 py-2 rounded-md transition-colors ${
                 activeTab === item.id && location.pathname === "/dashboard"
-                  ? "bg-brand text-white" 
+                  ? "bg-white text-black" 
                   : "text-[#CCC] hover:bg-[#222] hover:text-white"
               }`}
               onClick={() => handleTabClick(item.id)}
@@ -96,7 +96,7 @@ const DashboardSidebar = ({ activeTab, setActiveTab }: DashboardSidebarProps) =>
                 to={item.path}
                 className={`flex items-center w-full px-4 py-2 rounded-md transition-colors ${
                   isAccountPage(item.path)
-                    ? "bg-brand text-white" 
+                    ? "bg-white text-black" 
                     : "text-[#CCC] hover:bg-[#222] hover:text-white"
                 }`}
               >

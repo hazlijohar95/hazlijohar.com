@@ -1,59 +1,35 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
+import { Loader2 } from 'lucide-react';
 
 const ProfilePage = () => {
-  const { user } = useAuth();
-  const [isLoading, setIsLoading] = useState(false);
+  const { user, profile, isLoading, updateProfile } = useAuth();
   const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: user?.email || ''
+    firstName: profile?.firstName || '',
+    lastName: profile?.lastName || '',
+    email: user?.email || '',
+    company: profile?.company || '',
+    phone: profile?.phone || ''
   });
 
-  // Fetch user profile data
-  useEffect(() => {
-    const fetchProfile = async () => {
-      if (!user?.id) return;
-
-      setIsLoading(true);
-      try {
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('first_name, last_name')
-          .eq('id', user.id)
-          .single();
-
-        if (error) throw error;
-
-        if (data) {
-          setFormData({
-            firstName: data.first_name || '',
-            lastName: data.last_name || '',
-            email: user.email || ''
-          });
-        }
-      } catch (error) {
-        console.error('Error fetching profile:', error);
-        toast({
-          title: 'Error',
-          description: 'Failed to load profile data',
-          variant: 'destructive'
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchProfile();
-  }, [user]);
+  // Update form data when profile changes
+  React.useEffect(() => {
+    if (profile) {
+      setFormData({
+        firstName: profile.firstName || '',
+        lastName: profile.lastName || '',
+        email: user?.email || '',
+        company: profile.company || '',
+        phone: profile.phone || ''
+      });
+    }
+  }, [profile, user]);
 
   // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,27 +45,11 @@ const ProfilePage = () => {
     
     setIsSaving(true);
     try {
-      const { error } = await supabase
-        .from('profiles')
-        .update({
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', user.id);
-
-      if (error) throw error;
-
-      toast({
-        title: 'Profile updated',
-        description: 'Your profile has been updated successfully'
-      });
-    } catch (error) {
-      console.error('Error updating profile:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to update profile',
-        variant: 'destructive'
+      await updateProfile({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        company: formData.company,
+        phone: formData.phone
       });
     } finally {
       setIsSaving(false);
@@ -99,7 +59,7 @@ const ProfilePage = () => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-40">
-        <p className="text-white">Loading profile...</p>
+        <Loader2 className="h-8 w-8 animate-spin text-white" />
       </div>
     );
   }
@@ -121,7 +81,7 @@ const ProfilePage = () => {
                 id="firstName"
                 name="firstName"
                 type="text"
-                value={formData.firstName}
+                value={formData.firstName || ''}
                 onChange={handleChange}
                 className="bg-[#222] border-[#444] text-white focus:border-white"
               />
@@ -133,7 +93,7 @@ const ProfilePage = () => {
                 id="lastName"
                 name="lastName"
                 type="text"
-                value={formData.lastName}
+                value={formData.lastName || ''}
                 onChange={handleChange}
                 className="bg-[#222] border-[#444] text-white focus:border-white"
               />
@@ -146,11 +106,35 @@ const ProfilePage = () => {
               id="email"
               name="email"
               type="email"
-              value={formData.email}
+              value={formData.email || ''}
               disabled
               className="bg-[#222] border-[#444] text-[#999] cursor-not-allowed"
             />
             <p className="text-xs text-[#999] mt-1">To change your email, please contact support</p>
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="company" className="text-white">Company</Label>
+            <Input
+              id="company"
+              name="company"
+              type="text"
+              value={formData.company || ''}
+              onChange={handleChange}
+              className="bg-[#222] border-[#444] text-white focus:border-white"
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="phone" className="text-white">Phone Number</Label>
+            <Input
+              id="phone"
+              name="phone"
+              type="tel"
+              value={formData.phone || ''}
+              onChange={handleChange}
+              className="bg-[#222] border-[#444] text-white focus:border-white"
+            />
           </div>
           
           <CardFooter className="px-0 pt-4">

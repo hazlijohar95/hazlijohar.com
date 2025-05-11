@@ -59,14 +59,11 @@ const ParticleField = ({ count = 1000, speed = 0.03, size = 0.015, color = '#fff
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
-          // Fix: Remove count and move it to arg
-          array={particles}
-          itemSize={3}
-          args={[particles, 3, false]} // Fix: Add args with [array, itemSize, normalized]
+          // Fix: In React Three Fiber, we need to use only args for buffer attributes
+          args={[particles, 3]}
         />
       </bufferGeometry>
       <pointsMaterial
-        // Fix: Move properties to args
         args={[{
           size: size,
           color: color,

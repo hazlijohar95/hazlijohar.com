@@ -1,4 +1,3 @@
-
 // Component Props Types
 
 export interface NavbarProps {
@@ -10,6 +9,8 @@ export interface SectionContainerProps {
   className?: string;
   children: React.ReactNode;
   bgColor?: 'black' | 'white';
+  maxWidth?: string;
+  paddingY?: string;
 }
 
 export interface SectionTitleProps {

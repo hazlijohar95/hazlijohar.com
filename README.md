@@ -112,8 +112,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Contact
 
-For any inquiries, please reach out to us at [contact@hjc-malaysia.com](mailto:contact@hjc-malaysia.com).
+For any inquiries, please reach out to us at [work@hazlijohar.com.com]
 
 ---
 
-Made with ❤️ by the HJC team and contributors
+By Hazli Johar

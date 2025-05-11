@@ -141,3 +141,126 @@ html {
   -webkit-backdrop-filter: blur(5px);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
+
+/* Mobile app shell styling */
+.mobile-app-shell {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+  user-select: none;
+  overscroll-behavior: none;
+}
+
+/* Add native-like button feedback */
+@media (max-width: 768px) {
+  button, a {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .tap-effect {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .tap-effect::after {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.2) 1%, transparent 1%);
+    background-position: 50%;
+    transform: scale(10, 10);
+    opacity: 0;
+    transition: transform 0.5s, opacity 1s;
+  }
+  
+  .tap-effect:active::after {
+    transform: scale(0, 0);
+    opacity: 0.3;
+    transition: 0s;
+  }
+}
+
+/* iOS specific overrides */
+.ios-device {
+  /* Disable iOS double-tap to zoom */
+  touch-action: manipulation;
+  
+  /* iOS momentum scrolling */
+  -webkit-overflow-scrolling: touch;
+  
+  /* Prevent overscrolling on iOS */
+  overscroll-behavior: none;
+}
+
+/* Safari-specific adjustments */
+@supports (-webkit-touch-callout: none) {
+  .safari-fix {
+    /* Fix for Safari-specific issues */
+    -webkit-backdrop-filter: blur(5px);
+  }
+}
+
+/* Mobile bottom navigation animations */
+@keyframes slideInFromBottom {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.bottom-nav-animation-enter {
+  animation: slideInFromBottom 0.3s forwards;
+}
+
+/* Mobile pull-to-refresh indicator */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.pull-to-refresh {
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: top 0.2s;
+}
+
+.pull-to-refresh.active {
+  top: 20px;
+}
+
+.pull-to-refresh-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Mobile scroll to top functionality */
+.scroll-to-top-btn {
+  position: fixed;
+  bottom: 70px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 49;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.scroll-to-top-btn.visible {
+  opacity: 1;
+  visibility: visible;
+}

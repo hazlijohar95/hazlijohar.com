@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { useNavigate, Outlet } from 'react-router-dom';
+import { useNavigate, Outlet, useLocation } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
 import Navbar from '../components/Navbar';
 import OverviewCards from '@/components/dashboard/OverviewCards';
@@ -15,7 +15,8 @@ import DashboardSidebar from '@/components/dashboard/DashboardSidebar';
 import WelcomeBanner from '@/components/dashboard/WelcomeBanner';
 import DashboardCalendar from '@/components/dashboard/DashboardCalendar';
 import TaskManager from '@/components/dashboard/TaskManager';
-import { useLocation } from 'react-router-dom';
+import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -23,6 +24,7 @@ const Dashboard = () => {
   const location = useLocation();
   const [profile, setProfile] = useState<{ first_name?: string; last_name?: string } | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
+  const isMobile = useIsMobile();
   
   // Check if we're on a nested route
   const isNestedRoute = location.pathname !== "/dashboard";
@@ -60,10 +62,25 @@ const Dashboard = () => {
     ? `${profile.first_name || ''} ${profile.last_name || ''}`.trim() 
     : user?.email?.split('@')[0] || 'Client';
 
+  // Status bar component for mobile
+  const StatusBar = () => (
+    <div className="lg:hidden fixed top-0 left-0 right-0 h-6 bg-black z-40">
+      <div className="flex justify-between items-center px-4 h-full">
+        <div className="text-xs font-mono text-white/50">{new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+        <div className="flex items-center gap-1">
+          <div className="w-3 h-3 rounded-full bg-white/50"></div>
+          <div className="w-3 h-3 rounded-full bg-white/50"></div>
+          <div className="w-3 h-3 rounded-full bg-white/50"></div>
+        </div>
+      </div>
+    </div>
+  );
+
   // If this is a nested route (profile, settings, notifications), render the Outlet
   if (isNestedRoute) {
     return (
       <div className="min-h-screen bg-black text-white">
+        {isMobile && <StatusBar />}
         <Navbar />
         
         <div className="flex">
@@ -71,7 +88,7 @@ const Dashboard = () => {
           <DashboardSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
           
           {/* Main content */}
-          <div className="flex-1 pt-24 pb-16 px-6 lg:px-8">
+          <div className="flex-1 pt-24 lg:pt-24 pb-24 lg:pb-16 px-4 lg:px-8">
             {/* Welcome Banner */}
             <WelcomeBanner clientName={clientName} />
             
@@ -81,6 +98,8 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
+        
+        {isMobile && <MobileBottomNav activeTab={activeTab} setActiveTab={setActiveTab} />}
       </div>
     );
   }
@@ -88,6 +107,7 @@ const Dashboard = () => {
   // Main dashboard view
   return (
     <div className="min-h-screen bg-black text-white">
+      {isMobile && <StatusBar />}
       <Navbar />
       
       <div className="flex">
@@ -95,66 +115,83 @@ const Dashboard = () => {
         <DashboardSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
         
         {/* Main content */}
-        <div className="flex-1 pt-24 pb-16 px-6 lg:px-8">
+        <div className="flex-1 pt-24 pb-24 lg:pb-16 px-4 lg:px-8">
           {/* Welcome Banner */}
           <WelcomeBanner clientName={clientName} />
           
           {/* Main Content */}
           <div className="mt-8">
-            <Tabs 
-              value={activeTab} 
-              onValueChange={setActiveTab}
-              className="w-full"
-            >
-              <TabsList className="bg-[#111] border border-[#333] mb-6">
-                <TabsTrigger value="overview" className="data-[state=active]:bg-white data-[state=active]:text-black">
-                  Overview
-                </TabsTrigger>
-                <TabsTrigger value="documents" className="data-[state=active]:bg-white data-[state=active]:text-black">
-                  Documents
-                </TabsTrigger>
-                <TabsTrigger value="calendar" className="data-[state=active]:bg-white data-[state=active]:text-black">
-                  Calendar
-                </TabsTrigger>
-                <TabsTrigger value="tasks" className="data-[state=active]:bg-white data-[state=active]:text-black">
-                  Tasks
-                </TabsTrigger>
-                <TabsTrigger value="questions" className="data-[state=active]:bg-white data-[state=active]:text-black">
-                  Q&A
-                </TabsTrigger>
-                <TabsTrigger value="billing" className="data-[state=active]:bg-white data-[state=active]:text-black">
-                  Billing
-                </TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="overview" className="mt-4 space-y-12">
-                <OverviewCards />
-                <FutureFeature />
-              </TabsContent>
-              
-              <TabsContent value="documents" className="mt-4">
-                <DocumentVault />
-              </TabsContent>
-              
-              <TabsContent value="calendar" className="mt-4">
-                <DashboardCalendar />
-              </TabsContent>
-              
-              <TabsContent value="tasks" className="mt-4">
-                <TaskManager />
-              </TabsContent>
-              
-              <TabsContent value="questions" className="mt-4">
-                <AskQuestion />
-              </TabsContent>
-              
-              <TabsContent value="billing" className="mt-4">
-                <BillingSection />
-              </TabsContent>
-            </Tabs>
+            {isMobile ? (
+              // Mobile view - direct content display based on activeTab
+              <div>
+                {activeTab === 'overview' && <OverviewCards />}
+                {activeTab === 'documents' && <DocumentVault />}
+                {activeTab === 'calendar' && <DashboardCalendar />}
+                {activeTab === 'tasks' && <TaskManager />}
+                {activeTab === 'questions' && <AskQuestion />}
+                {activeTab === 'billing' && <BillingSection />}
+                
+                {activeTab === 'overview' && <div className="mt-12"><FutureFeature /></div>}
+              </div>
+            ) : (
+              // Desktop view - tabs
+              <Tabs 
+                value={activeTab} 
+                onValueChange={setActiveTab}
+                className="w-full"
+              >
+                <TabsList className="bg-[#111] border border-[#333] mb-6">
+                  <TabsTrigger value="overview" className="data-[state=active]:bg-white data-[state=active]:text-black">
+                    Overview
+                  </TabsTrigger>
+                  <TabsTrigger value="documents" className="data-[state=active]:bg-white data-[state=active]:text-black">
+                    Documents
+                  </TabsTrigger>
+                  <TabsTrigger value="calendar" className="data-[state=active]:bg-white data-[state=active]:text-black">
+                    Calendar
+                  </TabsTrigger>
+                  <TabsTrigger value="tasks" className="data-[state=active]:bg-white data-[state=active]:text-black">
+                    Tasks
+                  </TabsTrigger>
+                  <TabsTrigger value="questions" className="data-[state=active]:bg-white data-[state=active]:text-black">
+                    Q&A
+                  </TabsTrigger>
+                  <TabsTrigger value="billing" className="data-[state=active]:bg-white data-[state=active]:text-black">
+                    Billing
+                  </TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="overview" className="mt-4 space-y-12">
+                  <OverviewCards />
+                  <FutureFeature />
+                </TabsContent>
+                
+                <TabsContent value="documents" className="mt-4">
+                  <DocumentVault />
+                </TabsContent>
+                
+                <TabsContent value="calendar" className="mt-4">
+                  <DashboardCalendar />
+                </TabsContent>
+                
+                <TabsContent value="tasks" className="mt-4">
+                  <TaskManager />
+                </TabsContent>
+                
+                <TabsContent value="questions" className="mt-4">
+                  <AskQuestion />
+                </TabsContent>
+                
+                <TabsContent value="billing" className="mt-4">
+                  <BillingSection />
+                </TabsContent>
+              </Tabs>
+            )}
           </div>
         </div>
       </div>
+      
+      {isMobile && <MobileBottomNav activeTab={activeTab} setActiveTab={setActiveTab} />}
     </div>
   );
 };

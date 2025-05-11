@@ -5,6 +5,7 @@ import { BackgroundPathsProps } from '@/types';
 import { Button } from './ui/button';
 import { Link } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
+import TurbulenceBackground from './ui/TurbulenceBackground';
 
 const HeroSection = () => {
   const [showCalendar, setShowCalendar] = useState(false);
@@ -43,6 +44,9 @@ const HeroSection = () => {
 
   return (
     <div className="relative">
+      {/* Add the turbulence background */}
+      <TurbulenceBackground />
+      
       <BackgroundPaths 
         {...heroProps}
         onBookCall={handleOpenCalendar}

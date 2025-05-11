@@ -1,4 +1,3 @@
-
 "use client";
 
 import { motion } from "framer-motion";
@@ -74,13 +73,13 @@ export function BackgroundPaths({
   // Use reduced animations flag or fallback to isMobile check
   const shouldReduceAnimations = reducedAnimations || isMobile;
 
-  return <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-black text-white">
-            <div className="absolute inset-0">
+  return <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden z-10 bg-transparent text-white">
+            <div className="absolute inset-0 z-10 pointer-events-none">
                 <FloatingPaths position={1} reducedAnimations={shouldReduceAnimations} />
                 <FloatingPaths position={-1} reducedAnimations={shouldReduceAnimations} />
             </div>
 
-            <div className="relative z-10 container mx-auto px-4 md:px-6 text-center">
+            <div className="relative z-20 container mx-auto px-4 md:px-6 text-center">
                 <motion.div 
                   initial={{
                     opacity: 0

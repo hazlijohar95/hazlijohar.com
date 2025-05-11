@@ -8,17 +8,25 @@ export function SectionContainer({
   className,
   children,
   bgColor = 'white',
+  maxWidth = '7xl',
+  paddingY = 'py-16 md:py-24',
 }: SectionContainerProps) {
   return (
     <section
       id={id}
       className={cn(
-        "py-24",
+        paddingY,
+        "w-full relative overflow-hidden",
         bgColor === 'black' ? 'bg-black text-white' : 'bg-white text-black',
         className
       )}
     >
-      {children}
+      <div className={cn(
+        "container mx-auto px-4 sm:px-6 relative z-10",
+        maxWidth && `max-w-${maxWidth}`
+      )}>
+        {children}
+      </div>
     </section>
   );
 }

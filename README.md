@@ -1,53 +1,78 @@
 
 # HJC - Chartered Accountants Malaysia
 
+<p align="center">
+  <img src="public/favicon.svg" alt="HJC Logo" width="120">
+</p>
+
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
+  <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
+</p>
+
 This is the official website repository for HJC, a leading chartered accountancy firm in Malaysia.
 
 ## Overview
 
 HJC helps modern businesses in Malaysia grow with clarity and confidence through our professional financial services.
 
-## Features
+## ✨ Features
 
-- Modern, responsive design
-- Client dashboard for document management
-- Financial services overview
+- Modern, responsive design optimized for all devices
+- Client dashboard for secure document management
+- Comprehensive financial services overview
 - Team and leadership profiles
-- Contact and booking system
+- Interactive contact and booking system using Cal.com integration
+- Secure document vault for client file storage
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 This project is built with:
 
-- React 18 with TypeScript
-- Vite for fast development and building
-- Tailwind CSS for styling
-- shadcn/ui for UI components
-- Framer Motion for animations
-- React Router for navigation
-- Cal.com integration for booking
-- Supabase for backend services
+- **Frontend**: React 18 with TypeScript
+- **Build Tool**: Vite for fast development and building
+- **Styling**: Tailwind CSS with shadcn/ui components
+- **Animations**: Framer Motion
+- **Routing**: React Router v6
+- **State Management**: React Context API and TanStack Query
+- **Backend**: Supabase (Auth, Storage, Database)
+- **Booking**: Cal.com integration
+- **Charts**: Recharts
 
-## Development
+## 🚀 Development
 
 ### Prerequisites
 
-- Node.js 18+ & npm
+- Node.js 18+ & npm (or Bun)
+- Supabase account (for backend features)
 
 ### Getting Started
 
 ```sh
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/hjc-malaysia/website.git
 
 # Navigate to the project directory
 cd hjc-website
 
 # Install dependencies
 npm install
+# or
+bun install
 
 # Start the development server
 npm run dev
+# or
+bun dev
+```
+
+### Environment Variables
+
+Create a `.env` file in the root directory with the following variables:
+
+```
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
 ### Project Structure
@@ -61,31 +86,34 @@ npm run dev
   - `/types` - TypeScript type definitions
   - `/styles` - Global styles
   - `/lib` - Utility functions
+  - `/integrations` - Third-party service integrations
 
-## Deployment
+## 📦 Building for Production
 
 ```sh
 # Build for production
 npm run build
+# or
+bun run build
 
 # Preview the production build
 npm run preview
+# or
+bun run preview
 ```
 
-## Contributing
+## 🤝 Contributing
 
-We welcome contributions to improve the website. Please follow these steps:
+We welcome contributions to improve the website! See our [Contributing Guidelines](CONTRIBUTING.md) for more information.
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Commit your changes: `git commit -m 'Add some amazing feature'`
-4. Push to the branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
-
-## License
+## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Contact
+## 📞 Contact
 
 For any inquiries, please reach out to us at [contact@hjc-malaysia.com](mailto:contact@hjc-malaysia.com).
+
+---
+
+Made with ❤️ by the HJC team and contributors

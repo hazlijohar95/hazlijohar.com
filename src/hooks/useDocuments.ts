@@ -161,13 +161,13 @@ export const useDocuments = () => {
     }
     
     try {
-      // Create an anchor element and trigger download
-      const link = document.createElement('a');
+      // Create a proper anchor element for download
+      const link = window.document.createElement('a');
       link.href = document.fileUrl;
       link.download = document.name;
-      document.body.appendChild(link);
+      window.document.body.appendChild(link);
       link.click();
-      document.body.removeChild(link);
+      window.document.body.removeChild(link);
     } catch (error) {
       console.error('Error downloading document:', error);
       toast({

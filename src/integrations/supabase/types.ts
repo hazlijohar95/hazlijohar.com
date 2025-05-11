@@ -9,27 +9,99 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      documents: {
+        Row: {
+          file_type: string | null
+          id: string
+          name: string
+          service_type: string
+          size: number | null
+          upload_date: string
+          user_id: string
+        }
+        Insert: {
+          file_type?: string | null
+          id?: string
+          name: string
+          service_type: string
+          size?: number | null
+          upload_date?: string
+          user_id: string
+        }
+        Update: {
+          file_type?: string | null
+          id?: string
+          name?: string
+          service_type?: string
+          size?: number | null
+          upload_date?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
+          company: string | null
           created_at: string | null
           first_name: string | null
           id: string
           last_name: string | null
+          phone: string | null
           updated_at: string | null
         }
         Insert: {
+          company?: string | null
           created_at?: string | null
           first_name?: string | null
           id: string
           last_name?: string | null
+          phone?: string | null
           updated_at?: string | null
         }
         Update: {
+          company?: string | null
           created_at?: string | null
           first_name?: string | null
           id?: string
           last_name?: string | null
+          phone?: string | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      questions: {
+        Row: {
+          answer: string | null
+          answered_at: string | null
+          created_at: string
+          id: string
+          message: string
+          status: string
+          subject: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          answer?: string | null
+          answered_at?: string | null
+          created_at?: string
+          id?: string
+          message: string
+          status?: string
+          subject: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          answer?: string | null
+          answered_at?: string | null
+          created_at?: string
+          id?: string
+          message?: string
+          status?: string
+          subject?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }

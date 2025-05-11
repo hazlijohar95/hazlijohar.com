@@ -59,19 +59,23 @@ const ParticleField = ({ count = 1000, speed = 0.03, size = 0.015, color = '#fff
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
-          count={particleCount}
+          // Fix: Remove count and move it to arg
           array={particles}
           itemSize={3}
+          args={[particles, 3, false]} // Fix: Add args with [array, itemSize, normalized]
         />
       </bufferGeometry>
-      <pointsMaterial 
-        size={size} 
-        color={color} 
-        transparent
-        opacity={0.4}
-        depthWrite={false}
-        sizeAttenuation={true}
-        blending={THREE.AdditiveBlending}
+      <pointsMaterial
+        // Fix: Move properties to args
+        args={[{
+          size: size,
+          color: color,
+          transparent: true,
+          opacity: 0.4,
+          depthWrite: false,
+          sizeAttenuation: true,
+          blending: THREE.AdditiveBlending
+        }]}
       />
     </points>
   );

@@ -1,9 +1,8 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BackgroundPaths } from './ui/background-paths';
 import { BackgroundPathsProps } from '@/types';
 import { Button } from './ui/button';
-import { Link } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
 import TurbulenceBackground from './ui/TurbulenceBackground';
 

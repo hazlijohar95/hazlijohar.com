@@ -31,15 +31,15 @@ const FeaturedSessions = () => {
                   <div className="lg:col-span-2">
                     <div className="flex items-start gap-3 mb-4">
                       <div className="flex-shrink-0 mt-1">
-                        <CheckCircle className="w-5 h-5 text-green-600" />
+                        <CheckCircle className="w-5 h-5 text-black" />
                       </div>
                       <h3 className="text-2xl md:text-3xl lg:text-3xl font-medium leading-tight whitespace-pre-line">
                         {session.title}
                       </h3>
                     </div>
-                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-green-50 rounded-full">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <span className="font-mono text-xs text-green-700 font-medium">AVAILABLE</span>
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-black rounded-full border border-black">
+                      <div className="w-2 h-2 bg-white rounded-full"></div>
+                      <span className="font-mono text-xs text-white font-medium tracking-wide">AVAILABLE</span>
                     </div>
                   </div>
                   

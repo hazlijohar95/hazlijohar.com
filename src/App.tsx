@@ -98,15 +98,15 @@ const StandardLayout = () => {
         viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
       }
       
-      // Optimize touch interactions
+      // Optimize touch interactions with proper typing
       document.body.style.touchAction = 'manipulation';
-      document.body.style.webkitTouchCallout = 'none';
-      document.body.style.webkitUserSelect = 'none';
+      (document.body.style as any).webkitTouchCallout = 'none';
+      (document.body.style as any).webkitUserSelect = 'none';
       
       // iOS specific optimizations
       if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-        document.body.style.webkitOverflowScrolling = 'touch';
-        document.documentElement.style.webkitTextSizeAdjust = '100%';
+        (document.body.style as any).webkitOverflowScrolling = 'touch';
+        (document.documentElement.style as any).webkitTextSizeAdjust = '100%';
       }
     }
     

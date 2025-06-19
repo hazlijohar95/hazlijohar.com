@@ -1,7 +1,8 @@
-
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
+import { useSecureAuth } from '@/hooks/useSecureAuth';
+import { passwordSchema } from '@/utils/validation';
+import { PasswordStrengthMeter } from '@/components/security/PasswordStrengthMeter';
 import { toast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
@@ -12,6 +13,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
 const SettingsPage = () => {
   const { user } = useAuth();
+  const { securePasswordChange, isLoading: isUpdatingPassword } = useSecureAuth();
   const [activeTab, setActiveTab] = useState("account");
   
   const [notificationSettings, setNotificationSettings] = useState({
@@ -27,7 +29,7 @@ const SettingsPage = () => {
     confirmPassword: ''
   });
   
-  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+  const [passwordErrors, setPasswordErrors] = useState<string[]>([]);
 
   // Handle notification toggle
   const handleToggleNotification = (setting: keyof typeof notificationSettings) => {
@@ -46,9 +48,19 @@ const SettingsPage = () => {
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setPasswordForm(prev => ({ ...prev, [name]: value }));
+    
+    // Validate new password in real-time
+    if (name === 'newPassword') {
+      try {
+        passwordSchema.parse(value);
+        setPasswordErrors([]);
+      } catch (error: any) {
+        setPasswordErrors(error.errors?.map((err: any) => err.message) || []);
+      }
+    }
   };
   
-  // Handle password update
+  // Handle password update with enhanced security
   const handleUpdatePassword = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -62,42 +74,26 @@ const SettingsPage = () => {
       return;
     }
     
-    if (passwordForm.newPassword.length < 6) {
+    try {
+      passwordSchema.parse(passwordForm.newPassword);
+    } catch (error: any) {
       toast({
-        title: 'Password too short',
-        description: 'Password must be at least 6 characters',
+        title: 'Password requirements not met',
+        description: error.errors?.[0]?.message || 'Please check password requirements',
         variant: 'destructive'
       });
       return;
     }
     
-    setIsUpdatingPassword(true);
-    try {
-      const { error } = await supabase.auth.updateUser({
-        password: passwordForm.newPassword
-      });
-      
-      if (error) throw error;
-      
-      toast({
-        title: 'Password updated',
-        description: 'Your password has been changed successfully'
-      });
-      
+    const result = await securePasswordChange(passwordForm.currentPassword, passwordForm.newPassword);
+    
+    if (result.success) {
       setPasswordForm({
         currentPassword: '',
         newPassword: '',
         confirmPassword: ''
       });
-    } catch (error: any) {
-      console.error('Error updating password:', error);
-      toast({
-        title: 'Error',
-        description: error.message || 'Failed to update password',
-        variant: 'destructive'
-      });
-    } finally {
-      setIsUpdatingPassword(false);
+      setPasswordErrors([]);
     }
   };
 
@@ -230,6 +226,18 @@ const SettingsPage = () => {
                     className="bg-[#222] border-[#444] text-white"
                     required
                   />
+                  {passwordForm.newPassword && (
+                    <div className="mt-2">
+                      <PasswordStrengthMeter password={passwordForm.newPassword} />
+                    </div>
+                  )}
+                  {passwordErrors.length > 0 && (
+                    <div className="mt-2 space-y-1">
+                      {passwordErrors.map((error, index) => (
+                        <p key={index} className="text-red-400 text-sm">{error}</p>
+                      ))}
+                    </div>
+                  )}
                 </div>
                 
                 <div className="space-y-2">
@@ -247,7 +255,7 @@ const SettingsPage = () => {
                 
                 <Button 
                   type="submit" 
-                  disabled={isUpdatingPassword}
+                  disabled={isUpdatingPassword || passwordErrors.length > 0}
                   className="bg-white text-black hover:bg-gray-200"
                 >
                   {isUpdatingPassword ? 'Updating...' : 'Update Password'}

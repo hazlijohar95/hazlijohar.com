@@ -1,9 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { styles } from '@/styles/common-styles';
 import { toast } from '@/components/ui/use-toast';
+import { passwordSchema, emailSchema, sanitizeHtml } from '@/utils/validation';
+import { PasswordStrengthMeter } from '@/components/security/PasswordStrengthMeter';
 import Navbar from '../components/Navbar';
 
 const Register = () => {
@@ -15,6 +16,7 @@ const Register = () => {
     password: '',
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [passwordErrors, setPasswordErrors] = useState<string[]>([]);
 
   // Check if user is already logged in
   useEffect(() => {
@@ -30,10 +32,23 @@ const Register = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
+    // Sanitize input to prevent XSS
+    const sanitizedValue = sanitizeHtml(value);
+    
     setFormData(prev => ({
       ...prev,
-      [id]: value
+      [id]: sanitizedValue
     }));
+
+    // Validate password in real-time
+    if (id === 'password') {
+      try {
+        passwordSchema.parse(value);
+        setPasswordErrors([]);
+      } catch (error: any) {
+        setPasswordErrors(error.errors?.map((err: any) => err.message) || []);
+      }
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -41,14 +56,21 @@ const Register = () => {
     setIsLoading(true);
     
     try {
+      // Validate email
+      emailSchema.parse(formData.email);
+      
+      // Validate password
+      passwordSchema.parse(formData.password);
+      
       // Register user with Supabase
       const { data, error } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
         options: {
+          emailRedirectTo: `${window.location.origin}/`,
           data: {
-            full_name: formData.name,
-            company: formData.company,
+            full_name: sanitizeHtml(formData.name),
+            company: sanitizeHtml(formData.company),
           }
         }
       });
@@ -64,11 +86,20 @@ const Register = () => {
       
       navigate('/login');
     } catch (error: any) {
-      toast({
-        title: "Registration failed",
-        description: error.message || "There was a problem with your registration.",
-        variant: "destructive",
-      });
+      if (error.errors) {
+        // Validation errors
+        toast({
+          title: "Validation failed",
+          description: error.errors[0]?.message || "Please check your input.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Registration failed",
+          description: error.message || "There was a problem with your registration.",
+          variant: "destructive",
+        });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -91,6 +122,7 @@ const Register = () => {
               value={formData.name}
               onChange={handleChange}
               required
+              maxLength={100}
             />
           </div>
           <div>
@@ -115,6 +147,7 @@ const Register = () => {
               value={formData.company}
               onChange={handleChange}
               required
+              maxLength={100}
             />
           </div>
           <div>
@@ -127,13 +160,24 @@ const Register = () => {
               value={formData.password}
               onChange={handleChange}
               required
-              minLength={8}
             />
+            {formData.password && (
+              <div className="mt-2">
+                <PasswordStrengthMeter password={formData.password} />
+              </div>
+            )}
+            {passwordErrors.length > 0 && (
+              <div className="mt-2 space-y-1">
+                {passwordErrors.map((error, index) => (
+                  <p key={index} className="text-red-400 text-sm">{error}</p>
+                ))}
+              </div>
+            )}
           </div>
           <button 
             type="submit" 
             className={`${styles.buttonPrimary} w-full mt-4`}
-            disabled={isLoading}
+            disabled={isLoading || passwordErrors.length > 0}
           >
             {isLoading ? 'Processing...' : 'Complete Registration'}
           </button>

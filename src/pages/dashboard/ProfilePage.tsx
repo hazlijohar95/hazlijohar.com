@@ -1,11 +1,12 @@
-
 import React, { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { profileUpdateSchema, sanitizeHtml } from '@/utils/validation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
+import { toast } from '@/hooks/use-toast';
 
 const ProfilePage = () => {
   const { user, profile, isLoading, updateProfile } = useAuth();
@@ -17,6 +18,7 @@ const ProfilePage = () => {
     company: profile?.company || '',
     phone: profile?.phone || ''
   });
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   // Update form data when profile changes
   React.useEffect(() => {
@@ -31,10 +33,42 @@ const ProfilePage = () => {
     }
   }, [profile, user]);
 
-  // Handle input changes
+  // Handle input changes with validation
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    // Sanitize input to prevent XSS
+    const sanitizedValue = sanitizeHtml(value);
+    
+    setFormData(prev => ({ ...prev, [name]: sanitizedValue }));
+    
+    // Clear field-specific errors
+    if (errors[name]) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }));
+    }
+  };
+
+  const validateForm = () => {
+    try {
+      profileUpdateSchema.parse({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        company: formData.company,
+        phone: formData.phone
+      });
+      setErrors({});
+      return true;
+    } catch (error: any) {
+      const validationErrors: { [key: string]: string } = {};
+      error.errors?.forEach((err: any) => {
+        const field = err.path[0];
+        validationErrors[field] = err.message;
+      });
+      setErrors(validationErrors);
+      return false;
+    }
   };
 
   // Handle form submission
@@ -42,6 +76,15 @@ const ProfilePage = () => {
     e.preventDefault();
     
     if (!user?.id) return;
+    
+    if (!validateForm()) {
+      toast({
+        title: 'Validation Error',
+        description: 'Please check your input and try again.',
+        variant: 'destructive'
+      });
+      return;
+    }
     
     setIsSaving(true);
     try {
@@ -84,7 +127,11 @@ const ProfilePage = () => {
                 value={formData.firstName || ''}
                 onChange={handleChange}
                 className="bg-[#222] border-[#444] text-white focus:border-white"
+                maxLength={50}
               />
+              {errors.firstName && (
+                <p className="text-red-400 text-sm">{errors.firstName}</p>
+              )}
             </div>
             
             <div className="space-y-2">
@@ -96,7 +143,11 @@ const ProfilePage = () => {
                 value={formData.lastName || ''}
                 onChange={handleChange}
                 className="bg-[#222] border-[#444] text-white focus:border-white"
+                maxLength={50}
               />
+              {errors.lastName && (
+                <p className="text-red-400 text-sm">{errors.lastName}</p>
+              )}
             </div>
           </div>
           
@@ -122,7 +173,11 @@ const ProfilePage = () => {
               value={formData.company || ''}
               onChange={handleChange}
               className="bg-[#222] border-[#444] text-white focus:border-white"
+              maxLength={100}
             />
+            {errors.company && (
+              <p className="text-red-400 text-sm">{errors.company}</p>
+            )}
           </div>
           
           <div className="space-y-2">
@@ -135,6 +190,9 @@ const ProfilePage = () => {
               onChange={handleChange}
               className="bg-[#222] border-[#444] text-white focus:border-white"
             />
+            {errors.phone && (
+              <p className="text-red-400 text-sm">{errors.phone}</p>
+            )}
           </div>
           
           <CardFooter className="px-0 pt-4">

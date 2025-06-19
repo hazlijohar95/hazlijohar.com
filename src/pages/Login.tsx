@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -7,16 +6,18 @@ import { Label } from '@/components/ui/label';
 import { toast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import { useSecureAuth } from '@/hooks/useSecureAuth';
+import { sanitizeHtml } from '@/utils/validation';
 import Navbar from '../components/Navbar';
 import { Eye, EyeOff, LogIn } from 'lucide-react';
 
 const Login = () => {
   const navigate = useNavigate();
+  const { secureSignIn, isLoading } = useSecureAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
-  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   // Check if user is already logged in
@@ -33,9 +34,12 @@ const Login = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
+    // Sanitize input to prevent XSS
+    const sanitizedValue = sanitizeHtml(value);
+    
     setFormData(prev => ({
       ...prev,
-      [id]: value
+      [id]: sanitizedValue
     }));
   };
 
@@ -45,33 +49,11 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true);
     
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: formData.email,
-        password: formData.password,
-      });
-      
-      if (error) {
-        throw error;
-      }
-      
-      toast({
-        title: "Logged in successfully",
-        description: "Welcome back to your account.",
-      });
-      
-      // Redirect to dashboard instead of homepage
+    const result = await secureSignIn(formData.email, formData.password);
+    
+    if (result.success) {
       navigate('/dashboard');
-    } catch (error: any) {
-      toast({
-        title: "Login failed",
-        description: error.message || "Please check your credentials and try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -97,6 +79,7 @@ const Login = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
+                  maxLength={255}
                 />
               </div>
               

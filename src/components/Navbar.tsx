@@ -1,13 +1,13 @@
+
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useScrollObserver } from '../hooks/useScrollObserver';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ArrowLeft } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
-import { useNavigate } from 'react-router-dom';
 import { toast } from '@/components/ui/use-toast';
-import { OptimizedImage } from './ui/optimized-image';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Button } from './ui/button';
 
 const Navbar = () => {
   const [isWhiteBackground, setIsWhiteBackground] = useState(false);
@@ -41,16 +41,12 @@ const Navbar = () => {
 
     // Use the intersection data to determine navbar background
     if (isIntersecting['leadership'] && !isIntersecting['services'] || isIntersecting['contact']) {
-      // We're in the speakers section or tickets section (black background)
       setIsWhiteBackground(false);
     } else if (isIntersecting['services']) {
-      // We're in the sessions section (white background)
       setIsWhiteBackground(true);
     } else if (!isIntersecting['hero']) {
-      // We're past the hero section but not yet at speakers section
       setIsWhiteBackground(true);
     } else {
-      // We're in the hero section
       setIsWhiteBackground(false);
     }
 
@@ -76,11 +72,19 @@ const Navbar = () => {
     }
   };
 
+  const handleNavigation = (path: string) => {
+    setIsMenuOpen(false);
+    navigate(path);
+  };
+
   // Check if we're on the dashboard
   const isDashboard = location.pathname.startsWith('/dashboard');
   
   // Check if we're on the home page
   const isHomePage = location.pathname === '/';
+
+  // Check if we need a back button (for non-home, non-dashboard pages)
+  const needsBackButton = !isHomePage && !isDashboard && location.pathname !== '/login' && location.pathname !== '/register';
 
   // Only show section links on home page
   const renderSectionLinks = isHomePage ? (
@@ -99,63 +103,121 @@ const Navbar = () => {
     </div>
   );
 
-  return <nav 
-      className={`fixed top-0 left-0 right-0 z-50 flex justify-between items-center py-4 sm:py-5 px-4 sm:px-8 border-b transition-colors duration-300 ease-in-out ${isWhiteBackground && !isDashboard ? 'bg-white text-black border-[#EBEBEB]' : 'bg-black text-white border-[#1A1A1A]'}`}
+  return (
+    <nav 
+      className={`fixed top-0 left-0 right-0 z-50 flex justify-between items-center py-4 sm:py-5 px-4 sm:px-8 border-b transition-all duration-300 ease-in-out backdrop-blur-sm ${
+        isWhiteBackground && !isDashboard 
+          ? 'bg-white/95 text-black border-[#EBEBEB]' 
+          : 'bg-black/95 text-white border-[#1A1A1A]'
+      }`}
       aria-label="Main navigation"
     >
-      {/* Left menu items */}
+      {/* Left menu items / Back button */}
       <div className="hidden md:flex space-x-6 font-mono uppercase tracking-wide text-sm">
-        {renderSectionLinks}
+        {needsBackButton ? (
+          <Button
+            variant="ghost"
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2 px-0 hover:bg-transparent"
+          >
+            <ArrowLeft size={16} />
+            Back
+          </Button>
+        ) : (
+          renderSectionLinks
+        )}
       </div>
       
-      {/* Mobile menu button */}
+      {/* Mobile menu button / Back button */}
       <div className="md:hidden">
-        <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
-          <SheetTrigger asChild aria-label="Open menu">
-            <button className="font-mono uppercase tracking-wide text-sm flex items-center">
-              <Menu className="mr-2" size={18} /> Menu
-            </button>
-          </SheetTrigger>
-          <SheetContent side="left" className={`p-0 ${isWhiteBackground && !isDashboard ? 'bg-white text-black' : 'bg-black text-white'} border-r-[1px] ${isWhiteBackground && !isDashboard ? 'border-[#EBEBEB]' : 'border-[#1A1A1A]'}`}>
-            <div className="flex flex-col h-full">
-              <div className="flex justify-between items-center p-4 border-b border-[#333333]">
-                <div className="flex items-center">
-                  <MinimalistHJLogo className="text-2xl" />
-                </div>
-                <button onClick={() => setIsMenuOpen(false)} aria-label="Close menu">
-                  <X size={24} />
-                </button>
-              </div>
-              
-              <div className="flex-1 overflow-y-auto pt-4 px-4">
-                {isHomePage && (
-                  <div className="space-y-6 font-mono uppercase tracking-wide text-sm mb-6">
-                    <a href="#leadership" className="block hover:opacity-80 transition-opacity py-2" onClick={() => setIsMenuOpen(false)}>Team</a>
-                    <a href="#services" className="block hover:opacity-80 transition-opacity py-2" onClick={() => setIsMenuOpen(false)}>Services</a>
-                    <a href="#faq" className="block hover:opacity-80 transition-opacity py-2" onClick={() => setIsMenuOpen(false)}>FAQ</a>
+        {needsBackButton ? (
+          <Button
+            variant="ghost"
+            onClick={() => navigate(-1)}
+            className="font-mono uppercase tracking-wide text-sm flex items-center gap-2 px-0"
+          >
+            <ArrowLeft size={16} />
+            Back
+          </Button>
+        ) : (
+          <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+            <SheetTrigger asChild aria-label="Open menu">
+              <button className="font-mono uppercase tracking-wide text-sm flex items-center">
+                <Menu className="mr-2" size={18} /> Menu
+              </button>
+            </SheetTrigger>
+            <SheetContent 
+              side="left" 
+              className={`p-0 ${
+                isWhiteBackground && !isDashboard 
+                  ? 'bg-white text-black' 
+                  : 'bg-black text-white'
+              } border-r-[1px] ${
+                isWhiteBackground && !isDashboard 
+                  ? 'border-[#EBEBEB]' 
+                  : 'border-[#1A1A1A]'
+              }`}
+            >
+              <div className="flex flex-col h-full">
+                <div className="flex justify-between items-center p-4 border-b border-[#333333]">
+                  <div className="flex items-center">
+                    <MinimalistHJLogo className="text-2xl" />
                   </div>
-                )}
+                  <button onClick={() => setIsMenuOpen(false)} aria-label="Close menu">
+                    <X size={24} />
+                  </button>
+                </div>
                 
-                <div className="pt-6 border-t border-[#333333] space-y-6 font-mono uppercase tracking-wide text-sm">
-                  <Link to="/contact" className="block hover:opacity-80 transition-opacity py-2" onClick={() => setIsMenuOpen(false)}>Contact Us</Link>
-                  {user ? (
-                    <>
-                      <Link to="/dashboard" className="block hover:opacity-80 transition-opacity py-2" onClick={() => setIsMenuOpen(false)}>Dashboard</Link>
-                      <button onClick={() => {handleLogout(); setIsMenuOpen(false);}} className="block hover:opacity-80 transition-opacity text-left w-full py-2">Logout</button>
-                    </>
-                  ) : (
-                    <Link to="/login" className="block hover:opacity-80 transition-opacity py-2" onClick={() => setIsMenuOpen(false)}>Client Login</Link>
+                <div className="flex-1 overflow-y-auto pt-4 px-4">
+                  {isHomePage && (
+                    <div className="space-y-6 font-mono uppercase tracking-wide text-sm mb-6">
+                      <a href="#leadership" className="block hover:opacity-80 transition-opacity py-2" onClick={() => setIsMenuOpen(false)}>Team</a>
+                      <a href="#services" className="block hover:opacity-80 transition-opacity py-2" onClick={() => setIsMenuOpen(false)}>Services</a>
+                      <a href="#faq" className="block hover:opacity-80 transition-opacity py-2" onClick={() => setIsMenuOpen(false)}>FAQ</a>
+                    </div>
                   )}
+                  
+                  <div className="pt-6 border-t border-[#333333] space-y-6 font-mono uppercase tracking-wide text-sm">
+                    <button 
+                      onClick={() => handleNavigation("/contact")} 
+                      className="block hover:opacity-80 transition-opacity py-2 text-left w-full"
+                    >
+                      Contact Us
+                    </button>
+                    {user ? (
+                      <>
+                        <button 
+                          onClick={() => handleNavigation("/dashboard")} 
+                          className="block hover:opacity-80 transition-opacity py-2 text-left w-full"
+                        >
+                          Dashboard
+                        </button>
+                        <button 
+                          onClick={() => {handleLogout(); setIsMenuOpen(false);}} 
+                          className="block hover:opacity-80 transition-opacity text-left w-full py-2"
+                        >
+                          Logout
+                        </button>
+                      </>
+                    ) : (
+                      <button 
+                        onClick={() => handleNavigation("/login")} 
+                        className="block hover:opacity-80 transition-opacity py-2 text-left w-full"
+                      >
+                        Client Login
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          </SheetContent>
-        </Sheet>
+            </SheetContent>
+          </Sheet>
+        )}
       </div>
       
       {/* Center logo */}
       <div className="flex items-center font-mono">
-        <Link to="/" className="flex items-center">
+        <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
           <MinimalistHJLogo className="text-2xl sm:text-3xl mr-3" />
           {isDashboard && <span className="text-xs sm:text-sm font-medium ml-1 sm:ml-3 opacity-70">Client Portal</span>}
         </Link>
@@ -176,7 +238,8 @@ const Navbar = () => {
       
       {/* Mobile empty div for flex spacing */}
       <div className="md:hidden"></div>
-    </nav>;
+    </nav>
+  );
 };
 
 export default Navbar;

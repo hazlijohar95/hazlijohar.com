@@ -53,11 +53,11 @@ const ExpectSection = () => {
   return (
     <SectionContainer id="expect" className="bg-[#fcfcfc] py-32 overflow-hidden">
       <div className="container mx-auto px-0">
-        <div className="flex flex-col md:flex-row">
-          {/* Enhanced title section */}
-          <div className="md:w-1/3 pl-8 md:pl-24 lg:pl-36 mb-20 md:mb-0">
-            <div className="animate-fade-in-up">
-              <SectionTitle className="text-black mb-8">
+        <div className="flex flex-col lg:flex-row">
+          {/* Enhanced title section with proper spacing */}
+          <div className="lg:w-1/3 pl-8 md:pl-24 lg:pl-36 mb-20 lg:mb-0 flex-shrink-0">
+            <div className="animate-fade-in-up sticky top-32">
+              <SectionTitle className="text-black mb-8 pr-8">
                 What you<br />can expect
               </SectionTitle>
               <div className="max-w-sm">
@@ -69,9 +69,9 @@ const ExpectSection = () => {
             </div>
           </div>
           
-          {/* Enhanced cards section */}
-          <div className="md:w-2/3 overflow-x-auto scroll-snap-x scrollbar-hide">
-            <div className="flex space-x-6 pl-8 md:pl-0 pr-8 pb-12">
+          {/* Enhanced cards section with proper margin */}
+          <div className="lg:w-2/3 overflow-x-auto scroll-snap-x scrollbar-hide lg:ml-8">
+            <div className="flex space-x-6 pl-8 lg:pl-0 pr-8 pb-12">
               {expectCards.map((card, index) => (
                 <div 
                   key={index}

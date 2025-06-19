@@ -11,6 +11,7 @@ import { RouteErrorBoundary } from "./components/RouteErrorBoundary";
 import { PageTransition } from "./components/PageTransition";
 import { GlobalLoadingIndicator } from "./components/GlobalLoadingIndicator";
 import { LoadingSpinner } from "./components/ui/LoadingSpinner";
+import { SmoothScroll } from "./components/ui/SmoothScroll";
 import Footer from "./components/Footer";
 
 // Lazy load pages for better performance
@@ -27,26 +28,30 @@ const NotificationsPage = lazy(() => import("./pages/dashboard/NotificationsPage
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      retry: 3,
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      gcTime: 10 * 60 * 1000, // 10 minutes
+      retry: 2,
+      staleTime: 5 * 60 * 1000,
+      gcTime: 10 * 60 * 1000,
+      refetchOnWindowFocus: false,
     },
   },
 });
 
-// Enhanced loading component for route transitions
-const RouteLoader = ({ text = "Loading page..." }: { text?: string }) => (
+// Enhanced loading component with better UX
+const RouteLoader = ({ text = "Loading...", variant = "default" }: { 
+  text?: string; 
+  variant?: "default" | "dots" | "pulse" 
+}) => (
   <div className="min-h-screen bg-black flex items-center justify-center">
-    <LoadingSpinner size="lg" text={text} />
+    <LoadingSpinner size="lg" text={text} variant={variant} />
   </div>
 );
 
-// Protected route wrapper with better UX
+// Protected route with smooth transitions
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { user, isLoading } = useAuth();
   
   if (isLoading) {
-    return <RouteLoader text="Authenticating..." />;
+    return <RouteLoader text="Authenticating..." variant="pulse" />;
   }
   
   if (!user) {
@@ -54,18 +59,18 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   }
   
   return (
-    <PageTransition>
+    <PageTransition variant="fade">
       {children}
     </PageTransition>
   );
 };
 
-// Public route wrapper (redirects authenticated users)
+// Public route with redirect handling
 const PublicRoute = ({ children }: { children: JSX.Element }) => {
   const { user, isLoading } = useAuth();
   
   if (isLoading) {
-    return <RouteLoader text="Checking authentication..." />;
+    return <RouteLoader text="Loading..." variant="dots" />;
   }
   
   if (user) {
@@ -73,70 +78,62 @@ const PublicRoute = ({ children }: { children: JSX.Element }) => {
   }
   
   return (
-    <PageTransition>
+    <PageTransition variant="slide">
       {children}
     </PageTransition>
   );
 };
 
-// Layout for pages that need the standard footer
+// Standard layout with smooth scrolling
 const StandardLayout = () => {
   const isMobile = useIsMobile();
   const location = useLocation();
   
-  // Apply touch-friendly mobile optimizations
+  // Mobile optimizations
   useEffect(() => {
     if (isMobile) {
-      // Prevent zooming on inputs
-      const metaViewport = document.querySelector('meta[name=viewport]');
-      if (metaViewport) {
-        metaViewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
-      } else {
-        const meta = document.createElement('meta');
-        meta.name = 'viewport';
-        meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
-        document.getElementsByTagName('head')[0].appendChild(meta);
+      // Prevent zoom on inputs
+      const viewport = document.querySelector('meta[name=viewport]');
+      if (viewport) {
+        viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
       }
       
-      // Add touch action for smoother scrolling
+      // Optimize touch interactions
       document.body.style.touchAction = 'manipulation';
-      document.documentElement.style.touchAction = 'manipulation';
+      document.body.style.webkitTouchCallout = 'none';
+      document.body.style.webkitUserSelect = 'none';
       
-      // Set iOS specific styles
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-      if (isIOS) {
-        document.body.classList.add('ios-device');
+      // iOS specific optimizations
+      if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+        document.body.style.webkitOverflowScrolling = 'touch';
+        document.documentElement.style.webkitTextSizeAdjust = '100%';
       }
     }
     
     return () => {
-      // Reset viewport when component unmounts
-      const metaViewport = document.querySelector('meta[name=viewport]');
-      if (metaViewport) {
-        metaViewport.setAttribute('content', 'width=device-width, initial-scale=1.0');
+      if (isMobile) {
+        const viewport = document.querySelector('meta[name=viewport]');
+        if (viewport) {
+          viewport.setAttribute('content', 'width=device-width, initial-scale=1.0');
+        }
       }
     };
   }, [isMobile]);
 
-  // Smooth scroll to top on route change
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [location.pathname]);
-
   return (
-    <>
-      <Suspense fallback={<RouteLoader />}>
+    <SmoothScroll>
+      <Suspense fallback={<RouteLoader variant="dots" />}>
         <Outlet />
       </Suspense>
       <Footer />
-    </>
+    </SmoothScroll>
   );
 };
 
-// Dashboard layout with enhanced loading states
+// Dashboard layout
 const DashboardLayout = () => (
   <ProtectedRoute>
-    <Suspense fallback={<RouteLoader text="Loading dashboard..." />}>
+    <Suspense fallback={<RouteLoader text="Loading dashboard..." variant="pulse" />}>
       <Dashboard />
     </Suspense>
   </ProtectedRoute>
@@ -147,12 +144,12 @@ const AppRoutes = () => {
     <Routes>
       <Route path="/" element={<StandardLayout />} errorElement={<RouteErrorBoundary />}>
         <Route index element={
-          <PageTransition>
+          <PageTransition variant="fade">
             <Index />
           </PageTransition>
         } />
         <Route path="contact" element={
-          <PageTransition>
+          <PageTransition variant="slide">
             <Contact />
           </PageTransition>
         } />
@@ -167,7 +164,7 @@ const AppRoutes = () => {
           </PublicRoute>
         } />
         <Route path="*" element={
-          <PageTransition>
+          <PageTransition variant="scale">
             <NotFound />
           </PageTransition>
         } />
@@ -198,6 +195,22 @@ const AppRoutes = () => {
 const App = () => {
   const isMobile = useIsMobile();
   
+  // Preload critical resources
+  useEffect(() => {
+    const preloadCritical = () => {
+      const criticalImages = ['/placeholder.svg'];
+      criticalImages.forEach(src => {
+        const link = document.createElement('link');
+        link.rel = 'prefetch';
+        link.href = src;
+        document.head.appendChild(link);
+      });
+    };
+    
+    // Delay preloading to not block initial render
+    setTimeout(preloadCritical, 1000);
+  }, []);
+  
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -205,9 +218,9 @@ const App = () => {
         <Sonner />
         <BrowserRouter>
           <AuthProvider>
-            <div className={`${isMobile ? 'mobile-app-shell' : ''}`}>
+            <div className={`${isMobile ? 'mobile-app-shell' : ''} min-h-screen bg-black text-white`}>
               <GlobalLoadingIndicator />
-              <Suspense fallback={<RouteLoader text="Starting application..." />}>
+              <Suspense fallback={<RouteLoader text="Starting..." variant="dots" />}>
                 <AppRoutes />
               </Suspense>
             </div>

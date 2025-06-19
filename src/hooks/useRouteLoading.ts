@@ -9,10 +9,10 @@ export const useRouteLoading = () => {
   useEffect(() => {
     setIsLoading(true);
     
-    // Simulate route loading time for smooth transitions
+    // Simulate route loading with realistic timing
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 100);
+    }, 300); // Slightly longer for smoother feel
 
     return () => clearTimeout(timer);
   }, [location.pathname]);

@@ -1,14 +1,46 @@
-User-agent: Googlebot
+
+User-agent: *
 Allow: /
 
-User-agent: Bingbot
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot  
+Allow: /
+Crawl-delay: 1
+
+User-agent: Slurp
+Allow: /
+Crawl-delay: 1
+
+User-agent: DuckDuckBot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Baiduspider
+Allow: /
+Crawl-delay: 2
+
+User-agent: facebookexternalhit
 Allow: /
 
 User-agent: Twitterbot
 Allow: /
 
-User-agent: facebookexternalhit
+User-agent: LinkedInBot
 Allow: /
 
-User-agent: *
+User-agent: WhatsApp
 Allow: /
+
+User-agent: TelegramBot
+Allow: /
+
+Disallow: /api/
+Disallow: /admin/
+Disallow: /*.json$
+Disallow: /*?*utm_*
+Disallow: /*?*ref=*
+
+Sitemap: https://hjc-malaysia.com/sitemap.xml

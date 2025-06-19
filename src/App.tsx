@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
+import { SEOProvider } from "./components/SEOProvider";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useEffect, Suspense } from "react";
 import { GlobalLoadingIndicator } from "./components/GlobalLoadingIndicator";
@@ -42,22 +43,24 @@ const App = () => {
   }, []);
   
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <AuthProvider>
-            <div className={`${isMobile ? 'mobile-app-shell' : ''} min-h-screen bg-black text-white`}>
-              <GlobalLoadingIndicator />
-              <Suspense fallback={<RouteLoader text="Starting..." variant="dots" />}>
-                <AppRoutes />
-              </Suspense>
-            </div>
-          </AuthProvider>
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
+    <SEOProvider>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <AuthProvider>
+              <div className={`${isMobile ? 'mobile-app-shell' : ''} min-h-screen bg-black text-white`}>
+                <GlobalLoadingIndicator />
+                <Suspense fallback={<RouteLoader text="Starting..." variant="dots" />}>
+                  <AppRoutes />
+                </Suspense>
+              </div>
+            </AuthProvider>
+          </BrowserRouter>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </SEOProvider>
   );
 };
 

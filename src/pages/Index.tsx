@@ -1,5 +1,7 @@
 
 import React, { useEffect, useRef } from 'react';
+import { SEOHead } from '../components/SEOHead';
+import { seoConfig } from '../data/seo-config';
 import HeroSection from '../components/HeroSection';
 import ExpectSection from '../components/ExpectSection';
 import FeaturedSpeakers from '../components/FeaturedSpeakers';
@@ -82,6 +84,14 @@ const Index = () => {
   
   return (
     <div className="relative" ref={pageRef}>
+      <SEOHead 
+        title={seoConfig.home.title}
+        description={seoConfig.home.description}
+        keywords={seoConfig.home.keywords}
+        image={seoConfig.home.image}
+        url={seoConfig.home.url}
+        canonical="https://hjc-malaysia.com/"
+      />
       <Navbar />
       <div id="hero" className="mobile-touch-scroll">
         <HeroSection />

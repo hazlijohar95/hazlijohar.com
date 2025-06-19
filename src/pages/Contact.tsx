@@ -1,4 +1,7 @@
+
 import React, { useState } from 'react';
+import { SEOHead } from '../components/SEOHead';
+import { seoConfig } from '../data/seo-config';
 import Navbar from '../components/Navbar';
 import { toast } from '@/components/ui/use-toast';
 
@@ -9,16 +12,15 @@ const Contact = () => {
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const {
-      id,
-      value
-    } = e.target;
+    const { id, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [id]: value
     }));
   };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -37,7 +39,17 @@ const Contact = () => {
       setIsSubmitting(false);
     }, 1000);
   };
-  return <div className="min-h-screen bg-black text-white">
+
+  return (
+    <div className="min-h-screen bg-black text-white">
+      <SEOHead 
+        title={seoConfig.contact.title}
+        description={seoConfig.contact.description}
+        keywords={seoConfig.contact.keywords}
+        image={seoConfig.contact.image}
+        url={seoConfig.contact.url}
+        canonical="https://hjc-malaysia.com/contact"
+      />
       <Navbar />
       <div className="pt-24 sm:pt-32 pb-16 sm:pb-20 px-4 max-w-6xl mx-auto">
         <h1 className="text-3xl sm:text-5xl font-bold mb-8 sm:mb-12">Contact Us</h1>
@@ -70,24 +82,50 @@ const Contact = () => {
             <form className="space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
               <div>
                 <label htmlFor="name" className="block mb-2 font-mono text-sm">NAME</label>
-                <input type="text" id="name" value={formData.name} onChange={handleChange} className="w-full px-4 py-3 bg-[#111] border border-[#333] focus:border-white outline-none transition-colors" required />
+                <input 
+                  type="text" 
+                  id="name" 
+                  value={formData.name} 
+                  onChange={handleChange} 
+                  className="w-full px-4 py-3 bg-[#111] border border-[#333] focus:border-white outline-none transition-colors" 
+                  required 
+                />
               </div>
               <div>
                 <label htmlFor="email" className="block mb-2 font-mono text-sm">EMAIL</label>
-                <input type="email" id="email" value={formData.email} onChange={handleChange} className="w-full px-4 py-3 bg-[#111] border border-[#333] focus:border-white outline-none transition-colors" required />
+                <input 
+                  type="email" 
+                  id="email" 
+                  value={formData.email} 
+                  onChange={handleChange} 
+                  className="w-full px-4 py-3 bg-[#111] border border-[#333] focus:border-white outline-none transition-colors" 
+                  required 
+                />
               </div>
               <div>
                 <label htmlFor="message" className="block mb-2 font-mono text-sm">MESSAGE</label>
-                <textarea id="message" value={formData.message} onChange={handleChange} rows={5} className="w-full px-4 py-3 bg-[#111] border border-[#333] focus:border-white outline-none transition-colors" required></textarea>
+                <textarea 
+                  id="message" 
+                  value={formData.message} 
+                  onChange={handleChange} 
+                  rows={5} 
+                  className="w-full px-4 py-3 bg-[#111] border border-[#333] focus:border-white outline-none transition-colors" 
+                  required
+                ></textarea>
               </div>
-              <button type="submit" disabled={isSubmitting} className="w-full bg-white text-black py-3 font-medium hover:bg-[#f2f2f2] transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center">
+              <button 
+                type="submit" 
+                disabled={isSubmitting} 
+                className="w-full bg-white text-black py-3 font-medium hover:bg-[#f2f2f2] transition-colors disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center"
+              >
                 {isSubmitting ? 'Sending...' : 'Send Message'}
               </button>
             </form>
           </div>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
 
 export default Contact;

@@ -52,7 +52,7 @@ const Contact = () => {
             <div className="space-y-5 sm:space-y-6">
               <div>
                 <h3 className="text-sm font-mono text-[#888] mb-1">EMAIL</h3>
-                <p>contact@acmefirm.com</p>
+                <p>hazli@hazlijohar.my</p>
               </div>
               <div>
                 <h3 className="text-sm font-mono text-[#888] mb-1">PHONE</h3>

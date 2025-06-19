@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useScrollObserver } from '../hooks/useScrollObserver';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
-import { Menu, X, ArrowLeft } from 'lucide-react';
+import { Menu, X, ArrowLeft, Home } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/components/ui/use-toast';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -77,6 +77,15 @@ const Navbar = () => {
     navigate(path);
   };
 
+  const handleBackNavigation = () => {
+    // If there's browser history, go back, otherwise go to home
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate('/');
+    }
+  };
+
   // Check if we're on the dashboard
   const isDashboard = location.pathname.startsWith('/dashboard');
   
@@ -115,14 +124,23 @@ const Navbar = () => {
       {/* Left menu items / Back button */}
       <div className="hidden md:flex space-x-6 font-mono uppercase tracking-wide text-sm">
         {needsBackButton ? (
-          <Button
-            variant="ghost"
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-2 px-0 hover:bg-transparent"
-          >
-            <ArrowLeft size={16} />
-            Back
-          </Button>
+          <div className="flex items-center space-x-4">
+            <Button
+              variant="ghost"
+              onClick={handleBackNavigation}
+              className="flex items-center gap-2 px-0 hover:bg-transparent"
+            >
+              <ArrowLeft size={16} />
+              Back
+            </Button>
+            <Link 
+              to="/" 
+              className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+            >
+              <Home size={16} />
+              Home
+            </Link>
+          </div>
         ) : (
           renderSectionLinks
         )}
@@ -131,14 +149,23 @@ const Navbar = () => {
       {/* Mobile menu button / Back button */}
       <div className="md:hidden">
         {needsBackButton ? (
-          <Button
-            variant="ghost"
-            onClick={() => navigate(-1)}
-            className="font-mono uppercase tracking-wide text-sm flex items-center gap-2 px-0"
-          >
-            <ArrowLeft size={16} />
-            Back
-          </Button>
+          <div className="flex items-center space-x-3">
+            <Button
+              variant="ghost"
+              onClick={handleBackNavigation}
+              className="font-mono uppercase tracking-wide text-sm flex items-center gap-1 px-0"
+            >
+              <ArrowLeft size={14} />
+              Back
+            </Button>
+            <Link 
+              to="/" 
+              className="font-mono uppercase tracking-wide text-sm flex items-center gap-1 hover:opacity-80 transition-opacity"
+            >
+              <Home size={14} />
+              Home
+            </Link>
+          </div>
         ) : (
           <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
             <SheetTrigger asChild aria-label="Open menu">

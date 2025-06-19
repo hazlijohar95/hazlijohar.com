@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import { toast } from '@/components/ui/use-toast';
+
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -60,7 +61,7 @@ const Contact = () => {
               </div>
               <div>
                 <h3 className="text-sm font-mono text-[#888] mb-1">ADDRESS</h3>
-                <p>123 Finance Street<br />Business District<br />New York, NY 10001</p>
+                <p>No G-6-1A Jalan prima saujana 2/D<br />Taman Prima Saujana<br />43000 Kajang Selangor</p>
               </div>
             </div>
           </div>
@@ -88,4 +89,5 @@ const Contact = () => {
       </div>
     </div>;
 };
+
 export default Contact;

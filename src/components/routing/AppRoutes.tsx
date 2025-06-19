@@ -32,6 +32,11 @@ export const AppRoutes = () => {
             <Contact />
           </PageTransition>
         } />
+        <Route path="culture" element={
+          <PageTransition variant="fade">
+            <Index />
+          </PageTransition>
+        } />
         <Route path="login" element={
           <PublicRoute>
             <Login />

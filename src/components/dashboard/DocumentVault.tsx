@@ -14,8 +14,6 @@ const DocumentVault: React.FC = () => {
   const { 
     documents, 
     isLoading, 
-    isUploading, 
-    uploadDocument, 
     deleteDocument, 
     downloadDocument 
   } = useDocuments();
@@ -102,7 +100,7 @@ const DocumentVault: React.FC = () => {
     <div>
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-medium">Your Files</h2>
-        <DocumentUploader isUploading={isUploading} onUpload={uploadDocument} />
+        <DocumentUploader />
       </div>
       
       <DocumentFilters 

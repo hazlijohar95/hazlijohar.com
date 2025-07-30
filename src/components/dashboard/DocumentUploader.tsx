@@ -1,7 +1,7 @@
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useDocuments } from '@/hooks/useDocuments';
-import { validateFileType, validateFileSize, ALLOWED_DOCUMENT_TYPES, MAX_FILE_SIZE_MB } from '@/utils/validation';
+import { validateFileType, validateFileSize, ALLOWED_DOCUMENT_TYPES, MAX_FILE_SIZE_MB, validateFileName, sanitizeInput } from '@/utils/validation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Upload, File, AlertCircle } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
-const DocumentUploader = () => {
+const DocumentUploader: React.FC = () => {
   const { uploadDocument, isUploading } = useDocuments();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [serviceType, setServiceType] = useState<string>('');
@@ -23,9 +23,19 @@ const DocumentUploader = () => {
     'Financial Planning',
     'Business Consultation',
     'Other'
-  ];
+  ] as const;
 
-  const handleFileSelect = (file: File) => {
+  const handleFileSelect = useCallback((file: File): void => {
+    // Validate file name for security
+    if (!validateFileName(file.name)) {
+      toast({
+        title: 'Invalid file name',
+        description: 'File name contains invalid characters or is not allowed.',
+        variant: 'destructive'
+      });
+      return;
+    }
+
     // Validate file type
     if (!validateFileType(file, ALLOWED_DOCUMENT_TYPES)) {
       toast({
@@ -47,36 +57,36 @@ const DocumentUploader = () => {
     }
 
     setSelectedFile(file);
-  };
+  }, []);
 
-  const handleDrop = (e: React.DragEvent) => {
+  const handleDrop = useCallback((e: React.DragEvent<HTMLDivElement>): void => {
     e.preventDefault();
     setDragActive(false);
     
     const files = e.dataTransfer.files;
     if (files.length > 0) {
-      handleFileSelect(files[0]);
+      handleFileSelect(files[0] as File);
     }
-  };
+  }, [handleFileSelect]);
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>): void => {
     e.preventDefault();
     setDragActive(true);
-  };
+  }, []);
 
-  const handleDragLeave = (e: React.DragEvent) => {
+  const handleDragLeave = useCallback((e: React.DragEvent<HTMLDivElement>): void => {
     e.preventDefault();
     setDragActive(false);
-  };
+  }, []);
 
-  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>): void => {
     const files = e.target.files;
     if (files && files.length > 0) {
-      handleFileSelect(files[0]);
+      handleFileSelect(files[0] as File);
     }
-  };
+  }, [handleFileSelect]);
 
-  const handleUpload = async () => {
+  const handleUpload = useCallback(async (): Promise<void> => {
     if (!selectedFile || !serviceType) {
       toast({
         title: 'Missing information',
@@ -86,29 +96,31 @@ const DocumentUploader = () => {
       return;
     }
 
-    await uploadDocument(selectedFile, serviceType);
+    const success = await uploadDocument(selectedFile, serviceType);
     
-    // Reset form
-    setSelectedFile(null);
-    setServiceType('');
-    
-    // Clear file input
-    const fileInput = document.getElementById('file-input') as HTMLInputElement;
-    if (fileInput) {
-      fileInput.value = '';
+    if (success) {
+      // Reset form
+      setSelectedFile(null);
+      setServiceType('');
+      
+      // Clear file input
+      const fileInput = document.getElementById('file-input') as HTMLInputElement;
+      if (fileInput) {
+        fileInput.value = '';
+      }
     }
-  };
+  }, [selectedFile, serviceType, uploadDocument]);
 
-  const formatFileSize = (bytes: number) => {
+  const formatFileSize = useCallback((bytes: number): string => {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  };
+  }, []);
 
   return (
-    <Card className="bg-[#111] border-[#333] text-white">
+    <Card className="bg-[#0F0F0F] border border-[#1A1A1A] text-white">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Upload className="h-5 w-5" />
@@ -116,61 +128,16 @@ const DocumentUploader = () => {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {/* File Upload Area */}
-        <div
-          className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
-            dragActive
-              ? 'border-blue-500 bg-blue-500/10'
-              : 'border-[#333] hover:border-[#555]'
-          }`}
-          onDrop={handleDrop}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-        >
-          {selectedFile ? (
-            <div className="flex items-center justify-center gap-2">
-              <File className="h-5 w-5 text-blue-400" />
-              <div className="text-left">
-                <p className="font-medium">{selectedFile.name}</p>
-                <p className="text-sm text-[#999]">{formatFileSize(selectedFile.size)}</p>
-              </div>
-            </div>
-          ) : (
-            <div>
-              <Upload className="h-8 w-8 mx-auto mb-2 text-[#666]" />
-              <p className="text-[#999] mb-2">Drag and drop your file here, or click to select</p>
-              <p className="text-xs text-[#666]">
-                Supported: PDF, Word, Excel, Images (Max {MAX_FILE_SIZE_MB}MB)
-              </p>
-            </div>
-          )}
-          <input
-            id="file-input"
-            type="file"
-            accept={ALLOWED_DOCUMENT_TYPES.join(',')}
-            onChange={handleFileInputChange}
-            className="hidden"
-          />
-          <Button
-            type="button"
-            variant="outline"
-            className="mt-4 bg-transparent border-[#333] hover:bg-[#222]"
-            onClick={() => document.getElementById('file-input')?.click()}
-          >
-            Select File
-          </Button>
-        </div>
-
         {/* Service Type Selection */}
         <div className="space-y-2">
-          <Label htmlFor="service-type">Service Type</Label>
+          <Label htmlFor="service-type" className="block font-mono text-sm">SERVICE TYPE</Label>
           <Select value={serviceType} onValueChange={setServiceType}>
-            <SelectTrigger className="bg-[#222] border-[#444] text-white">
+            <SelectTrigger className="bg-[#111] border border-[#333] text-white">
               <SelectValue placeholder="Select service type" />
             </SelectTrigger>
-            <SelectContent className="bg-[#222] border-[#444] text-white">
+            <SelectContent className="bg-[#111] border border-[#333] text-white">
               {serviceTypes.map((type) => (
-                <SelectItem key={type} value={type}>
+                <SelectItem key={type} value={type} className="text-white hover:bg-[#333]">
                   {type}
                 </SelectItem>
               ))}
@@ -178,14 +145,63 @@ const DocumentUploader = () => {
           </Select>
         </div>
 
-        {/* Security Notice */}
-        <div className="flex items-start gap-2 p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-          <AlertCircle className="h-5 w-5 text-blue-400 mt-0.5 flex-shrink-0" />
-          <div className="text-sm">
-            <p className="font-medium text-blue-400">Secure Upload</p>
-            <p className="text-[#999]">
-              Your documents are encrypted and stored securely. Only you and authorized personnel can access them.
-            </p>
+        {/* File Upload Area */}
+        <div className="space-y-2">
+          <Label className="block font-mono text-sm">DOCUMENT</Label>
+          <div
+            className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
+              dragActive 
+                ? 'border-blue-500 bg-blue-500/10' 
+                : 'border-[#333] hover:border-[#555]'
+            }`}
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+          >
+            <input
+              id="file-input"
+              type="file"
+              className="hidden"
+              onChange={handleFileInputChange}
+              accept={ALLOWED_DOCUMENT_TYPES.join(',')}
+            />
+            
+            {selectedFile ? (
+              <div className="space-y-2">
+                <File className="h-8 w-8 mx-auto text-green-500" />
+                <div>
+                  <p className="font-medium text-white">{selectedFile.name}</p>
+                  <p className="text-sm text-[#999]">{formatFileSize(selectedFile.size)}</p>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setSelectedFile(null)}
+                  className="text-red-400 border-red-400 hover:bg-red-400/10"
+                >
+                  Remove
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <Upload className="h-8 w-8 mx-auto text-[#666]" />
+                <div>
+                  <p className="text-white">
+                    Drag and drop your file here, or{' '}
+                    <button
+                      type="button"
+                      onClick={() => document.getElementById('file-input')?.click()}
+                      className="text-blue-400 hover:text-blue-300 underline"
+                    >
+                      browse
+                    </button>
+                  </p>
+                  <p className="text-sm text-[#999] mt-1">
+                    Supported formats: PDF, Word, Excel, Images (max {MAX_FILE_SIZE_MB}MB)
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -193,10 +209,19 @@ const DocumentUploader = () => {
         <Button
           onClick={handleUpload}
           disabled={!selectedFile || !serviceType || isUploading}
-          className="w-full bg-white text-black hover:bg-gray-200"
+          className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-[#333] disabled:text-[#666]"
         >
           {isUploading ? 'Uploading...' : 'Upload Document'}
         </Button>
+
+        {/* Security Notice */}
+        <div className="flex items-start gap-2 p-3 bg-[#1A1A1A] rounded-lg">
+          <AlertCircle className="h-4 w-4 text-yellow-500 mt-0.5 flex-shrink-0" />
+          <div className="text-xs text-[#999]">
+            <p className="font-medium text-yellow-500 mb-1">Security Notice</p>
+            <p>Your documents are encrypted and stored securely. Only authorized personnel can access your files.</p>
+          </div>
+        </div>
       </CardContent>
     </Card>
   );

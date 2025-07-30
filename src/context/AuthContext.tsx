@@ -1,5 +1,5 @@
 
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import type { User, Session } from '@supabase/supabase-js';
 import { toast } from '@/hooks/use-toast';
@@ -21,18 +21,18 @@ type AuthContextType = {
   isLoading: boolean;
   refreshProfile: () => Promise<void>;
   updateProfile: (updates: Partial<Omit<UserProfile, 'id' | 'email'>>) => Promise<void>;
+  signOut: () => Promise<void>;
 };
 
-const AuthContext = createContext<AuthContextType>({
-  user: null,
-  session: null,
-  profile: null,
-  isLoading: true,
-  refreshProfile: async () => {},
-  updateProfile: async () => {}
-});
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = (): AuthContextType => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -41,7 +41,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   // Fetch user profile from database
-  const fetchProfile = async (userId: string) => {
+  const fetchProfile = useCallback(async (userId: string): Promise<UserProfile | null> => {
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -71,10 +71,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.error('Error in fetchProfile:', error);
       return null;
     }
-  };
+  }, [user?.email]);
 
   // Refresh user profile
-  const refreshProfile = async () => {
+  const refreshProfile = useCallback(async (): Promise<void> => {
     if (!user) return;
     
     try {
@@ -84,12 +84,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     } catch (error) {
       console.error('Error refreshing profile:', error);
+      toast({
+        title: 'Error refreshing profile',
+        description: 'Failed to refresh profile data.',
+        variant: 'destructive'
+      });
     }
-  };
+  }, [user, fetchProfile]);
 
   // Update user profile
-  const updateProfile = async (updates: Partial<Omit<UserProfile, 'id' | 'email'>>) => {
-    if (!user) return;
+  const updateProfile = useCallback(async (updates: Partial<Omit<UserProfile, 'id' | 'email'>>): Promise<void> => {
+    if (!user) {
+      toast({
+        title: 'Authentication required',
+        description: 'Please sign in to update your profile.',
+        variant: 'destructive'
+      });
+      return;
+    }
     
     try {
       const { error } = await supabase
@@ -112,15 +124,41 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         title: 'Profile updated',
         description: 'Your profile has been updated successfully.',
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error updating profile:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to update profile';
       toast({
         title: 'Error updating profile',
-        description: error.message || 'Failed to update profile',
+        description: errorMessage,
         variant: 'destructive'
       });
     }
-  };
+  }, [user, profile, refreshProfile]);
+
+  // Sign out function
+  const signOut = useCallback(async (): Promise<void> => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      
+      setUser(null);
+      setSession(null);
+      setProfile(null);
+      
+      toast({
+        title: "Signed out successfully",
+        description: "You have been signed out of your account.",
+      });
+    } catch (error: unknown) {
+      console.error('Error signing out:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to sign out';
+      toast({
+        title: 'Error signing out',
+        description: errorMessage,
+        variant: 'destructive'
+      });
+    }
+  }, []);
 
   useEffect(() => {
     console.log("AuthProvider mounted - setting up auth state");
@@ -149,42 +187,45 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             title: "Signed in successfully",
             description: `Welcome back${session?.user?.email ? ', ' + session.user.email : ''}!`,
           });
-        } else if (event === 'SIGNED_OUT') {
-          toast({
-            title: "Signed out successfully",
-            description: "You have been signed out of your account.",
-          });
         }
       }
     );
 
     // Then check for existing session
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      console.log("Initial session check:", session?.user?.email);
-      setSession(session);
-      setUser(session?.user ?? null);
-      
-      if (session?.user) {
-        const userProfile = await fetchProfile(session.user.id);
-        setProfile(userProfile);
+    const initializeAuth = async (): Promise<void> => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        console.log("Initial session check:", session?.user?.email);
+        setSession(session);
+        setUser(session?.user ?? null);
+        
+        if (session?.user) {
+          const userProfile = await fetchProfile(session.user.id);
+          setProfile(userProfile);
+        }
+      } catch (error) {
+        console.error('Error initializing auth:', error);
+      } finally {
+        setIsLoading(false);
       }
-      
-      setIsLoading(false);
-    });
+    };
+
+    initializeAuth();
 
     return () => {
       console.log("AuthProvider unmounted - unsubscribing");
       subscription.unsubscribe();
     };
-  }, []);
+  }, [fetchProfile]);
 
-  const value = {
+  const value: AuthContextType = {
     user,
     session,
     profile,
     isLoading,
     refreshProfile,
-    updateProfile
+    updateProfile,
+    signOut
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -1,14 +1,65 @@
 {
-  "name": "vite_react_shadcn_ts",
+  "name": "hjc-chartered-accountants",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "description": "HJC Chartered Accountants - Leading financial services in Malaysia",
+  "keywords": ["accounting", "malaysia", "financial-services", "tax-consulting", "business-advisory"],
+  "author": "HJC Chartered Accountants",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hjc-malaysia/hazlijohar.com"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "build:dev": "vite build --mode development",
+    "build:prod": "vite build --mode production",
+    "build:analyze": "vite build --mode production && npx vite-bundle-analyzer dist/stats.html",
+    "preview": "vite preview",
+    "preview:prod": "npm run build:prod && npm run preview",
+    
     "lint": "eslint .",
-    "preview": "vite preview"
+    "lint:fix": "eslint . --fix",
+    "lint:check": "eslint . --max-warnings 0",
+    "type-check": "tsc --noEmit",
+    "type-check:strict": "tsc --noEmit --strict",
+    
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
+    "format:fix": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\" && npm run lint:fix",
+    
+    "security:audit": "npm audit",
+    "security:fix": "npm audit fix",
+    "security:check": "npm audit --audit-level=moderate",
+    "security:full": "npm run security:audit && npm run type-check && npm run lint:check",
+    
+    "test": "echo \"No tests specified\" && exit 0",
+    "test:security": "npm run security:audit && npm run type-check && npm run lint",
+    "test:full": "npm run security:full && npm run format:check",
+    
+    "prebuild": "npm run test:security",
+    "postinstall": "npm run security:audit",
+    
+    "deploy": "node scripts/deploy.js",
+    "deploy:dev": "node scripts/deploy.js development",
+    "deploy:staging": "node scripts/deploy.js staging",
+    "deploy:prod": "node scripts/deploy.js production",
+    "deploy:analyze": "node scripts/deploy.js production --analyze",
+    "deploy:preview": "node scripts/deploy.js production --preview",
+    "deploy:clean": "node scripts/deploy.js production --clean",
+    
+    "start": "npm run preview",
+    "serve": "npm run preview",
+    
+    "clean": "rm -rf dist node_modules/.vite",
+    "clean:all": "rm -rf dist node_modules/.vite .vite",
+    "reset": "npm run clean:all && npm install",
+    
+    "update": "npm update && npm audit fix",
+    "update:check": "npm outdated",
+    "update:security": "npm audit fix"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -80,9 +131,30 @@
     "globals": "^15.9.0",
     "lovable-tagger": "^1.1.7",
     "postcss": "^8.4.47",
+    "prettier": "^3.2.5",
+    "rollup-plugin-visualizer": "^5.12.0",
     "tailwindcss": "^3.4.11",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
-    "vite": "^5.4.1"
-  }
+    "vite": "^5.4.1",
+    "vite-plugin-compression": "^0.5.1",
+    "vite-plugin-pwa": "^0.19.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "packageManager": "npm@9.0.0"
 }

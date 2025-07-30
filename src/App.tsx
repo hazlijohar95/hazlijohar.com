@@ -11,14 +11,35 @@ import { useEffect, Suspense } from "react";
 import { GlobalLoadingIndicator } from "./components/GlobalLoadingIndicator";
 import { RouteLoader } from "./components/routing/RouteLoader";
 import { AppRoutes } from "./components/routing/AppRoutes";
+import { RouteErrorBoundary } from "./components/RouteErrorBoundary";
+import { validateEnvironment } from "./utils/security";
+
+// Validate environment variables on app startup
+try {
+  validateEnvironment();
+} catch (error) {
+  console.error('Environment validation failed:', error);
+  // In production, you might want to show a user-friendly error page
+  if (import.meta.env.PROD) {
+    throw new Error('Application configuration error. Please contact support.');
+  }
+}
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: 2,
-      staleTime: 5 * 60 * 1000,
-      gcTime: 10 * 60 * 1000,
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      gcTime: 10 * 60 * 1000, // 10 minutes
       refetchOnWindowFocus: false,
+      refetchOnReconnect: true,
+      refetchOnMount: true,
+    },
+    mutations: {
+      retry: 1,
+      onError: (error) => {
+        console.error('Query mutation error:', error);
+      },
     },
   },
 });
@@ -28,7 +49,7 @@ const App = () => {
   
   // Preload critical resources
   useEffect(() => {
-    const preloadCritical = () => {
+    const preloadCritical = (): void => {
       const criticalImages = ['/placeholder.svg'];
       criticalImages.forEach(src => {
         const link = document.createElement('link');
@@ -39,28 +60,32 @@ const App = () => {
     };
     
     // Delay preloading to not block initial render
-    setTimeout(preloadCritical, 1000);
+    const timeoutId = setTimeout(preloadCritical, 1000);
+    
+    return () => clearTimeout(timeoutId);
   }, []);
   
   return (
-    <SEOProvider>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <AuthProvider>
-              <div className={`${isMobile ? 'mobile-app-shell' : ''} min-h-screen bg-black text-white`}>
-                <GlobalLoadingIndicator />
-                <Suspense fallback={<RouteLoader text="Starting..." variant="dots" />}>
-                  <AppRoutes />
-                </Suspense>
-              </div>
-            </AuthProvider>
-          </BrowserRouter>
-        </TooltipProvider>
-      </QueryClientProvider>
-    </SEOProvider>
+    <RouteErrorBoundary>
+      <SEOProvider>
+        <QueryClientProvider client={queryClient}>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <AuthProvider>
+                <div className={`${isMobile ? 'mobile-app-shell' : ''} min-h-screen bg-black text-white`}>
+                  <GlobalLoadingIndicator />
+                  <Suspense fallback={<RouteLoader text="Starting..." variant="dots" />}>
+                    <AppRoutes />
+                  </Suspense>
+                </div>
+              </AuthProvider>
+            </BrowserRouter>
+          </TooltipProvider>
+        </QueryClientProvider>
+      </SEOProvider>
+    </RouteErrorBoundary>
   );
 };
 

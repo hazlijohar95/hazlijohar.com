@@ -1,0 +1,21 @@
+{
+  "name": "HJC Chartered Accountants",
+  "short_name": "HJC CA",
+  "description": "Client portal for HJC Chartered Accountants",
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "display": "standalone",
+  "start_url": "/",
+  "scope": "/",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "lang": "en-MY",
+  "dir": "ltr"
+}

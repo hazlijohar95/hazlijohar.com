@@ -4,7 +4,13 @@
   "version": "1.0.0",
   "type": "module",
   "description": "HJC Chartered Accountants - Leading financial services in Malaysia",
-  "keywords": ["accounting", "malaysia", "financial-services", "tax-consulting", "business-advisory"],
+  "keywords": [
+    "accounting",
+    "malaysia",
+    "financial-services",
+    "tax-consulting",
+    "business-advisory"
+  ],
   "author": "HJC Chartered Accountants",
   "license": "MIT",
   "repository": {
@@ -19,29 +25,30 @@
     "build:analyze": "vite build --mode production && npx vite-bundle-analyzer dist/stats.html",
     "preview": "vite preview",
     "preview:prod": "npm run build:prod && npm run preview",
-    
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "lint:check": "eslint . --max-warnings 0",
     "type-check": "tsc --noEmit",
     "type-check:strict": "tsc --noEmit --strict",
-    
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "format:fix": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,md}\" && npm run lint:fix",
-    
     "security:audit": "npm audit",
     "security:fix": "npm audit fix",
     "security:check": "npm audit --audit-level=moderate",
     "security:full": "npm run security:audit && npm run type-check && npm run lint:check",
-    
-    "test": "echo \"No tests specified\" && exit 0",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest run --coverage",
+    "test:ui": "vitest --ui",
+    "test:unit": "vitest run src/**/*.test.{ts,tsx}",
+    "test:integration": "vitest run src/**/*.integration.test.{ts,tsx}",
     "test:security": "npm run security:audit && npm run type-check && npm run lint",
-    "test:full": "npm run security:full && npm run format:check",
-    
+    "test:all": "npm run test:run && npm run test:security",
+    "test:full": "npm run test:coverage && npm run security:full && npm run format:check",
     "prebuild": "npm run test:security",
     "postinstall": "npm run security:audit",
-    
     "deploy": "node scripts/deploy.js",
     "deploy:dev": "node scripts/deploy.js development",
     "deploy:staging": "node scripts/deploy.js staging",
@@ -49,14 +56,11 @@
     "deploy:analyze": "node scripts/deploy.js production --analyze",
     "deploy:preview": "node scripts/deploy.js production --preview",
     "deploy:clean": "node scripts/deploy.js production --clean",
-    
     "start": "npm run preview",
     "serve": "npm run preview",
-    
     "clean": "rm -rf dist node_modules/.vite",
     "clean:all": "rm -rf dist node_modules/.vite .vite",
     "reset": "npm run clean:all && npm install",
-    
     "update": "npm update && npm audit fix",
     "update:check": "npm outdated",
     "update:security": "npm audit fix"
@@ -115,20 +119,27 @@
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.176.0",
     "vaul": "^0.9.3",
+    "web-vitals": "^5.1.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
     "@tailwindcss/typography": "^0.5.15",
+    "@testing-library/jest-dom": "^6.8.0",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^22.5.5",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/parser": "^8.43.0",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.9.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.9",
     "globals": "^15.9.0",
+    "jsdom": "^27.0.0",
     "lovable-tagger": "^1.1.7",
     "postcss": "^8.4.47",
     "prettier": "^3.2.5",
@@ -138,7 +149,8 @@
     "typescript-eslint": "^8.0.1",
     "vite": "^5.4.1",
     "vite-plugin-compression": "^0.5.1",
-    "vite-plugin-pwa": "^0.19.0"
+    "vite-plugin-pwa": "^0.19.0",
+    "vitest": "^3.2.4"
   },
   "engines": {
     "node": ">=18.0.0",

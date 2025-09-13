@@ -1,10 +1,10 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { 
-  LayoutDashboard, Files, Calendar, CheckSquare, 
-  HelpCircle, CreditCard, Settings, User, 
-  Bell, LogOut
+import {
+  LayoutDashboard, Files, Calendar, CheckSquare,
+  HelpCircle, CreditCard, Settings, User,
+  Bell, LogOut, Gauge
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -46,6 +46,7 @@ const DashboardSidebar = ({ activeTab, setActiveTab }: DashboardSidebarProps) =>
     { id: "tasks", icon: <CheckSquare size={20} />, label: "Tasks", path: "/dashboard" },
     { id: "questions", icon: <HelpCircle size={20} />, label: "Questions", path: "/dashboard" },
     { id: "billing", icon: <CreditCard size={20} />, label: "Billing", path: "/dashboard" },
+    { id: "performance", icon: <Gauge size={20} />, label: "Performance", path: "/dashboard" },
   ];
 
   const accountItems = [

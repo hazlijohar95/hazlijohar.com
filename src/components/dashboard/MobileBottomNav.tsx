@@ -29,10 +29,10 @@ const MobileBottomNav = ({ activeTab, setActiveTab }: MobileBottomNavProps) => {
   };
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ y: 100 }}
       animate={{ y: 0 }}
-      className="lg:hidden fixed bottom-0 left-0 right-0 h-20 bg-[#0F0F0F]/95 backdrop-blur-md border-t border-[#1A1A1A] flex items-center justify-around z-50 safe-area-bottom"
+      className="lg:hidden fixed bottom-0 left-0 right-0 bg-[#0F0F0F]/95 backdrop-blur-md border-t border-[#1A1A1A] flex items-center justify-around z-50 mobile-bottom-nav-safe"
     >
       {tabs.map((tab) => {
         const Icon = tab.icon;
@@ -42,11 +42,12 @@ const MobileBottomNav = ({ activeTab, setActiveTab }: MobileBottomNavProps) => {
           <motion.button
             key={tab.id}
             onClick={() => handleTabClick(tab.id)}
-            className={`flex flex-col items-center justify-center w-16 h-full relative touch-manipulation ${
+            className={`flex flex-col items-center justify-center min-w-[64px] min-h-[64px] relative touch-manipulation select-none ${
               isActive ? 'text-white' : 'text-[#777]'
-            }`}
+            } hover:text-white/80 transition-colors duration-200`}
             whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.1 }}
+            aria-label={`Navigate to ${tab.label}`}
           >
             {isActive && (
               <motion.div

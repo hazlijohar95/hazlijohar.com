@@ -42,27 +42,48 @@ const HeroSection = () => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative mobile-viewport">
       {/* Add the turbulence background */}
       <TurbulenceBackground />
-      
-      <BackgroundPaths 
+
+      <BackgroundPaths
         {...heroProps}
         onBookCall={handleOpenCalendar}
       />
-      
-      {/* Cal.com Calendar Modal - Optimized for mobile */}
+
+      {/* Cal.com Calendar Modal - Enhanced mobile optimization */}
       {showCalendar && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className={`bg-white rounded-lg shadow-xl w-full ${isMobile ? 'h-[95vh] max-w-[95vw] m-2' : 'max-w-4xl h-[90vh]'} flex flex-col`}>
-            <div className="flex items-center justify-between border-b p-4">
-              <h3 className="text-xl font-bold">Schedule a Call</h3>
-              <Button variant="ghost" onClick={handleCloseCalendar} className="mobile-tap-target">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
+          <div
+            className={`bg-white rounded-xl shadow-2xl w-full flex flex-col ${
+              isMobile
+                ? 'mobile-modal-safe max-w-[95vw] max-h-[90vh] m-4'
+                : 'max-w-4xl max-h-[85vh] mx-8'
+            }`}
+          >
+            <div className="flex items-center justify-between border-b p-4 sm:p-6 min-h-[64px]">
+              <h3 className="mobile-heading-md text-black font-semibold">Schedule a Call</h3>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleCloseCalendar}
+                className="mobile-tap-target text-black hover:bg-gray-100 rounded-full"
+                aria-label="Close calendar"
+              >
                 ✕
               </Button>
             </div>
-            <div className="flex-1 p-4 overflow-hidden">
-              <div style={{width:"100%", height:"100%", overflow:"scroll"}} id="my-cal-inline"></div>
+            <div className="flex-1 p-4 sm:p-6 overflow-hidden">
+              <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  overflow: "auto",
+                  WebkitOverflowScrolling: "touch" // iOS smooth scrolling
+                }}
+                id="my-cal-inline"
+                className="rounded-lg"
+              ></div>
             </div>
           </div>
         </div>
@@ -71,10 +92,32 @@ const HeroSection = () => {
   );
 };
 
-// Add the Cal.com type definition for TypeScript
+// Cal.com type definitions for TypeScript
+interface CalConfig {
+  layout?: string;
+  origin?: string;
+  hideEventTypeDetails?: boolean;
+}
+
+interface CalNamespace {
+  (action: string, config?: CalConfig): void;
+  (elementOrSelector: string, config: {
+    elementOrSelector?: string;
+    config?: CalConfig;
+    calLink?: string;
+  }): void;
+}
+
+interface CalInstance {
+  (action: string, calLink?: string, options?: { origin?: string }): void;
+  ns: {
+    [key: string]: CalNamespace;
+  };
+}
+
 declare global {
   interface Window {
-    Cal?: any;
+    Cal?: CalInstance;
   }
 }
 

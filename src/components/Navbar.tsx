@@ -113,10 +113,10 @@ const Navbar = () => {
   );
 
   return (
-    <nav 
-      className={`fixed top-0 left-0 right-0 z-50 flex justify-between items-center py-4 sm:py-5 px-4 sm:px-8 border-b transition-all duration-300 ease-in-out backdrop-blur-sm ${
-        isWhiteBackground && !isDashboard 
-          ? 'bg-white/95 text-black border-[#EBEBEB]' 
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 flex justify-between items-center border-b transition-all duration-300 ease-in-out backdrop-blur-sm mobile-header-safe ${
+        isWhiteBackground && !isDashboard
+          ? 'bg-white/95 text-black border-[#EBEBEB]'
           : 'bg-black/95 text-white border-[#1A1A1A]'
       }`}
       aria-label="Main navigation"
@@ -127,109 +127,141 @@ const Navbar = () => {
           <div className="flex items-center space-x-4">
             <Button
               variant="ghost"
+              size="default"
               onClick={handleBackNavigation}
-              className="flex items-center gap-2 px-0 hover:bg-transparent"
+              className="mobile-nav-item gap-2 px-3"
             >
               <ArrowLeft size={16} />
               Back
             </Button>
-            <Link 
-              to="/" 
-              className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+            <Link
+              to="/"
+              className="mobile-nav-item gap-2 hover:opacity-80 transition-opacity"
             >
               <Home size={16} />
               Home
             </Link>
           </div>
         ) : (
-          renderSectionLinks
+          <div className="flex space-x-6">
+            {isHomePage && (
+              <>
+                <a href="#leadership" className="mobile-nav-item hover:opacity-80 transition-opacity">Team</a>
+                <a href="#services" className="mobile-nav-item hover:opacity-80 transition-opacity">Services</a>
+                <a href="#faq" className="mobile-nav-item hover:opacity-80 transition-opacity">FAQ</a>
+              </>
+            )}
+          </div>
         )}
       </div>
       
       {/* Mobile menu button / Back button */}
       <div className="md:hidden">
         {needsBackButton ? (
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2">
             <Button
               variant="ghost"
+              size="sm"
               onClick={handleBackNavigation}
-              className="font-mono uppercase tracking-wide text-sm flex items-center gap-1 px-0"
+              className="mobile-tap-target-sm font-mono uppercase tracking-wide text-xs gap-1"
             >
-              <ArrowLeft size={14} />
+              <ArrowLeft size={16} />
               Back
             </Button>
-            <Link 
-              to="/" 
-              className="font-mono uppercase tracking-wide text-sm flex items-center gap-1 hover:opacity-80 transition-opacity"
+            <Link
+              to="/"
+              className="mobile-tap-target-sm font-mono uppercase tracking-wide text-xs flex items-center gap-1 hover:opacity-80 transition-opacity px-2 py-1 rounded"
             >
-              <Home size={14} />
+              <Home size={16} />
               Home
             </Link>
           </div>
         ) : (
           <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
             <SheetTrigger asChild aria-label="Open menu">
-              <button className="font-mono uppercase tracking-wide text-sm flex items-center">
+              <button className="mobile-tap-target font-mono uppercase tracking-wide text-sm flex items-center px-3 py-2 rounded hover:bg-white/10 transition-colors">
                 <Menu className="mr-2" size={18} /> Menu
               </button>
             </SheetTrigger>
-            <SheetContent 
-              side="left" 
-              className={`p-0 ${
-                isWhiteBackground && !isDashboard 
-                  ? 'bg-white text-black' 
+            <SheetContent
+              side="left"
+              className={`p-0 mobile-modal-safe ${
+                isWhiteBackground && !isDashboard
+                  ? 'bg-white text-black'
                   : 'bg-black text-white'
               } border-r-[1px] ${
-                isWhiteBackground && !isDashboard 
-                  ? 'border-[#EBEBEB]' 
+                isWhiteBackground && !isDashboard
+                  ? 'border-[#EBEBEB]'
                   : 'border-[#1A1A1A]'
               }`}
             >
-              <div className="flex flex-col h-full">
-                <div className="flex justify-between items-center p-4 border-b border-[#333333]">
+              <div className="flex flex-col h-full safe-area-inset">
+                <div className="flex justify-between items-center p-4 border-b border-[#333333] min-h-[64px]">
                   <div className="flex items-center">
                     <MinimalistHJLogo className="text-2xl" />
                   </div>
-                  <button onClick={() => setIsMenuOpen(false)} aria-label="Close menu">
+                  <button
+                    onClick={() => setIsMenuOpen(false)}
+                    aria-label="Close menu"
+                    className="mobile-tap-target p-2 rounded-lg hover:bg-white/10 transition-colors"
+                  >
                     <X size={24} />
                   </button>
                 </div>
                 
-                <div className="flex-1 overflow-y-auto pt-4 px-4">
+                <div className="flex-1 overflow-y-auto pt-6 px-4 pb-8">
                   {isHomePage && (
-                    <div className="space-y-6 font-mono uppercase tracking-wide text-sm mb-6">
-                      <a href="#leadership" className="block hover:opacity-80 transition-opacity py-2" onClick={() => setIsMenuOpen(false)}>Team</a>
-                      <a href="#services" className="block hover:opacity-80 transition-opacity py-2" onClick={() => setIsMenuOpen(false)}>Services</a>
-                      <a href="#faq" className="block hover:opacity-80 transition-opacity py-2" onClick={() => setIsMenuOpen(false)}>FAQ</a>
+                    <div className="space-y-2 font-mono uppercase tracking-wide text-sm mb-8">
+                      <a
+                        href="#leadership"
+                        className="mobile-tap-target w-full justify-start px-4 py-3 rounded-lg hover:bg-white/10 transition-colors"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        Team
+                      </a>
+                      <a
+                        href="#services"
+                        className="mobile-tap-target w-full justify-start px-4 py-3 rounded-lg hover:bg-white/10 transition-colors"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        Services
+                      </a>
+                      <a
+                        href="#faq"
+                        className="mobile-tap-target w-full justify-start px-4 py-3 rounded-lg hover:bg-white/10 transition-colors"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        FAQ
+                      </a>
                     </div>
                   )}
-                  
-                  <div className="pt-6 border-t border-[#333333] space-y-6 font-mono uppercase tracking-wide text-sm">
-                    <button 
-                      onClick={() => handleNavigation("/contact")} 
-                      className="block hover:opacity-80 transition-opacity py-2 text-left w-full"
+
+                  <div className="pt-6 border-t border-[#333333] space-y-2 font-mono uppercase tracking-wide text-sm">
+                    <button
+                      onClick={() => handleNavigation("/contact")}
+                      className="mobile-tap-target w-full justify-start px-4 py-3 rounded-lg hover:bg-white/10 transition-colors text-left"
                     >
                       Contact Us
                     </button>
                     {user ? (
                       <>
-                        <button 
-                          onClick={() => handleNavigation("/dashboard")} 
-                          className="block hover:opacity-80 transition-opacity py-2 text-left w-full"
+                        <button
+                          onClick={() => handleNavigation("/dashboard")}
+                          className="mobile-tap-target w-full justify-start px-4 py-3 rounded-lg hover:bg-white/10 transition-colors text-left"
                         >
                           Dashboard
                         </button>
-                        <button 
-                          onClick={() => {handleLogout(); setIsMenuOpen(false);}} 
-                          className="block hover:opacity-80 transition-opacity text-left w-full py-2"
+                        <button
+                          onClick={() => {handleLogout(); setIsMenuOpen(false);}}
+                          className="mobile-tap-target w-full justify-start px-4 py-3 rounded-lg hover:bg-red-500/10 text-red-400 transition-colors text-left"
                         >
                           Logout
                         </button>
                       </>
                     ) : (
-                      <button 
-                        onClick={() => handleNavigation("/login")} 
-                        className="block hover:opacity-80 transition-opacity py-2 text-left w-full"
+                      <button
+                        onClick={() => handleNavigation("/login")}
+                        className="mobile-tap-target w-full justify-start px-4 py-3 rounded-lg hover:bg-white/10 transition-colors text-left"
                       >
                         Client Login
                       </button>
@@ -252,14 +284,25 @@ const Navbar = () => {
       
       {/* Right menu items */}
       <div className="hidden md:flex space-x-6 font-mono uppercase tracking-wide text-sm">
-        <Link to="/contact" className="hover:opacity-80 transition-opacity">Contact Us</Link>
+        <Link to="/contact" className="mobile-nav-item hover:opacity-80 transition-opacity">
+          Contact Us
+        </Link>
         {user ? (
           <>
-            <Link to="/dashboard" className="hover:opacity-80 transition-opacity">Dashboard</Link>
-            <button onClick={handleLogout} className="hover:opacity-80 transition-opacity">Logout</button>
+            <Link to="/dashboard" className="mobile-nav-item hover:opacity-80 transition-opacity">
+              Dashboard
+            </Link>
+            <button
+              onClick={handleLogout}
+              className="mobile-nav-item hover:opacity-80 transition-opacity text-left"
+            >
+              Logout
+            </button>
           </>
         ) : (
-          <Link to="/login" className="hover:opacity-80 transition-opacity">Client Login</Link>
+          <Link to="/login" className="mobile-nav-item hover:opacity-80 transition-opacity">
+            Client Login
+          </Link>
         )}
       </div>
       

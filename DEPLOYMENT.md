@@ -101,48 +101,161 @@ npm run preview:prod
 ## 🔧 Server Configuration
 
 ### Nginx Configuration
+
 ```nginx
+# Rate limiting
+limit_req_zone $binary_remote_addr zone=login:10m rate=5r/m;
+limit_req_zone $binary_remote_addr zone=api:10m rate=100r/m;
+
 server {
     listen 80;
-    server_name hjc-malaysia.com www.hjc-malaysia.com;
-    return 301 https://$server_name$request_uri;
+    server_name hazlijohar.com www.hazlijohar.com;
+    return 301 https://hazlijohar.com$request_uri;
 }
 
 server {
     listen 443 ssl http2;
-    server_name hjc-malaysia.com www.hjc-malaysia.com;
+    server_name www.hazlijohar.com;
+    return 301 https://hazlijohar.com$request_uri;
+}
 
-    # SSL Configuration
-    ssl_certificate /path/to/certificate.crt;
-    ssl_certificate_key /path/to/private.key;
+server {
+    listen 443 ssl http2;
+    server_name hazlijohar.com;
+
+    # SSL Configuration with Let's Encrypt
+    ssl_certificate /etc/letsencrypt/live/hazlijohar.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/hazlijohar.com/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/hazlijohar.com/chain.pem;
+
+    # Modern SSL Configuration
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers ECDHE-RSA-AES256-GCM-SHA512:DHE-RSA-AES256-GCM-SHA512:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES256-GCM-SHA384;
+    ssl_prefer_server_ciphers off;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+    ssl_stapling on;
+    ssl_stapling_verify on;
 
     # Security Headers
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
     add_header X-Frame-Options "DENY" always;
     add_header X-Content-Type-Options "nosniff" always;
     add_header X-XSS-Protection "1; mode=block" always;
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
-    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://app.cal.com https://cdn.gpteng.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://ekgglnhnitrffayubchl.supabase.co https://app.cal.com; frame-src https://app.cal.com;" always;
+    add_header Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()" always;
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://app.cal.com https://cdn.gpteng.co https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://*.supabase.co https://app.cal.com https://www.google-analytics.com; frame-src https://app.cal.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests;" always;
 
     # Root directory
-    root /var/www/hjc-malaysia.com;
+    root /var/www/hazlijohar.com/dist;
     index index.html;
+
+    # Logging
+    access_log /var/log/nginx/hazlijohar.access.log;
+    error_log /var/log/nginx/hazlijohar.error.log;
 
     # Handle SPA routing
     location / {
         try_files $uri $uri/ /index.html;
+
+        # Security headers for HTML files
+        location ~* \.html$ {
+            add_header Cache-Control "no-cache, no-store, must-revalidate";
+            add_header Pragma "no-cache";
+            add_header Expires "0";
+        }
     }
 
-    # Cache static assets
-    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
+    # API rate limiting
+    location /api/ {
+        limit_req zone=api burst=20 nodelay;
+        limit_req_status 429;
+        proxy_pass http://localhost:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Authentication endpoints with stricter rate limiting
+    location /auth/ {
+        limit_req zone=login burst=3 nodelay;
+        limit_req_status 429;
+        proxy_pass http://localhost:3000;
+    }
+
+    # Static assets with long-term caching
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
         expires 1y;
         add_header Cache-Control "public, immutable";
+        add_header Access-Control-Allow-Origin "*";
+
+        # Brotli compression
+        location ~* \.(js|css)$ {
+            gzip_static on;
+            brotli_static on;
+        }
+    }
+
+    # Manifest and service worker
+    location ~* \.(webmanifest|manifest\.json)$ {
+        expires 1d;
+        add_header Cache-Control "public";
+    }
+
+    location /sw.js {
+        expires 0;
+        add_header Cache-Control "no-cache, no-store, must-revalidate";
+    }
+
+    # Security.txt for responsible disclosure
+    location = /.well-known/security.txt {
+        return 200 "Contact: hazli@hazlijohar.my\nExpires: 2025-12-31T23:59:59.000Z\n";
+        add_header Content-Type text/plain;
+    }
+
+    # Block access to sensitive files
+    location ~ /\. {
+        deny all;
+        access_log off;
+        log_not_found off;
+    }
+
+    location ~ ~$ {
+        deny all;
+        access_log off;
+        log_not_found off;
     }
 
     # Gzip compression
     gzip on;
     gzip_vary on;
     gzip_min_length 1024;
-    gzip_types text/plain text/css text/xml text/javascript application/javascript application/xml+rss application/json;
+    gzip_proxied any;
+    gzip_comp_level 6;
+    gzip_types
+        text/plain
+        text/css
+        text/xml
+        text/javascript
+        application/javascript
+        application/xml+rss
+        application/json
+        application/xml
+        image/svg+xml;
+
+    # Brotli compression (if module available)
+    brotli on;
+    brotli_comp_level 6;
+    brotli_types
+        text/plain
+        text/css
+        application/json
+        application/javascript
+        text/xml
+        application/xml
+        application/xml+rss
+        text/javascript;
 }
 ```
 

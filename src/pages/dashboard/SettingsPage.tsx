@@ -4,6 +4,7 @@ import { useSecureAuth } from '@/hooks/useSecureAuth';
 import { passwordSchema } from '@/utils/validation';
 import { PasswordStrengthMeter } from '@/components/security/PasswordStrengthMeter';
 import { toast } from '@/hooks/use-toast';
+import type { ZodError } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
@@ -54,8 +55,13 @@ const SettingsPage = () => {
       try {
         passwordSchema.parse(value);
         setPasswordErrors([]);
-      } catch (error: any) {
-        setPasswordErrors(error.errors?.map((err: any) => err.message) || []);
+      } catch (error) {
+        if (error instanceof Error && 'errors' in error) {
+          const zodError = error as ZodError;
+          setPasswordErrors(zodError.errors.map(err => err.message));
+        } else {
+          setPasswordErrors(['Invalid password format']);
+        }
       }
     }
   };
@@ -76,12 +82,21 @@ const SettingsPage = () => {
     
     try {
       passwordSchema.parse(passwordForm.newPassword);
-    } catch (error: any) {
-      toast({
-        title: 'Password requirements not met',
-        description: error.errors?.[0]?.message || 'Please check password requirements',
-        variant: 'destructive'
-      });
+    } catch (error) {
+      if (error instanceof Error && 'errors' in error) {
+        const zodError = error as ZodError;
+        toast({
+          title: 'Password requirements not met',
+          description: zodError.errors[0]?.message || 'Please check password requirements',
+          variant: 'destructive'
+        });
+      } else {
+        toast({
+          title: 'Password requirements not met',
+          description: 'Please check password requirements',
+          variant: 'destructive'
+        });
+      }
       return;
     }
     

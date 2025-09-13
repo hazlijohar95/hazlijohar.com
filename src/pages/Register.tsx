@@ -5,6 +5,7 @@ import { styles } from '@/styles/common-styles';
 import { toast } from '@/components/ui/use-toast';
 import { passwordSchema, emailSchema, sanitizeHtml } from '@/utils/validation';
 import { PasswordStrengthMeter } from '@/components/security/PasswordStrengthMeter';
+import type { ZodError } from 'zod';
 import Navbar from '../components/Navbar';
 
 const Register = () => {
@@ -45,8 +46,13 @@ const Register = () => {
       try {
         passwordSchema.parse(value);
         setPasswordErrors([]);
-      } catch (error: any) {
-        setPasswordErrors(error.errors?.map((err: any) => err.message) || []);
+      } catch (error) {
+        if (error instanceof Error && 'errors' in error) {
+          const zodError = error as ZodError;
+          setPasswordErrors(zodError.errors.map(err => err.message));
+        } else {
+          setPasswordErrors(['Invalid password format']);
+        }
       }
     }
   };
@@ -85,18 +91,26 @@ const Register = () => {
       });
       
       navigate('/login');
-    } catch (error: any) {
-      if (error.errors) {
-        // Validation errors
+    } catch (error) {
+      if (error instanceof Error && 'errors' in error) {
+        // Zod validation errors
+        const zodError = error as ZodError;
         toast({
           title: "Validation failed",
-          description: error.errors[0]?.message || "Please check your input.",
+          description: zodError.errors[0]?.message || "Please check your input.",
+          variant: "destructive",
+        });
+      } else if (error instanceof Error) {
+        // Supabase or other errors
+        toast({
+          title: "Registration failed",
+          description: error.message || "There was a problem with your registration.",
           variant: "destructive",
         });
       } else {
         toast({
           title: "Registration failed",
-          description: error.message || "There was a problem with your registration.",
+          description: "An unexpected error occurred.",
           variant: "destructive",
         });
       }

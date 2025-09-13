@@ -47,7 +47,7 @@ export const questionSchema = z.object({
   message: z.string()
     .min(10, 'Message must be at least 10 characters')
     .max(1000, 'Message is too long')
-    .regex(/^[a-zA-Z0-9\s\-_.,!?@#$%^&*()\[\]{}|\\:;"'<>\/\n\r\t]+$/, 'Message contains invalid characters')
+    .regex(/^[a-zA-Z0-9\s\-_.,!?@#$%^&*()[\]{}|\\:;"'<>/\n\r\t]+$/, 'Message contains invalid characters')
 });
 
 // File validation

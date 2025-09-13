@@ -161,29 +161,93 @@
 
 /* Button variants */
 @layer components {
-  /* Button variants with refined aesthetics */
+  /* Mobile-first touch target standards (44px minimum per Apple/Google guidelines) */
+  .mobile-tap-target {
+    @apply min-h-[44px] min-w-[44px] flex items-center justify-center touch-manipulation;
+  }
+
+  .mobile-tap-target-sm {
+    @apply min-h-[36px] min-w-[36px] flex items-center justify-center touch-manipulation;
+  }
+
+  /* Enhanced mobile button variants */
   .btn-brand {
-    @apply bg-white text-black transition-all duration-300 
-           shadow-sm hover:shadow-md hover:scale-[1.02];
+    @apply bg-white text-black transition-all duration-300
+           shadow-sm hover:shadow-md hover:scale-[1.02]
+           mobile-tap-target active:scale-[0.98] select-none;
   }
 
   .btn-outline-brand {
-    @apply border border-white text-white hover:bg-white/10 transition-all duration-300;
+    @apply border border-white text-white hover:bg-white/10 transition-all duration-300
+           mobile-tap-target active:scale-[0.98] select-none;
   }
 
   .btn-ghost-brand {
-    @apply text-white hover:bg-white/10 transition-all duration-300;
+    @apply text-white hover:bg-white/10 transition-all duration-300
+           mobile-tap-target active:scale-[0.98] select-none;
   }
-  
-  /* Card styles */
+
+  /* Mobile-optimized card styles */
   .card-elevated {
-    @apply bg-black rounded-xl shadow-md border border-white/20 
-           transition-all duration-300 hover:shadow-lg hover:border-white/40;
+    @apply bg-black rounded-xl shadow-md border border-white/20
+           transition-all duration-300 hover:shadow-lg hover:border-white/40
+           touch-manipulation;
   }
-  
+
+  .card-mobile {
+    @apply card-elevated p-4 sm:p-6 mb-4 sm:mb-6;
+  }
+
   /* Section styles */
   .section-divider {
-    @apply w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent my-12;
+    @apply w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent my-8 sm:my-12;
+  }
+
+  /* Mobile spacing system */
+  .mobile-container {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+
+  .mobile-section {
+    @apply py-12 sm:py-16 lg:py-20;
+  }
+
+  /* Mobile typography with proper line heights */
+  .mobile-heading-xl {
+    @apply text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight tracking-tight;
+  }
+
+  .mobile-heading-lg {
+    @apply text-xl sm:text-2xl md:text-3xl font-semibold leading-tight;
+  }
+
+  .mobile-heading-md {
+    @apply text-lg sm:text-xl md:text-2xl font-medium leading-snug;
+  }
+
+  .mobile-body-lg {
+    @apply text-base sm:text-lg leading-relaxed;
+  }
+
+  .mobile-body {
+    @apply text-sm sm:text-base leading-relaxed;
+  }
+
+  .mobile-caption {
+    @apply text-xs sm:text-sm text-muted-foreground leading-normal;
+  }
+
+  /* Mobile-specific input enhancements */
+  .mobile-input {
+    @apply min-h-[48px] px-4 py-3 text-base rounded-lg border-2
+           focus:border-white focus:ring-2 focus:ring-white/20
+           transition-all duration-200 touch-manipulation;
+  }
+
+  /* Mobile navigation improvements */
+  .mobile-nav-item {
+    @apply mobile-tap-target px-4 py-2 font-mono uppercase tracking-wide
+           text-sm hover:bg-white/10 rounded-md transition-all duration-200;
   }
 }
 
@@ -202,4 +266,256 @@
 /* Add subtle texture to backgrounds */
 .bg-texture-light {
   background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+}
+
+/* ============================================ */
+/* COMPREHENSIVE SAFE AREA HANDLING */
+/* ============================================ */
+
+/* Safe area CSS variables for modern mobile devices */
+:root {
+  --safe-area-inset-top: env(safe-area-inset-top, 0px);
+  --safe-area-inset-right: env(safe-area-inset-right, 0px);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-inset-left: env(safe-area-inset-left, 0px);
+
+  /* Mobile-specific measurements */
+  --mobile-header-height: calc(60px + var(--safe-area-inset-top));
+  --mobile-bottom-nav-height: calc(80px + var(--safe-area-inset-bottom));
+  --mobile-content-spacing: max(16px, var(--safe-area-inset-left), var(--safe-area-inset-right));
+}
+
+/* Safe area utility classes */
+.safe-area-top {
+  padding-top: var(--safe-area-inset-top);
+}
+
+.safe-area-bottom {
+  padding-bottom: var(--safe-area-inset-bottom);
+}
+
+.safe-area-left {
+  padding-left: var(--safe-area-inset-left);
+}
+
+.safe-area-right {
+  padding-right: var(--safe-area-inset-right);
+}
+
+.safe-area-inset {
+  padding-top: var(--safe-area-inset-top);
+  padding-right: var(--safe-area-inset-right);
+  padding-bottom: var(--safe-area-inset-bottom);
+  padding-left: var(--safe-area-inset-left);
+}
+
+/* Mobile app shell with proper safe area handling */
+.mobile-app-shell {
+  min-height: 100vh;
+  min-height: calc(100vh - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+  padding-left: var(--safe-area-inset-left);
+  padding-right: var(--safe-area-inset-right);
+}
+
+/* Mobile viewport optimizations */
+.mobile-viewport {
+  min-height: 100vh;
+  min-height: 100dvh; /* Dynamic viewport height for mobile browsers */
+  position: relative;
+}
+
+/* Mobile header with safe area */
+.mobile-header-safe {
+  height: var(--mobile-header-height);
+  padding-top: var(--safe-area-inset-top);
+  padding-left: var(--safe-area-inset-left);
+  padding-right: var(--safe-area-inset-right);
+}
+
+/* Mobile content with safe margins */
+.mobile-content-safe {
+  padding-left: var(--mobile-content-spacing);
+  padding-right: var(--mobile-content-spacing);
+}
+
+/* Mobile bottom navigation with safe area */
+.mobile-bottom-nav-safe {
+  height: var(--mobile-bottom-nav-height);
+  padding-bottom: var(--safe-area-inset-bottom);
+  padding-left: var(--safe-area-inset-left);
+  padding-right: var(--safe-area-inset-right);
+}
+
+/* Modal and overlay safe areas */
+.mobile-modal-safe {
+  margin-top: var(--safe-area-inset-top);
+  margin-bottom: var(--safe-area-inset-bottom);
+  margin-left: var(--safe-area-inset-left);
+  margin-right: var(--safe-area-inset-right);
+  max-height: calc(100vh - var(--safe-area-inset-top) - var(--safe-area-inset-bottom));
+}
+
+/* ============================================ */
+/* MOBILE-NATIVE ENHANCEMENTS */
+/* ============================================ */
+
+/* iOS specific optimizations */
+.ios-optimized {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Enhanced mobile gestures */
+.mobile-gesture-zone {
+  touch-action: pan-x pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Mobile pull-to-refresh prevention */
+.mobile-no-refresh {
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Mobile keyboard avoiding */
+.mobile-keyboard-avoid {
+  position: relative;
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Native-like loading states */
+.mobile-loading-shimmer {
+  background: linear-gradient(90deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.1) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Mobile-optimized focus states */
+.mobile-focus:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+}
+
+/* Enhanced mobile cards */
+.mobile-card-native {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Mobile typography enhancements */
+.mobile-text-crisp {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Mobile-specific animations with respect to reduced motion */
+@media (prefers-reduced-motion: no-preference) {
+  .mobile-bounce-in {
+    animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  .mobile-slide-up {
+    animation: slideUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .mobile-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) translateY(50px);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Mobile-specific media queries */
+@media (max-width: 480px) {
+  .mobile-sm-text {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  .mobile-sm-padding {
+    padding: 1rem;
+  }
+
+  .mobile-sm-gap {
+    gap: 0.75rem;
+  }
+}
+
+/* Portrait orientation optimizations */
+@media (orientation: portrait) and (max-width: 768px) {
+  .mobile-portrait-stack {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .mobile-portrait-full {
+    width: 100%;
+  }
+}
+
+/* Landscape orientation optimizations */
+@media (orientation: landscape) and (max-height: 500px) {
+  .mobile-landscape-compact {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .mobile-landscape-hide {
+    display: none;
+  }
 }

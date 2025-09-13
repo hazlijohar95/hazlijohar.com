@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node:*)",
+      "Bash(npm:*)",
+      "Bash(lsof:*)",
+      "Bash(pkill:*)",
+      "Bash(awk:*)",
+      "Bash(xargs kill:*)",
+      "Bash(sudo lsof:*)",
+      "Bash(kill:*)",
+      "Bash(curl:*)",
+      "Bash(/dev/null)",
+      "Read(//Users/hazlijohar/Library/Application Support/CleanShot/media/media_lBWPN2qVpb/**)",
+      "Read(//Users/hazlijohar/Library/Application Support/CleanShot/media/media_zzfdBI9nAC/**)",
+      "Bash(tree:*)",
+      "Bash(wc:*)",
+      "Read(//Applications/Cursor/**)",
+      "Bash(find:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

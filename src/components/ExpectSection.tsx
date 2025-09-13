@@ -1,5 +1,6 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { BookText, BarChartBig, Wrench, Users } from 'lucide-react';
 import { SectionContainer } from './ui/section-container';
 import { SectionTitle } from './ui/section-title';
@@ -8,22 +9,56 @@ import { CardProps } from '@/types';
 import '../App.css';
 
 const Card = ({ icon, title, description }: CardProps) => (
-  <div className="scroll-snap-start min-w-[460px] bg-black text-white p-12 flex flex-col justify-between shrink-0 h-[580px] group hover:bg-[#111] transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-white/5">
+  <motion.div
+    className="w-full max-w-[460px] bg-black text-white p-12 flex flex-col justify-between h-[580px] group transition-all duration-500"
+    whileHover={{
+      backgroundColor: "#111",
+      scale: 1.02,
+      boxShadow: "0 25px 50px -12px rgba(255, 255, 255, 0.05)"
+    }}
+    transition={{ duration: 0.3 }}
+  >
     <div>
-      <div className="text-white mb-20 transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+      <motion.div
+        className="text-white mb-20"
+        whileHover={{
+          scale: 1.1,
+          rotate: 3,
+          transition: { duration: 0.3 }
+        }}
+      >
         {icon}
-      </div>
-      <h3 className="font-semibold text-4xl leading-tight text-white mb-6 transition-colors duration-300 group-hover:text-white/90">
+      </motion.div>
+      <motion.h3
+        className="font-semibold text-4xl leading-tight text-white mb-6"
+        whileHover={{
+          color: "rgba(255, 255, 255, 0.9)",
+          transition: { duration: 0.3 }
+        }}
+      >
         {title}
-      </h3>
-      <p className="text-base font-mono opacity-70 leading-relaxed transition-opacity duration-300 group-hover:opacity-90">
+      </motion.h3>
+      <motion.p
+        className="text-base font-mono opacity-70 leading-relaxed"
+        whileHover={{
+          opacity: 0.9,
+          transition: { duration: 0.3 }
+        }}
+      >
         {description}
-      </p>
+      </motion.p>
     </div>
-    
+
     {/* Subtle accent line that appears on hover */}
-    <div className="w-12 h-px bg-white/20 mt-8 transition-all duration-500 group-hover:w-20 group-hover:bg-white/40"></div>
-  </div>
+    <motion.div
+      className="w-12 h-px bg-white/20 mt-8"
+      whileHover={{
+        width: 80,
+        backgroundColor: "rgba(255, 255, 255, 0.4)",
+        transition: { duration: 0.5 }
+      }}
+    />
+  </motion.div>
 );
 
 const expectCards: CardProps[] = [
@@ -50,6 +85,20 @@ const expectCards: CardProps[] = [
 ];
 
 const ExpectSection = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Auto-advance to next card every 15 seconds (60 seconds total for 4 cards)
+  useEffect(() => {
+    if (isHovered) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % expectCards.length);
+    }, 15000); // 15 seconds per card
+
+    return () => clearInterval(interval);
+  }, [isHovered]);
+
   return (
     <SectionContainer id="expect" className="bg-[#fcfcfc] py-32 overflow-hidden">
       <div className="container mx-auto px-0">
@@ -68,26 +117,65 @@ const ExpectSection = () => {
               </div>
             </div>
           </div>
-          
-          {/* Enhanced cards section with proper margin */}
-          <div className="lg:w-2/3 overflow-x-auto scroll-snap-x scrollbar-hide lg:ml-8">
-            <div className="flex space-x-6 pl-8 lg:pl-0 pr-8 pb-12">
-              {expectCards.map((card, index) => (
-                <div 
-                  key={index}
-                  className="animate-fade-in-up"
-                  style={{ 
-                    animationDelay: `${index * 0.1}s`,
-                    animationFillMode: 'both'
+
+          {/* Auto-sliding cards section - one card at a time */}
+          <div className="lg:w-2/3 flex justify-center items-center lg:ml-8">
+            <div
+              className="relative w-full max-w-[480px] h-[580px]"
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+            >
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentIndex}
+                  initial={{ opacity: 0, x: 300 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -300 }}
+                  transition={{
+                    duration: 0.8,
+                    ease: "easeInOut"
                   }}
+                  className="absolute inset-0"
                 >
-                  <Card 
-                    icon={card.icon}
-                    title={card.title}
-                    description={card.description}
+                  <Card
+                    icon={expectCards[currentIndex].icon}
+                    title={expectCards[currentIndex].title}
+                    description={expectCards[currentIndex].description}
                   />
-                </div>
-              ))}
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Card indicators */}
+              <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                {expectCards.map((_, index) => (
+                  <motion.button
+                    key={index}
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                      index === currentIndex ? 'bg-black' : 'bg-black/30'
+                    }`}
+                    whileHover={{ scale: 1.2 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => setCurrentIndex(index)}
+                  />
+                ))}
+              </div>
+
+              {/* Progress bar */}
+              <div className="absolute -bottom-16 left-0 right-0 h-px bg-black/20">
+                <motion.div
+                  className="h-full bg-black"
+                  initial={{ width: "0%" }}
+                  animate={{
+                    width: isHovered ? "0%" : "100%"
+                  }}
+                  transition={{
+                    duration: isHovered ? 0.3 : 15, // 15 seconds per card
+                    ease: "linear",
+                    repeat: isHovered ? 0 : Infinity,
+                    repeatType: "restart"
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>

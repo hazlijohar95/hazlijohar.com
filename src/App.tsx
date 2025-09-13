@@ -6,13 +6,14 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { SEOProvider } from "./components/SEOProvider";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useMobileOptimizations } from "@/hooks/useMobileOptimizations";
 import { useEffect, Suspense } from "react";
 import { GlobalLoadingIndicator } from "./components/GlobalLoadingIndicator";
 import { RouteLoader } from "./components/routing/RouteLoader";
 import { AppRoutes } from "./components/routing/AppRoutes";
 import { RouteErrorBoundary } from "./components/RouteErrorBoundary";
 import { validateEnvironment } from "./utils/security";
+import { initWebVitals, observePageLoad, observeResourceLoading } from "./utils/performance";
 
 // Validate environment variables on app startup
 try {
@@ -45,10 +46,15 @@ const queryClient = new QueryClient({
 });
 
 const App = () => {
-  const isMobile = useIsMobile();
+  const { isMobile, isIOS } = useMobileOptimizations();
   
-  // Preload critical resources
+  // Initialize Web Vitals and preload critical resources
   useEffect(() => {
+    // Initialize Web Vitals performance monitoring
+    initWebVitals();
+    observePageLoad();
+    observeResourceLoading();
+
     const preloadCritical = (): void => {
       const criticalImages = ['/placeholder.svg'];
       criticalImages.forEach(src => {
@@ -58,10 +64,10 @@ const App = () => {
         document.head.appendChild(link);
       });
     };
-    
+
     // Delay preloading to not block initial render
     const timeoutId = setTimeout(preloadCritical, 1000);
-    
+
     return () => clearTimeout(timeoutId);
   }, []);
   
@@ -74,7 +80,18 @@ const App = () => {
             <Sonner />
             <BrowserRouter>
               <AuthProvider>
-                <div className={`${isMobile ? 'mobile-app-shell' : ''} min-h-screen bg-black text-white`}>
+                <div
+                  className={`min-h-screen bg-black text-white ${
+                    isMobile ? 'mobile-app-shell mobile-viewport' : ''
+                  } ${isIOS ? 'ios-optimized' : ''}`}
+                  style={{
+                    // Enhanced mobile viewport handling
+                    ...(isMobile && {
+                      minHeight: '100vh',
+                      minHeight: '100dvh', // Dynamic viewport height
+                    }),
+                  }}
+                >
                   <GlobalLoadingIndicator />
                   <Suspense fallback={<RouteLoader text="Starting..." variant="dots" />}>
                     <AppRoutes />

@@ -1,6 +1,23 @@
-// Security utility functions and configurations
+/**
+ * Security utility functions and configurations
+ * Provides comprehensive security features including input validation,
+ * environment validation, and security header configuration.
+ * @fileoverview Security utilities for HJC Chartered Accountants application
+ */
 
-// Environment variable validation
+/**
+ * Validates that all required environment variables are present
+ * @throws {Error} Throws an error if any required environment variables are missing
+ * @example
+ * ```typescript
+ * try {
+ *   validateEnvironment();
+ *   console.log('Environment is valid');
+ * } catch (error) {
+ *   console.error('Missing environment variables:', error.message);
+ * }
+ * ```
+ */
 export const validateEnvironment = (): void => {
   const requiredVars = [
     'VITE_SUPABASE_URL',
@@ -93,7 +110,17 @@ export const sanitizationPatterns = {
   angleBrackets: /[<>]/g,
 } as const;
 
-// Enhanced input sanitization
+/**
+ * Sanitizes user input to prevent XSS attacks and other security vulnerabilities
+ * @param input - The string to sanitize
+ * @returns The sanitized string with dangerous patterns removed
+ * @example
+ * ```typescript
+ * const userInput = '<script>alert("xss")</script>Hello World';
+ * const safe = sanitizeInput(userInput);
+ * console.log(safe); // "Hello World"
+ * ```
+ */
 export const sanitizeInput = (input: string): string => {
   if (typeof input !== 'string') {
     return '';
@@ -139,7 +166,20 @@ export const isValidEmail = (email: string): boolean => {
   return !dangerousPatterns.some(pattern => pattern.test(email));
 };
 
-// Password strength validation
+/**
+ * Validates password strength against security best practices
+ * @param password - The password to validate
+ * @returns Object containing validation result, strength score (0-5), and feedback array
+ * @example
+ * ```typescript
+ * const result = validatePasswordStrength('MySecureP@ssw0rd123!');
+ * if (result.isValid) {
+ *   console.log('Strong password, score:', result.score);
+ * } else {
+ *   console.log('Weak password:', result.feedback);
+ * }
+ * ```
+ */
 export const validatePasswordStrength = (password: string): {
   isValid: boolean;
   score: number;

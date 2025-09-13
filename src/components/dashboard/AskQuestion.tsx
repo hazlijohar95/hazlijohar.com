@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useQuestions } from '@/hooks/useQuestions';
 import { questionSchema, sanitizeHtml } from '@/utils/validation';
 import { Button } from '@/components/ui/button';
+import type { ZodError } from 'zod';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -42,13 +43,18 @@ const AskQuestion = () => {
       questionSchema.parse(formData);
       setErrors({});
       return true;
-    } catch (error: any) {
-      const validationErrors: { [key: string]: string } = {};
-      error.errors?.forEach((err: any) => {
-        const field = err.path[0];
-        validationErrors[field] = err.message;
-      });
-      setErrors(validationErrors);
+    } catch (error) {
+      if (error instanceof Error && 'errors' in error) {
+        const zodError = error as ZodError;
+        const validationErrors: { [key: string]: string } = {};
+        zodError.errors.forEach(err => {
+          const field = err.path[0] as string;
+          validationErrors[field] = err.message;
+        });
+        setErrors(validationErrors);
+      } else {
+        setErrors({ general: 'Validation failed' });
+      }
       return false;
     }
   };

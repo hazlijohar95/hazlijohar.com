@@ -17,6 +17,7 @@ import DashboardCalendar from '@/components/dashboard/DashboardCalendar';
 import TaskManager from '@/components/dashboard/TaskManager';
 import MobileBottomNav from '@/components/dashboard/MobileBottomNav';
 import { useIsMobile } from '@/hooks/use-mobile';
+import PerformanceMetrics from '@/components/dashboard/PerformanceMetrics';
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -130,6 +131,7 @@ const Dashboard = () => {
                 {activeTab === 'tasks' && <TaskManager />}
                 {activeTab === 'questions' && <AskQuestion />}
                 {activeTab === 'billing' && <BillingSection />}
+                {activeTab === 'performance' && <PerformanceMetrics />}
                 
                 {activeTab === 'overview' && <div className="mt-12"><FutureFeature /></div>}
               </div>
@@ -159,6 +161,9 @@ const Dashboard = () => {
                   <TabsTrigger value="billing" className="data-[state=active]:bg-white data-[state=active]:text-black">
                     Billing
                   </TabsTrigger>
+                  <TabsTrigger value="performance" className="data-[state=active]:bg-white data-[state=active]:text-black">
+                    Performance
+                  </TabsTrigger>
                 </TabsList>
                 
                 <TabsContent value="overview" className="mt-4 space-y-12">
@@ -184,6 +189,10 @@ const Dashboard = () => {
                 
                 <TabsContent value="billing" className="mt-4">
                   <BillingSection />
+                </TabsContent>
+
+                <TabsContent value="performance" className="mt-4">
+                  <PerformanceMetrics />
                 </TabsContent>
               </Tabs>
             )}

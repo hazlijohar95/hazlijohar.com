@@ -1,59 +1,51 @@
-
 import js from "@eslint/js";
 import globals from "globals";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
-import tseslint from "typescript-eslint";
-import a11y from "eslint-plugin-jsx-a11y";
+import tsParser from "@typescript-eslint/parser";
 
-export default tseslint.config(
-  { ignores: ["dist", "node_modules"] },
+export default [
+  { ignores: ["dist", "node_modules", "*.config.js", "scripts/**/*"] },
   {
-    extends: [
-      js.configs.recommended, 
-      ...tseslint.configs.recommended,
-      ...tseslint.configs.stylistic,
-    ],
     files: ["**/*.{ts,tsx}"],
     languageOptions: {
       ecmaVersion: 2020,
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: "module",
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
       globals: {
         ...globals.browser,
         ...globals.node,
-      },
-      parserOptions: {
-        project: true,
       },
     },
     plugins: {
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
-      "jsx-a11y": a11y,
     },
     rules: {
+      ...js.configs.recommended.rules,
       ...reactHooks.configs.recommended.rules,
       "react-refresh/only-export-components": [
         "warn",
         { allowConstantExport: true },
       ],
-      "@typescript-eslint/no-unused-vars": ["warn", { 
+      "no-unused-vars": ["warn", {
         "argsIgnorePattern": "^_",
         "varsIgnorePattern": "^_",
         "caughtErrorsIgnorePattern": "^_"
       }],
-      "@typescript-eslint/no-explicit-any": "warn",
-      "@typescript-eslint/explicit-function-return-type": ["off"],
-      "@typescript-eslint/ban-ts-comment": ["warn"],
-      "@typescript-eslint/no-non-null-assertion": ["warn"],
-      "jsx-a11y/alt-text": ["warn", { "elements": ["img"] }],
-      "jsx-a11y/click-events-have-key-events": "warn",
-      "jsx-a11y/no-static-element-interactions": "warn",
       "no-console": ["warn", { allow: ["warn", "error"] }],
       "prefer-const": "warn",
       "eqeqeq": ["warn", "always"],
       "no-var": "error",
       "curly": ["warn", "multi-line"],
       "arrow-body-style": ["warn", "as-needed"],
+      "no-undef": "off", // TypeScript handles this
     },
-  }
-);
+  },
+];

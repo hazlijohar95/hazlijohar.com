@@ -7,7 +7,7 @@ export interface InputProps extends React.ComponentProps<"input"> {
   mobileOptimized?: boolean;
 }
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
+const UIInput = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, error, mobileOptimized = true, ...props }, ref) => {
     const isMobile = useIsMobile();
 
@@ -70,6 +70,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     )
   }
 )
-Input.displayName = "Input"
+UIInput.displayName = "Input"
 
-export { Input }
+export { UIInput as Input }

@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
-const CardComponent = React.forwardRef<
+const UICard = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
@@ -15,9 +15,9 @@ const CardComponent = React.forwardRef<
     {...props}
   />
 ))
-CardComponent.displayName = "Card"
+UICard.displayName = "Card"
 
-const CardHeaderComponent = React.forwardRef<
+const UICardHeader = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
@@ -27,9 +27,9 @@ const CardHeaderComponent = React.forwardRef<
     {...props}
   />
 ))
-CardHeaderComponent.displayName = "CardHeader"
+UICardHeader.displayName = "CardHeader"
 
-const CardTitleComponent = React.forwardRef<
+const UICardTitle = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLHeadingElement>
 >(({ className, ...props }, ref) => (
@@ -42,9 +42,9 @@ const CardTitleComponent = React.forwardRef<
     {...props}
   />
 ))
-CardTitleComponent.displayName = "CardTitle"
+UICardTitle.displayName = "CardTitle"
 
-const CardDescriptionComponent = React.forwardRef<
+const UICardDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => (
@@ -54,17 +54,17 @@ const CardDescriptionComponent = React.forwardRef<
     {...props}
   />
 ))
-CardDescriptionComponent.displayName = "CardDescription"
+UICardDescription.displayName = "CardDescription"
 
-const CardContentComponent = React.forwardRef<
+const UICardContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
   <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
 ))
-CardContentComponent.displayName = "CardContent"
+UICardContent.displayName = "CardContent"
 
-const CardFooterComponent = React.forwardRef<
+const UICardFooter = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
@@ -74,14 +74,6 @@ const CardFooterComponent = React.forwardRef<
     {...props}
   />
 ))
-CardFooterComponent.displayName = "CardFooter"
+UICardFooter.displayName = "CardFooter"
 
-// Export with original names to maintain API compatibility
-export {
-  CardComponent as Card,
-  CardHeaderComponent as CardHeader,
-  CardFooterComponent as CardFooter,
-  CardTitleComponent as CardTitle,
-  CardDescriptionComponent as CardDescription,
-  CardContentComponent as CardContent
-}
+export { UICard as Card, UICardHeader as CardHeader, UICardFooter as CardFooter, UICardTitle as CardTitle, UICardDescription as CardDescription, UICardContent as CardContent }

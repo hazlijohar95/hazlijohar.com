@@ -8,7 +8,7 @@ const labelVariants = cva(
   "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
 )
 
-const LabelComponent = React.forwardRef<
+const UILabel = React.forwardRef<
   React.ElementRef<typeof LabelPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> &
     VariantProps<typeof labelVariants>
@@ -19,6 +19,6 @@ const LabelComponent = React.forwardRef<
     {...props}
   />
 ))
-LabelComponent.displayName = LabelPrimitive.Root.displayName
+UILabel.displayName = LabelPrimitive.Root.displayName
 
-export { LabelComponent as Label }
+export { UILabel as Label }

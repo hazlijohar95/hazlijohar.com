@@ -1,7 +1,6 @@
 
 import React from 'react';
-import * as FramerMotion from 'framer-motion';
-const { motion, AnimatePresence } = FramerMotion;
+import { motion } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 
 interface PageTransitionProps {
@@ -54,21 +53,18 @@ export const PageTransition = ({ children, variant = 'fade' }: PageTransitionPro
   const variants = pageVariants[variant];
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={location.pathname}
-        variants={variants}
-        initial="initial"
-        animate="enter"
-        exit="exit"
-        className="w-full min-h-screen"
-        style={{ 
-          backfaceVisibility: 'hidden',
-          transform: 'translateZ(0)'
-        }}
-      >
-        {children}
-      </motion.div>
-    </AnimatePresence>
+    <motion.div
+      key={location.pathname}
+      variants={variants}
+      initial="initial"
+      animate="enter"
+      className="w-full min-h-screen"
+      style={{
+        backfaceVisibility: 'hidden',
+        transform: 'translateZ(0)'
+      }}
+    >
+      {children}
+    </motion.div>
   );
 };

@@ -9,7 +9,7 @@ import { toast } from '@/components/ui/use-toast';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Button } from './ui/button';
 
-const Navbar = () => {
+const UINavbar = () => {
   const [isWhiteBackground, setIsWhiteBackground] = useState(false);
   const [user, setUser] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -312,4 +312,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default UINavbar;

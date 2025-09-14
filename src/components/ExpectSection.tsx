@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import * as FramerMotion from 'framer-motion';
-const { motion, AnimatePresence } = FramerMotion;
+import { motion } from 'framer-motion';
 import { BookText, BarChartBig, Wrench, Users } from 'lucide-react';
 import { SectionContainer } from './ui/section-container';
 import { SectionTitle } from './ui/section-title';
@@ -126,25 +125,22 @@ const ExpectSection = () => {
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
             >
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentIndex}
-                  initial={{ opacity: 0, x: 300 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -300 }}
-                  transition={{
-                    duration: 0.8,
-                    ease: "easeInOut"
-                  }}
-                  className="absolute inset-0"
-                >
-                  <Card
-                    icon={expectCards[currentIndex].icon}
-                    title={expectCards[currentIndex].title}
-                    description={expectCards[currentIndex].description}
-                  />
-                </motion.div>
-              </AnimatePresence>
+              <motion.div
+                key={currentIndex}
+                initial={{ opacity: 0, x: 300 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{
+                  duration: 0.8,
+                  ease: "easeInOut"
+                }}
+                className="absolute inset-0"
+              >
+                <Card
+                  icon={expectCards[currentIndex].icon}
+                  title={expectCards[currentIndex].title}
+                  description={expectCards[currentIndex].description}
+                />
+              </motion.div>
 
               {/* Card indicators */}
               <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">

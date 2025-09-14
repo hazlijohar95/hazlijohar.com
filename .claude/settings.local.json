@@ -25,7 +25,9 @@
       "Bash(./build-for-cloudflare.sh:*)",
       "Read(//Users/hazlijohar/Library/Application Support/CleanShot/media/media_VZn3QbMqAb/**)",
       "Bash(npx wrangler pages deploy:*)",
-      "Read(//Users/hazlijohar/Library/Application Support/CleanShot/media/media_1xwdh6Sbae/**)"
+      "Read(//Users/hazlijohar/Library/Application Support/CleanShot/media/media_1xwdh6Sbae/**)",
+      "Bash(grep:*)",
+      "Bash(rm:*)"
     ],
     "deny": [],
     "ask": []

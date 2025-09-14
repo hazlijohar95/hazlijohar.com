@@ -1,5 +1,6 @@
 # Cloudflare Pages Configuration
 # This is a React/Vite SPA that should be deployed to Cloudflare Pages
+# Cache-busting build timestamp: 2025-09-14T15:25:00Z
 
 name = "hazlijoharnco"
 compatibility_date = "2025-09-14"

@@ -22,7 +22,10 @@
       "Bash(git push:*)",
       "Bash(chmod:*)",
       "Bash(echo \"Exit code: $?\")",
-      "Bash(./build-for-cloudflare.sh:*)"
+      "Bash(./build-for-cloudflare.sh:*)",
+      "Read(//Users/hazlijohar/Library/Application Support/CleanShot/media/media_VZn3QbMqAb/**)",
+      "Bash(npx wrangler pages deploy:*)",
+      "Read(//Users/hazlijohar/Library/Application Support/CleanShot/media/media_1xwdh6Sbae/**)"
     ],
     "deny": [],
     "ask": []

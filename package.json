@@ -124,6 +124,7 @@
     "three": "^0.176.0",
     "vaul": "^0.9.3",
     "web-vitals": "^5.1.0",
+    "wrangler": "4.36.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

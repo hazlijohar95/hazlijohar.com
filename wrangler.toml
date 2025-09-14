@@ -1,10 +1,15 @@
+# Cloudflare Pages Configuration
+# This is a React/Vite SPA that should be deployed to Cloudflare Pages
+
 name = "hazlijoharnco"
 compatibility_date = "2025-09-14"
-compatibility_flags = ["nodejs_compat"]
 
+# Pages configuration for SPA
+pages_build_output_dir = "dist"
+
+# Build configuration for Cloudflare Pages
 [build]
 command = "npm ci --ignore-scripts --no-audit --no-fund && npm run build"
-watch_dir = "./src"
 cwd = "."
 
 [build.environment_variables]
@@ -16,4 +21,3 @@ NPM_CONFIG_UPDATE_NOTIFIER = "false"
 SKIP_PREFLIGHT_CHECK = "true"
 CI = "true"
 GENERATE_SOURCEMAP = "false"
-CACHE_BUSTER = "2025-09-14-nuclear-fix"

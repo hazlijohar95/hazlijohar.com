@@ -1,0 +1,8 @@
+# Cloudflare Pages SPA redirects for React Router
+# This ensures all routes are handled by React Router
+
+# API redirects (if you have any backend APIs)
+/api/* https://api.hazlijohar.com/:splat 200
+
+# SPA fallback - all other routes should serve index.html
+/* /index.html 200

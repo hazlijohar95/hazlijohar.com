@@ -39,6 +39,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoadingProfile, setIsLoadingProfile] = useState<boolean>(false);
 
   // Fetch user profile from database
   const fetchProfile = useCallback(async (userId: string): Promise<UserProfile | null> => {
@@ -171,12 +172,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser(session?.user ?? null);
         
         if (session?.user) {
-          // Don't fetch profile inside the auth event handler to prevent deadlocks
-          setTimeout(async () => {
-            const userProfile = await fetchProfile(session.user.id);
-            setProfile(userProfile);
-            setIsLoading(false);
-          }, 0);
+          // Load profile sequentially to prevent race conditions
+          const loadProfile = async () => {
+            if (isLoadingProfile) return; // Prevent concurrent profile loads
+            setIsLoadingProfile(true);
+            try {
+              const userProfile = await fetchProfile(session.user.id);
+              setProfile(userProfile);
+            } catch (error) {
+              console.error('Error loading profile in auth state change:', error);
+              setProfile(null);
+            } finally {
+              setIsLoadingProfile(false);
+              setIsLoading(false);
+            }
+          };
+          loadProfile();
         } else {
           setProfile(null);
           setIsLoading(false);
@@ -198,10 +209,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         console.log("Initial session check:", session?.user?.email);
         setSession(session);
         setUser(session?.user ?? null);
-        
+
         if (session?.user) {
-          const userProfile = await fetchProfile(session.user.id);
-          setProfile(userProfile);
+          setIsLoadingProfile(true);
+          try {
+            const userProfile = await fetchProfile(session.user.id);
+            setProfile(userProfile);
+          } catch (error) {
+            console.error('Error loading profile during initialization:', error);
+            setProfile(null);
+          } finally {
+            setIsLoadingProfile(false);
+          }
+        } else {
+          setProfile(null);
         }
       } catch (error) {
         console.error('Error initializing auth:', error);
@@ -216,7 +237,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.log("AuthProvider unmounted - unsubscribing");
       subscription.unsubscribe();
     };
-  }, [fetchProfile]);
+  }, [fetchProfile, isLoadingProfile]);
 
   const value: AuthContextType = {
     user,

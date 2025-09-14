@@ -254,17 +254,41 @@ export const generateSecureString = (length: number = 32): string => {
   return result;
 };
 
-// Hash function for sensitive data (simple implementation)
+// Cryptographically secure hash function using SHA-256
+export const secureHash = async (input: string): Promise<string> => {
+  try {
+    // Encode the input string as UTF-8
+    const encoder = new TextEncoder();
+    const data = encoder.encode(input);
+
+    // Hash the data using SHA-256
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+
+    // Convert buffer to hex string
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+    return hashHex;
+  } catch (error) {
+    console.error('Error creating secure hash:', error);
+    throw new Error('Failed to create secure hash');
+  }
+};
+
+// Synchronous hash function for backwards compatibility (DEPRECATED - use secureHash instead)
+// This should only be used for non-sensitive data like cache keys
 export const simpleHash = (input: string): string => {
+  console.warn('simpleHash is deprecated and insecure. Use secureHash for sensitive data.');
+
   let hash = 0;
   if (input.length === 0) return hash.toString();
-  
+
   for (let i = 0; i < input.length; i++) {
     const char = input.charCodeAt(i);
     hash = ((hash << 5) - hash) + char;
     hash = hash & hash; // Convert to 32-bit integer
   }
-  
+
   return Math.abs(hash).toString(36);
 };
 
@@ -277,12 +301,41 @@ export const rateLimitConfig = {
 
 // Security audit logging
 export const logSecurityEvent = (event: string, details?: Record<string, unknown>): void => {
-  if (import.meta.env.VITE_ENABLE_DEBUG_MODE === 'true') {
+  // Only log in development mode - import.meta.env.DEV is false in production builds
+  if (import.meta.env.DEV) {
     console.log(`[SECURITY] ${event}`, details);
   }
-  
-  // In production, you would send this to a security monitoring service
-  // Example: sendToSecurityService({ event, details, timestamp: new Date().toISOString() });
+
+  // In production, send to a security monitoring service instead of console
+  if (import.meta.env.PROD) {
+    // TODO: Implement proper security event logging for production
+    // Example: sendToSecurityService({ event, details, timestamp: new Date().toISOString() });
+
+    // For now, you could use a service like:
+    // - Sentry for error tracking
+    // - LogRocket for user session recording
+    // - Custom analytics/logging endpoint
+
+    // Avoid logging sensitive details in production
+    const sanitizedDetails = details ? sanitizeForLogging(details) : undefined;
+    // sendToProductionLogging(event, sanitizedDetails);
+  }
+};
+
+// Helper to sanitize sensitive data before logging
+const sanitizeForLogging = (details: Record<string, unknown>): Record<string, unknown> => {
+  const sanitized = { ...details };
+
+  // Remove sensitive fields
+  const sensitiveKeys = ['password', 'email', 'token', 'key', 'secret', 'auth', 'credential'];
+
+  for (const key in sanitized) {
+    if (sensitiveKeys.some(sensitive => key.toLowerCase().includes(sensitive))) {
+      sanitized[key] = '[REDACTED]';
+    }
+  }
+
+  return sanitized;
 };
 
 // Export security configuration

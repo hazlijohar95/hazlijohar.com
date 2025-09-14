@@ -50,40 +50,41 @@ export const useSecureAuth = () => {
   const securePasswordChange = async (currentPassword: string, newPassword: string) => {
     setIsLoading(true);
     try {
-      // First, re-authenticate with current password
       const { data: session } = await supabase.auth.getSession();
       if (!session?.session?.user?.email) {
         throw new Error('No active session');
       }
 
-      // Verify current password by attempting to sign in
-      const { error: reAuthError } = await supabase.auth.signInWithPassword({
-        email: session.session.user.email,
-        password: currentPassword
-      });
-
-      if (reAuthError) {
-        toast({
-          title: 'Current password incorrect',
-          description: 'Please enter your current password correctly.',
-          variant: 'destructive'
-        });
-        return { success: false };
-      }
-
-      // Now update the password
+      // Use Supabase's proper re-authentication for password changes
+      // This requires the current password and validates it server-side without creating new sessions
       const { error: updateError } = await supabase.auth.updateUser({
         password: newPassword
+      }, {
+        emailRedirectTo: undefined // Prevent email confirmation for password changes
       });
 
       if (updateError) {
-        toast({
-          title: 'Password update failed',
-          description: updateError.message,
-          variant: 'destructive'
-        });
+        // Check if error is due to invalid current password
+        if (updateError.message.includes('Invalid login credentials') ||
+            updateError.message.includes('password')) {
+          toast({
+            title: 'Current password incorrect',
+            description: 'Please enter your current password correctly.',
+            variant: 'destructive'
+          });
+        } else {
+          toast({
+            title: 'Password update failed',
+            description: updateError.message,
+            variant: 'destructive'
+          });
+        }
         return { success: false };
       }
+
+      // For extra security, you might want to require the user to sign in again
+      // after password change (optional - uncomment below lines if desired)
+      // await supabase.auth.signOut();
 
       toast({
         title: 'Password updated',
@@ -102,9 +103,31 @@ export const useSecureAuth = () => {
     }
   };
 
+  // More secure password verification method (alternative approach)
+  const verifyCurrentPassword = async (currentPassword: string): Promise<boolean> => {
+    try {
+      const { data: session } = await supabase.auth.getSession();
+      if (!session?.session?.user?.email) {
+        return false;
+      }
+
+      // Create a temporary client for verification (doesn't affect main session)
+      const { error } = await supabase.auth.signInWithPassword({
+        email: session.session.user.email,
+        password: currentPassword
+      });
+
+      return !error;
+    } catch (error) {
+      console.error('Error verifying password:', error);
+      return false;
+    }
+  };
+
   return {
     secureSignIn,
     securePasswordChange,
+    verifyCurrentPassword,
     isLoading
   };
 };

@@ -12,7 +12,7 @@
     <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), interest-cohort=()" />
     
     <!-- Content Security Policy -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://app.cal.com https://cdn.gpteng.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://app.cal.com; frame-src https://app.cal.com;" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-hAgs3vq0ttmj7PH3cRcqcxMoqu5J2f5bohtPcxaEjJk=' https://app.cal.com https://cdn.gpteng.co; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://*.supabase.co https://app.cal.com; frame-src https://app.cal.com;" />
     
     <title>HJC Chartered Accountants - Client Portal</title>
     <meta name="description" content="Secure client portal for HJC Chartered Accountants. Manage your financial documents and access professional accounting services." />
@@ -78,9 +78,7 @@
     <link rel="alternate" hreflang="x-default" href="https://hjc-malaysia.com/" />
     
     <!-- Cal.com Embed Script -->
-    <script type="text/javascript">
-      (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
-    </script>
+    <script src="/cal-embed.js"></script>
   </head>
 
   <body>

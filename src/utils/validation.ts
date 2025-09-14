@@ -125,11 +125,20 @@ interface RateLimitRecord {
   blocked: boolean;
 }
 
+// WARNING: CLIENT-SIDE RATE LIMITING IS INSECURE
+// This is only a UX improvement and can be easily bypassed
+// Real rate limiting MUST be implemented server-side using:
+// 1. Supabase Edge Functions with Redis/KV storage
+// 2. Cloudflare Rate Limiting rules
+// 3. API Gateway rate limiting
+// 4. Database-backed tracking with server-side validation
+
 const rateLimitMap = new Map<string, RateLimitRecord>();
 
+// Client-side rate limiting (INSECURE - for UX only)
 export const checkRateLimit = (
-  identifier: string, 
-  maxAttempts: number = 5, 
+  identifier: string,
+  maxAttempts: number = 5,
   windowMs: number = 15 * 60 * 1000,
   blockDuration: number = 30 * 60 * 1000
 ): boolean => {

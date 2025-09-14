@@ -27,7 +27,10 @@
       "Bash(npx wrangler pages deploy:*)",
       "Read(//Users/hazlijohar/Library/Application Support/CleanShot/media/media_1xwdh6Sbae/**)",
       "Bash(grep:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(git rm:*)",
+      "Bash(openssl dgst:*)",
+      "Bash(openssl base64:*)"
     ],
     "deny": [],
     "ask": []

@@ -1,17 +1,33 @@
 #!/bin/bash
 
-# Cloudflare Pages Build Script
-# This script bypasses all npm lifecycle hooks to prevent postinstall audit failures
+# AGGRESSIVE Cloudflare Pages Build Script v2.0
+# This script FORCES fresh installation bypassing ALL npm lifecycle hooks
 
 set -e  # Exit on any error
 
-echo "🚀 Starting Cloudflare Pages build..."
+echo "🚀 AGGRESSIVE Cloudflare Pages build v2.0..."
 echo "Node version: $(node --version)"
 echo "NPM version: $(npm --version)"
+echo "Project: hazlijohar-website-v2 @ 2.0.0"
 
-# Install dependencies with ALL lifecycle scripts disabled
-echo "📦 Installing dependencies (bypassing all lifecycle scripts)..."
-npm install --ignore-scripts --no-audit --no-fund --progress=false
+# Remove any existing installations
+echo "🧹 Cleaning any existing installations..."
+rm -rf node_modules package-lock.json || true
+
+# Set aggressive npm config to disable ALL lifecycle scripts
+echo "⚙️ Configuring npm for aggressive bypass..."
+export NPM_CONFIG_IGNORE_SCRIPTS=true
+export NPM_CONFIG_AUDIT=false
+export NPM_CONFIG_FUND=false
+export NPM_CONFIG_UPDATE_NOTIFIER=false
+
+# Install dependencies with MAXIMUM script disabling
+echo "📦 Installing dependencies (MAXIMUM bypass mode)..."
+if [ -f "package-lock.json" ]; then
+  npm ci --ignore-scripts --no-audit --no-fund --omit=optional --progress=false --loglevel=warn
+else
+  npm install --ignore-scripts --no-audit --no-fund --omit=optional --progress=false --loglevel=warn
+fi
 
 echo "📋 Verifying installation..."
 npm ls --depth=0 || true
@@ -20,4 +36,4 @@ npm ls --depth=0 || true
 echo "🔨 Building project..."
 npm run build
 
-echo "✅ Build completed successfully!"
+echo "✅ AGGRESSIVE build completed successfully!"

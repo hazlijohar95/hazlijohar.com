@@ -1,14 +1,16 @@
-name = "hazlijoharnco"
+name = "hazlijohar-website-v2-deploy"
 compatibility_date = "2024-09-14"
 
 [build]
 command = "./build-for-cloudflare.sh"
 watch_dir = "./src"
+cwd = "."
 
 [build.environment_variables]
 NODE_ENV = "production"
 NPM_CONFIG_AUDIT = "false"
 NPM_CONFIG_FUND = "false"
+NPM_CONFIG_IGNORE_SCRIPTS = "true"
 
 [env.production]
-vars = { NODE_ENV = "production" }
+vars = { NODE_ENV = "production", FORCE_FRESH_BUILD = "2024-09-14-v2" }

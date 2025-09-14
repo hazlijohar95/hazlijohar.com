@@ -30,7 +30,9 @@
       "Bash(rm:*)",
       "Bash(git rm:*)",
       "Bash(openssl dgst:*)",
-      "Bash(openssl base64:*)"
+      "Bash(openssl base64:*)",
+      "Bash(echo:*)",
+      "Bash(git fetch:*)"
     ],
     "deny": [],
     "ask": []

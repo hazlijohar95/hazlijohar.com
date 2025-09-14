@@ -1,7 +1,11 @@
 
 import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
+import * as RadixSlot from "@radix-ui/react-slot"
+import * as CVA from "class-variance-authority"
+
+const { Slot } = RadixSlot;
+const { cva } = CVA;
+type VariantProps<T> = CVA.VariantProps<T>;
 
 import { cn } from "@/lib/utils"
 

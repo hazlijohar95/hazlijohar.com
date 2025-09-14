@@ -5,5 +5,10 @@ compatibility_date = "2024-09-14"
 command = "npm run build"
 watch_dir = "./src"
 
+[build.environment_variables]
+NODE_ENV = "production"
+NPM_CONFIG_AUDIT = "false"
+NPM_CONFIG_FUND = "false"
+
 [env.production]
 vars = { NODE_ENV = "production" }

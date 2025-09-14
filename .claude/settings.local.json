@@ -21,7 +21,8 @@
       "Bash(git commit:*)",
       "Bash(git push:*)",
       "Bash(chmod:*)",
-      "Bash(echo \"Exit code: $?\")"
+      "Bash(echo \"Exit code: $?\")",
+      "Bash(./build-for-cloudflare.sh:*)"
     ],
     "deny": [],
     "ask": []

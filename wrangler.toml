@@ -2,7 +2,7 @@ name = "hazlijoharnco"
 compatibility_date = "2024-09-14"
 
 [build]
-command = "npm run build"
+command = "./build-for-cloudflare.sh"
 watch_dir = "./src"
 
 [build.environment_variables]

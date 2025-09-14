@@ -183,3 +183,8 @@ logs/
 # Local development overrides
 config.local.js
 vite.config.local.ts
+
+# Package manager lockfiles (keep only npm)
+bun.lockb
+yarn.lock
+pnpm-lock.yaml

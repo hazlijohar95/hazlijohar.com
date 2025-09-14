@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import * as FramerMotion from 'framer-motion';
+const { motion, AnimatePresence } = FramerMotion;
 import { BookText, BarChartBig, Wrench, Users } from 'lucide-react';
 import { SectionContainer } from './ui/section-container';
 import { SectionTitle } from './ui/section-title';

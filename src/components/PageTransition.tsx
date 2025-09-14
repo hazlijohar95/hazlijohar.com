@@ -1,6 +1,7 @@
 
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import * as FramerMotion from 'framer-motion';
+const { motion, AnimatePresence } = FramerMotion;
 import { useLocation } from 'react-router-dom';
 
 interface PageTransitionProps {

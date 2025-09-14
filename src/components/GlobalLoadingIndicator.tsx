@@ -1,6 +1,7 @@
 
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import * as FramerMotion from 'framer-motion';
+const { motion, AnimatePresence } = FramerMotion;
 import { useRouteLoading } from '@/hooks/useRouteLoading';
 
 export const GlobalLoadingIndicator = () => {

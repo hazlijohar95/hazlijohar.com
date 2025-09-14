@@ -7,7 +7,6 @@
   node_version = "20"
 
 [build.environment]
-  NODE_ENV = "production"
   GENERATE_SOURCEMAP = "false"
   NPM_CONFIG_AUDIT = "false"
   NPM_CONFIG_FUND = "false"

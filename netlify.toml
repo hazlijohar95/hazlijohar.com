@@ -1,6 +1,6 @@
 [build]
-  # Build command
-  command = "npm run build"
+  # Custom command to fix Rollup optional dependency issue on Linux
+  command = "rm -rf node_modules package-lock.json && npm install && npm run build"
   # Directory to publish (where the build output goes)
   publish = "dist"
   # Node.js version
@@ -10,6 +10,8 @@
   GENERATE_SOURCEMAP = "false"
   NPM_CONFIG_AUDIT = "false"
   NPM_CONFIG_FUND = "false"
+  NPM_CONFIG_OPTIONAL = "true"
+  NPM_CONFIG_PREFER_OFFLINE = "false"
 
 # SPA redirect rules - ensures React Router works properly
 [[redirects]]

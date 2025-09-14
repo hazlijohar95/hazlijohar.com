@@ -1,11 +1,7 @@
 
 import * as React from "react"
-import * as RadixSlot from "@radix-ui/react-slot"
-import * as CVA from "class-variance-authority"
-
-const { Slot } = RadixSlot;
-const { cva } = CVA;
-type VariantProps<T> = CVA.VariantProps<T>;
+import { Slot } from "@radix-ui/react-slot"
+import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
 
@@ -64,4 +60,3 @@ ButtonComponent.displayName = "Button"
 
 // Export as Button to maintain API compatibility
 export { ButtonComponent as Button, buttonVariants }
-export type { ButtonProps }

@@ -1,6 +1,11 @@
 {
   "name": "hjc-chartered-accountants",
   "private": true,
+  "packageManager": "npm@10.8.2",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
   "version": "1.0.0",
   "type": "module",
   "description": "HJC Chartered Accountants - Leading financial services in Malaysia",

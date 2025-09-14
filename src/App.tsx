@@ -87,7 +87,6 @@ const App = () => {
                   style={{
                     // Enhanced mobile viewport handling
                     ...(isMobile && {
-                      minHeight: '100vh',
                       minHeight: '100dvh', // Dynamic viewport height
                     }),
                   }}

@@ -14,12 +14,20 @@ import { AppRoutes } from "./components/routing/AppRoutes";
 import { RouteErrorBoundary } from "./components/RouteErrorBoundary";
 import { validateEnvironment } from "./utils/security";
 import { initWebVitals, observePageLoad, observeResourceLoading } from "./utils/performance";
+import { errorLogger } from "./utils/errorLogger";
+
+// Initialize global error handling
+errorLogger.setupGlobalErrorHandling();
 
 // Validate environment variables on app startup
 try {
   validateEnvironment();
 } catch (error) {
-  console.error('Environment validation failed:', error);
+  errorLogger.error('Environment validation failed', error, {
+    component: 'App',
+    action: 'startup_validation'
+  });
+
   // In production, you might want to show a user-friendly error page
   if (import.meta.env.PROD) {
     throw new Error('Application configuration error. Please contact support.');
@@ -39,7 +47,10 @@ const queryClient = new QueryClient({
     mutations: {
       retry: 1,
       onError: (error) => {
-        console.error('Query mutation error:', error);
+        errorLogger.error('Query mutation error', error, {
+          component: 'QueryClient',
+          action: 'mutation_error'
+        });
       },
     },
   },

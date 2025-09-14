@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { errorLogger } from '@/utils/errorLogger';
 
 interface Props {
   children: ReactNode;
@@ -28,13 +29,15 @@ export class RouteErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    // Log error to console in development
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Route Error Boundary caught an error:', error, errorInfo);
-    }
-
-    // In production, you might want to log to an error reporting service
-    // logErrorToService(error, errorInfo);
+    // Log error using centralized error logger
+    errorLogger.error('Route Error Boundary caught an error', error, {
+      component: 'RouteErrorBoundary',
+      action: 'componentDidCatch',
+      additionalData: {
+        componentStack: errorInfo.componentStack,
+        errorBoundary: true
+      }
+    });
 
     this.setState({
       error,

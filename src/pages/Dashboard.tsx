@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useNavigate, Outlet, useLocation } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
+import { errorLogger } from '@/utils/errorLogger';
 import Navbar from '../components/Navbar';
 import OverviewCards from '@/components/dashboard/OverviewCards';
 import DocumentVault from '@/components/dashboard/DocumentVault';
@@ -51,7 +52,11 @@ const Dashboard = () => {
         if (error) throw error;
         setProfile(data);
       } catch (error) {
-        console.error('Error fetching profile:', error);
+        errorLogger.error('Error fetching profile in Dashboard', error, {
+          component: 'Dashboard',
+          action: 'fetchProfile',
+          userId: user?.id
+        });
       }
     };
     

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import { checkRateLimit } from '@/utils/validation';
+import { errorLogger } from '@/utils/errorLogger';
 
 export const useSecureAuth = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -36,6 +37,12 @@ export const useSecureAuth = () => {
 
       return { success: true, data };
     } catch (error) {
+      errorLogger.error('Unexpected error during secure sign in', error, {
+        component: 'useSecureAuth',
+        action: 'secureSignIn',
+        additionalData: { email }
+      });
+
       toast({
         title: 'Login failed',
         description: 'An unexpected error occurred.',
@@ -92,6 +99,11 @@ export const useSecureAuth = () => {
       });
       return { success: true };
     } catch (error) {
+      errorLogger.error('Unexpected error during password update', error, {
+        component: 'useSecureAuth',
+        action: 'updatePassword'
+      });
+
       toast({
         title: 'Password update failed',
         description: 'An unexpected error occurred.',
@@ -119,7 +131,10 @@ export const useSecureAuth = () => {
 
       return !error;
     } catch (error) {
-      console.error('Error verifying password:', error);
+      errorLogger.error('Error verifying password', error, {
+        component: 'useSecureAuth',
+        action: 'verifyCurrentPassword'
+      });
       return false;
     }
   };

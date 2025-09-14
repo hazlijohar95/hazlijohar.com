@@ -3,6 +3,7 @@ import React, { createContext, useState, useEffect, useContext, useCallback } fr
 import { supabase } from '@/integrations/supabase/client';
 import type { User, Session } from '@supabase/supabase-js';
 import { toast } from '@/hooks/use-toast';
+import { errorLogger } from '@/utils/errorLogger';
 
 type UserProfile = {
   id: string;
@@ -51,7 +52,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         .single();
 
       if (error) {
-        console.error('Error fetching profile:', error);
+        errorLogger.error('Error fetching profile', error, {
+          component: 'AuthContext',
+          action: 'fetchProfile',
+          userId: userId
+        });
         return null;
       }
 
@@ -69,7 +74,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       return null;
     } catch (error) {
-      console.error('Error in fetchProfile:', error);
+      errorLogger.error('Error in fetchProfile', error, {
+        component: 'AuthContext',
+        action: 'fetchProfile_catch',
+        userId: userId
+      });
       return null;
     }
   }, [user?.email]);
@@ -84,7 +93,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setProfile(userProfile);
       }
     } catch (error) {
-      console.error('Error refreshing profile:', error);
+      errorLogger.error('Error refreshing profile', error, {
+        component: 'AuthContext',
+        action: 'refreshProfile',
+        userId: user?.id
+      });
       toast({
         title: 'Error refreshing profile',
         description: 'Failed to refresh profile data.',
@@ -126,7 +139,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         description: 'Your profile has been updated successfully.',
       });
     } catch (error: unknown) {
-      console.error('Error updating profile:', error);
+      errorLogger.error('Error updating profile', error, {
+        component: 'AuthContext',
+        action: 'updateProfile',
+        userId: user?.id
+      });
       const errorMessage = error instanceof Error ? error.message : 'Failed to update profile';
       toast({
         title: 'Error updating profile',
@@ -151,7 +168,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         description: "You have been signed out of your account.",
       });
     } catch (error: unknown) {
-      console.error('Error signing out:', error);
+      errorLogger.error('Error signing out', error, {
+        component: 'AuthContext',
+        action: 'signOut',
+        userId: user?.id
+      });
       const errorMessage = error instanceof Error ? error.message : 'Failed to sign out';
       toast({
         title: 'Error signing out',
@@ -180,7 +201,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               const userProfile = await fetchProfile(session.user.id);
               setProfile(userProfile);
             } catch (error) {
-              console.error('Error loading profile in auth state change:', error);
+              errorLogger.error('Error loading profile in auth state change', error, {
+                component: 'AuthContext',
+                action: 'auth_state_change',
+                userId: session?.user?.id
+              });
               setProfile(null);
             } finally {
               setIsLoadingProfile(false);
@@ -216,7 +241,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             const userProfile = await fetchProfile(session.user.id);
             setProfile(userProfile);
           } catch (error) {
-            console.error('Error loading profile during initialization:', error);
+            errorLogger.error('Error loading profile during initialization', error, {
+              component: 'AuthContext',
+              action: 'initialization',
+              userId: session?.user?.id
+            });
             setProfile(null);
           } finally {
             setIsLoadingProfile(false);
@@ -225,7 +254,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setProfile(null);
         }
       } catch (error) {
-        console.error('Error initializing auth:', error);
+        errorLogger.error('Error initializing auth', error, {
+          component: 'AuthContext',
+          action: 'initialization_main'
+        });
       } finally {
         setIsLoading(false);
       }

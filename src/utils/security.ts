@@ -7,7 +7,8 @@
 
 /**
  * Validates that all required environment variables are present
- * @throws {Error} Throws an error if any required environment variables are missing
+ * For production environments, logs warnings instead of throwing errors to allow graceful degradation
+ * @throws {Error} Throws an error if any required environment variables are missing (development only)
  * @example
  * ```typescript
  * try {
@@ -27,7 +28,15 @@ export const validateEnvironment = (): void => {
   const missingVars = requiredVars.filter(varName => !import.meta.env[varName as keyof ImportMetaEnv]);
 
   if (missingVars.length > 0) {
-    throw new Error(`Missing required environment variables: ${missingVars.join(', ')}`);
+    const message = `Missing required environment variables: ${missingVars.join(', ')}`;
+
+    // In production, log warning instead of throwing to allow graceful degradation
+    if (import.meta.env.PROD) {
+      console.warn(`⚠️ ${message}. Authentication features will be disabled.`);
+    } else {
+      // In development, still throw to catch configuration issues early
+      throw new Error(message);
+    }
   }
 };
 

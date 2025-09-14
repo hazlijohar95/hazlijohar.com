@@ -18,8 +18,7 @@ const ProfilePage = lazy(() => import('@/pages/dashboard/ProfilePage'));
 const SettingsPage = lazy(() => import('@/pages/dashboard/SettingsPage'));
 const NotificationsPage = lazy(() => import('@/pages/dashboard/NotificationsPage'));
 
-export const AppRoutes = () => {
-  return (
+export const AppRoutes = () => (
     <Routes>
       <Route path="/" element={<StandardLayout />} errorElement={<RouteErrorBoundary />}>
         <Route index element={
@@ -74,4 +73,3 @@ export const AppRoutes = () => {
       </Route>
     </Routes>
   );
-};

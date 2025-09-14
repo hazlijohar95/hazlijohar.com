@@ -36,13 +36,11 @@ export const useOptimizedScroll = ({
   }, [requestTick]);
 
   // Intersection Observer for better performance
-  const createObserver = useCallback((callback: IntersectionObserverCallback) => {
-    return new IntersectionObserver(callback, {
+  const createObserver = useCallback((callback: IntersectionObserverCallback) => new IntersectionObserver(callback, {
       root: null,
       rootMargin,
       threshold: [0, 0.1, 0.25, 0.5, 0.75, 1]
-    });
-  }, [rootMargin]);
+    }), [rootMargin]);
 
   return {
     scrollY: scrollRef.current,

@@ -27,12 +27,10 @@ const BillingSection: React.FC = () => {
     });
   };
 
-  const formatAmount = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
+  const formatAmount = (amount: number) => new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'MYR'
     }).format(amount);
-  };
 
   return (
     <section>

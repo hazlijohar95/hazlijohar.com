@@ -24,8 +24,7 @@ const DeleteConfirmDialog: React.FC<DeleteConfirmDialogProps> = ({
   setIsOpen,
   documentToDelete,
   onConfirmDelete
-}) => {
-  return (
+}) => (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogContent className="bg-[#0F0F0F] border border-[#333] text-white">
         <AlertDialogHeader>
@@ -46,6 +45,5 @@ const DeleteConfirmDialog: React.FC<DeleteConfirmDialogProps> = ({
       </AlertDialogContent>
     </AlertDialog>
   );
-};
 
 export default DeleteConfirmDialog;

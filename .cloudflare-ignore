@@ -1,5 +1,0 @@
-# Force Cloudflare to ignore cache and use fresh build
-node_modules/
-dist/
-.vite/
-*.log

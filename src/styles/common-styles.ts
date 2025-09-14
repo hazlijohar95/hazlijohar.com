@@ -53,9 +53,7 @@ export const styles = {
 };
 
 // Helper to easily combine styles with Tailwind classes
-export const combineStyles = (...styleClasses: string[]) => {
-  return styleClasses.join(' ');
-};
+export const combineStyles = (...styleClasses: string[]) => styleClasses.join(' ');
 
 /**
  * Design System Documentation

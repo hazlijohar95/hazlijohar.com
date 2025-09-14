@@ -80,11 +80,9 @@ export const contentSecurityPolicy = {
 } as const;
 
 // Generate CSP string
-export const generateCSP = (): string => {
-  return Object.entries(contentSecurityPolicy)
+export const generateCSP = (): string => Object.entries(contentSecurityPolicy)
     .map(([key, values]) => `${key} ${values.join(' ')}`)
     .join('; ');
-};
 
 // Input sanitization patterns
 export const sanitizationPatterns = {

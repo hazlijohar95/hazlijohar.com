@@ -24,8 +24,7 @@ ${pages.map(page => `
   return sitemap;
 };
 
-export const generateRobotsTxt = () => {
-  return `User-agent: *
+export const generateRobotsTxt = () => `User-agent: *
 Allow: /
 
 User-agent: Googlebot
@@ -71,4 +70,3 @@ Disallow: /*?*ref=*
 
 Sitemap: https://hjc-malaysia.com/sitemap.xml
 `;
-};

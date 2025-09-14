@@ -1,8 +1,0 @@
-CLOUDFLARE PAGES NUCLEAR CACHE RESET
-=====================================
-Build ID: NUCLEAR-2025-09-14-v2.1.0
-Project: hazlijohar-website-v2-nuclear
-Reset Timestamp: 2025-09-14T06:45:00Z
-
-This file forces Cloudflare Pages to detect repository changes.
-Delete after successful deployment.

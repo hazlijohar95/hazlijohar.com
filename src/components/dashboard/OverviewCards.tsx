@@ -9,8 +9,7 @@ interface StatusCardProps {
   icon: React.ReactNode;
 }
 
-const StatusCard: React.FC<StatusCardProps> = ({ title, status, icon }) => {
-  return (
+const StatusCard: React.FC<StatusCardProps> = ({ title, status, icon }) => (
     <div className="bg-black text-white p-6 rounded-lg shadow-md w-full border border-[#1A1A1A] hover:border-[#333] transition-colors">
       <div className="flex items-start justify-between">
         <div>
@@ -23,7 +22,6 @@ const StatusCard: React.FC<StatusCardProps> = ({ title, status, icon }) => {
       </div>
     </div>
   );
-};
 
 const OverviewCards = () => {
   // In a real app, this data would come from an API

@@ -6,6 +6,4 @@ interface SEOProviderProps {
   children: React.ReactNode;
 }
 
-export const SEOProvider: React.FC<SEOProviderProps> = ({ children }) => {
-  return <HelmetProvider>{children}</HelmetProvider>;
-};
+export const SEOProvider: React.FC<SEOProviderProps> = ({ children }) => <HelmetProvider>{children}</HelmetProvider>;

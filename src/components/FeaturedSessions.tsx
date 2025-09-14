@@ -7,8 +7,7 @@ import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
 import { Separator } from './ui/separator';
 import { CheckCircle } from 'lucide-react';
 
-const FeaturedSessions = () => {
-  return (
+const FeaturedSessions = () => (
     <SectionContainer id="services" bgColor="white">
       <div className="container mx-auto px-4 md:px-6 max-w-[1400px]">
         <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-12 lg:gap-16 items-start">
@@ -117,7 +116,6 @@ const FeaturedSessions = () => {
       </div>
     </SectionContainer>
   );
-};
 
 // Helper function to get benefits for each service
 const getBenefits = (index: number) => {

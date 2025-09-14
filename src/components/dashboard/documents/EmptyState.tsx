@@ -7,8 +7,7 @@ interface EmptyStateProps {
   onResetFilters: () => void;
 }
 
-const EmptyState: React.FC<EmptyStateProps> = ({ searchActive, onResetFilters }) => {
-  return (
+const EmptyState: React.FC<EmptyStateProps> = ({ searchActive, onResetFilters }) => (
     <div className="bg-[#0F0F0F] border border-[#1A1A1A] rounded-xl p-6 md:p-12 text-center">
       <div className="flex flex-col items-center">
         {searchActive ? (
@@ -42,6 +41,5 @@ const EmptyState: React.FC<EmptyStateProps> = ({ searchActive, onResetFilters })
       </div>
     </div>
   );
-};
 
 export default EmptyState;

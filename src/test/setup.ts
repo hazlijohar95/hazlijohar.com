@@ -31,9 +31,7 @@ vi.mock('framer-motion', () => ({
     {},
     {
       get: (_target, prop) => {
-        const Component = ({ children, ...props }: React.ComponentProps<any>) => {
-          return React.createElement(prop as string, props, children)
-        }
+        const Component = ({ children, ...props }: React.ComponentProps<any>) => React.createElement(prop as string, props, children)
         Component.displayName = `motion.${String(prop)}`
         return Component
       }

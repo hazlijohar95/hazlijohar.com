@@ -9,8 +9,7 @@ import {
   CollapsibleTrigger
 } from '@/components/ui/collapsible';
 
-const FAQSection = () => {
-  return (
+const FAQSection = () => (
     <SectionContainer id="faq" bgColor="black" className="bg-texture-light overflow-hidden">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-6 md:gap-12">
@@ -57,6 +56,5 @@ const FAQSection = () => {
       </div>
     </SectionContainer>
   );
-};
 
 export default FAQSection;

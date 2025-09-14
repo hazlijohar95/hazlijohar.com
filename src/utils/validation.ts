@@ -51,9 +51,7 @@ export const questionSchema = z.object({
 });
 
 // File validation
-export const validateFileType = (file: File, allowedTypes: string[]): boolean => {
-  return allowedTypes.includes(file.type);
-};
+export const validateFileType = (file: File, allowedTypes: string[]): boolean => allowedTypes.includes(file.type);
 
 export const validateFileSize = (file: File, maxSizeInMB: number): boolean => {
   const maxSizeInBytes = maxSizeInMB * 1024 * 1024;

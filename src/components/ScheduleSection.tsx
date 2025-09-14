@@ -6,8 +6,7 @@ import { SectionTitle } from './ui/section-title';
 import { Separator } from './ui/separator';
 import { Calendar } from 'lucide-react';
 
-const ScheduleSection = () => {
-  return (
+const ScheduleSection = () => (
     <SectionContainer id="schedule" bgColor="black">
       <div className="container mx-auto px-4 max-w-[1400px]">
         <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-12 items-start">
@@ -97,6 +96,5 @@ const ScheduleSection = () => {
       </div>
     </SectionContainer>
   );
-};
 
 export default ScheduleSection;

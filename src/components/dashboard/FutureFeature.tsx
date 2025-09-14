@@ -1,8 +1,7 @@
 
 import React from 'react';
 
-const FutureFeature: React.FC = () => {
-  return (
+const FutureFeature: React.FC = () => (
     <section className="border-t border-[#1A1A1A] pt-8 mt-16">
       <div className="text-[#888888]">
         <h2 className="text-lg font-medium italic mb-2">Coming Soon:</h2>
@@ -12,6 +11,5 @@ const FutureFeature: React.FC = () => {
       </div>
     </section>
   );
-};
 
 export default FutureFeature;

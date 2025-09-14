@@ -1,16 +1,19 @@
-name = "hazlijohar-website-v2-deploy"
-compatibility_date = "2024-09-14"
+name = "hazlijohar-website-v2-nuclear"
+compatibility_date = "2025-09-14"
+compatibility_flags = ["nodejs_compat"]
 
 [build]
-command = "./build-for-cloudflare.sh"
+command = "npm ci --ignore-scripts --no-audit --no-fund && npm run build"
 watch_dir = "./src"
 cwd = "."
 
 [build.environment_variables]
 NODE_ENV = "production"
+NPM_CONFIG_IGNORE_SCRIPTS = "true"
 NPM_CONFIG_AUDIT = "false"
 NPM_CONFIG_FUND = "false"
-NPM_CONFIG_IGNORE_SCRIPTS = "true"
-
-[env.production]
-vars = { NODE_ENV = "production", FORCE_FRESH_BUILD = "2024-09-14-v2" }
+NPM_CONFIG_UPDATE_NOTIFIER = "false"
+SKIP_PREFLIGHT_CHECK = "true"
+CI = "true"
+GENERATE_SOURCEMAP = "false"
+CACHE_BUSTER = "2025-09-14-nuclear-fix"

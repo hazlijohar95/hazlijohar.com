@@ -6,7 +6,7 @@
     "node": ">=20.0.0",
     "npm": ">=10.0.0"
   },
-  "version": "2.0.0",
+  "version": "2.1.0",
   "type": "module",
   "description": "HJC Chartered Accountants - Leading financial services in Malaysia",
   "keywords": [
@@ -52,7 +52,7 @@
     "test:security": "npm run security:audit && npm run type-check && npm run lint",
     "test:all": "npm run test:run && npm run test:security",
     "test:full": "npm run test:coverage && npm run security:full && npm run format:check",
-    "prebuild": "echo 'Skipping security checks for deployment'",
+    "prebuild": "echo 'NUCLEAR BUILD: All scripts disabled for Cloudflare Pages'",
     "deploy": "node scripts/deploy.js",
     "deploy:dev": "node scripts/deploy.js development",
     "deploy:staging": "node scripts/deploy.js staging",

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { BackgroundPaths } from './ui/background-paths';
 import { BackgroundPathsProps } from '@/types';
@@ -15,52 +14,40 @@ const HeroSection = () => {
     subtitle: "Helping modern businesses in Malaysia grow with clarity and confidence.",
     ctaText: "BOOK A CALL",
     ctaLink: "/contact",
-    reducedAnimations: isMobile // Pass flag to reduce animations on mobile
+    reducedAnimations: isMobile
   };
 
-  // Function to open the calendar modal
   const handleOpenCalendar = () => {
     setShowCalendar(true);
     
-    // Load Cal.com script only when needed
     setTimeout(() => {
-      if (window.Cal) {
-        window.Cal("init", "30min", {origin:"https://cal.com"});
-        window.Cal.ns["30min"]("inline", {
-          elementOrSelector:"#my-cal-inline",
-          config: {"layout": isMobile ? "mobile_view" : "month_view"},
+      if ((window as any).Cal) {
+        (window as any).Cal("init", "30min");
+        (window as any).Cal.ns["30min"]("inline", {
+          elementOrSelector: "#my-cal-inline",
           calLink: "hazli-johar-cynco/30min",
+          config: {
+            layout: isMobile ? "mobile_view" : "month_view"
+          }
         });
-        window.Cal.ns["30min"]("ui", {"hideEventTypeDetails":false,"layout": isMobile ? "mobile_view" : "month_view"});
       }
     }, 100);
   };
 
-  // Function to close the calendar modal
   const handleCloseCalendar = () => {
     setShowCalendar(false);
   };
 
   return (
     <div className="relative mobile-viewport">
-      {/* Add the turbulence background */}
       <TurbulenceBackground />
+      <BackgroundPaths {...heroProps} onBookCall={handleOpenCalendar} />
 
-      <BackgroundPaths
-        {...heroProps}
-        onBookCall={handleOpenCalendar}
-      />
-
-      {/* Cal.com Calendar Modal - Enhanced mobile optimization */}
       {showCalendar && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
-          <div
-            className={`bg-white rounded-xl shadow-2xl w-full flex flex-col ${
-              isMobile
-                ? 'mobile-modal-safe max-w-[95vw] max-h-[90vh] m-4'
-                : 'max-w-4xl max-h-[85vh] mx-8'
-            }`}
-          >
+          <div className={`bg-white rounded-xl shadow-2xl w-full flex flex-col ${
+            isMobile ? 'mobile-modal-safe max-w-[95vw] max-h-[90vh] m-4' : 'max-w-4xl max-h-[85vh] mx-8'
+          }`}>
             <div className="flex items-center justify-between border-b p-4 sm:p-6 min-h-[64px]">
               <h3 className="mobile-heading-md text-black font-semibold">Schedule a Call</h3>
               <Button
@@ -79,11 +66,11 @@ const HeroSection = () => {
                   width: "100%",
                   height: "100%",
                   overflow: "auto",
-                  WebkitOverflowScrolling: "touch" // iOS smooth scrolling
+                  WebkitOverflowScrolling: "touch"
                 }}
                 id="my-cal-inline"
                 className="rounded-lg"
-              ></div>
+              />
             </div>
           </div>
         </div>
@@ -91,34 +78,5 @@ const HeroSection = () => {
     </div>
   );
 };
-
-// Cal.com type definitions for TypeScript
-interface CalConfig {
-  layout?: string;
-  origin?: string;
-  hideEventTypeDetails?: boolean;
-}
-
-interface CalNamespace {
-  (action: string, config?: CalConfig): void;
-  (elementOrSelector: string, config: {
-    elementOrSelector?: string;
-    config?: CalConfig;
-    calLink?: string;
-  }): void;
-}
-
-interface CalInstance {
-  (action: string, calLink?: string, options?: { origin?: string }): void;
-  ns: {
-    [key: string]: CalNamespace;
-  };
-}
-
-declare global {
-  interface Window {
-    Cal?: CalInstance;
-  }
-}
 
 export default HeroSection;

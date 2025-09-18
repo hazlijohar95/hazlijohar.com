@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
@@ -11,41 +10,23 @@ interface PageTransitionProps {
 const pageVariants = {
   fade: {
     initial: { opacity: 0 },
-    enter: { 
-      opacity: 1,
-      transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }
-    },
-    exit: { 
-      opacity: 0,
-      transition: { duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }
-    }
+    animate: { opacity: 1 },
+    exit: { opacity: 0 }
   },
   slide: {
     initial: { opacity: 0, x: 20 },
-    enter: { 
-      opacity: 1, 
-      x: 0,
-      transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }
-    },
-    exit: { 
-      opacity: 0, 
-      x: -20,
-      transition: { duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }
-    }
+    animate: { opacity: 1, x: 0 },
+    exit: { opacity: 0, x: -20 }
   },
   scale: {
     initial: { opacity: 0, scale: 0.95 },
-    enter: { 
-      opacity: 1, 
-      scale: 1,
-      transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }
-    },
-    exit: { 
-      opacity: 0, 
-      scale: 1.05,
-      transition: { duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }
-    }
+    animate: { opacity: 1, scale: 1 },
+    exit: { opacity: 0, scale: 1.05 }
   }
+};
+
+const transitionConfig = {
+  duration: 0.4
 };
 
 export const PageTransition = ({ children, variant = 'fade' }: PageTransitionProps) => {
@@ -57,7 +38,9 @@ export const PageTransition = ({ children, variant = 'fade' }: PageTransitionPro
       key={location.pathname}
       variants={variants}
       initial="initial"
-      animate="enter"
+      animate="animate"
+      exit="exit"
+      transition={transitionConfig}
       className="w-full min-h-screen"
       style={{
         backfaceVisibility: 'hidden',

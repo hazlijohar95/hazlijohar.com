@@ -6,13 +6,17 @@ import { RouteLoader } from '@/components/routing/RouteLoader';
 import { useMobileOptimizations } from '@/hooks/useMobileOptimizations';
 import Footer from '@/components/Footer';
 
-export const StandardLayout = () => {
+interface StandardLayoutProps {
+  children?: React.ReactNode;
+}
+
+export const StandardLayout = ({ children }: StandardLayoutProps) => {
   useMobileOptimizations();
 
   return (
     <SmoothScroll>
       <Suspense fallback={<RouteLoader variant="dots" />}>
-        <Outlet />
+        {children || <Outlet />}
       </Suspense>
       <Footer />
     </SmoothScroll>

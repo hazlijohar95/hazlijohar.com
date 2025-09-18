@@ -119,21 +119,24 @@ export const useErrorLogger = () => {
 };
 
 // Higher-order component for automatic error logging
-export const withErrorLogging = <P extends object>(
+export const withErrorLogging = <P extends Record<string, any>>(
   WrappedComponent: React.ComponentType<P>,
   componentName: string
 ) => {
-  return React.forwardRef<any, P>((props, ref) => {
+  const ErrorLoggedComponent = (props: P) => {
     try {
-      return React.createElement(WrappedComponent, { ...props, ref });
+      return React.createElement(WrappedComponent, props);
     } catch (error) {
       errorLogger.error(`Error in component ${componentName}`, error, {
         component: componentName,
         action: 'render',
       });
-      throw error; // Re-throw to let error boundary handle it
+      throw error;
     }
-  });
+  };
+
+  ErrorLoggedComponent.displayName = `withErrorLogging(${componentName})`;
+  return ErrorLoggedComponent;
 };
 
 export default errorLogger;

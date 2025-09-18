@@ -20,7 +20,7 @@ const NotificationsPage = lazy(() => import('@/pages/dashboard/NotificationsPage
 
 export const AppRoutes = () => (
     <Routes>
-      <Route path="/" element={<StandardLayout />} errorElement={<RouteErrorBoundary />}>
+      <Route path="/" element={<StandardLayout />} errorElement={<RouteErrorBoundary><span>Error</span></RouteErrorBoundary>}>
         <Route index element={
           <PageTransition variant="fade">
             <Index />
@@ -53,7 +53,7 @@ export const AppRoutes = () => (
         } />
       </Route>
       
-      <Route path="/dashboard" element={<DashboardLayout />} errorElement={<RouteErrorBoundary />}>
+      <Route path="/dashboard" element={<DashboardLayout />} errorElement={<RouteErrorBoundary><span>Error</span></RouteErrorBoundary>}>
         <Route index element={<Outlet />} />
         <Route path="profile" element={
           <Suspense fallback={<RouteLoader text="Loading profile..." />}>

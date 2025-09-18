@@ -169,7 +169,7 @@ const ExpectSection = () => {
                     duration: isHovered ? 0.3 : 15, // 15 seconds per card
                     ease: "linear",
                     repeat: isHovered ? 0 : Infinity,
-                    repeatType: "restart"
+                    repeatType: "loop"
                   }}
                 />
               </div>

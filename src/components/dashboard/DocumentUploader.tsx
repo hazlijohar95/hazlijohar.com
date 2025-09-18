@@ -37,7 +37,7 @@ const DocumentUploader: React.FC = () => {
     }
 
     // Validate file type
-    if (!validateFileType(file, ALLOWED_DOCUMENT_TYPES)) {
+    if (!validateFileType(file, [...ALLOWED_DOCUMENT_TYPES])) {
       toast({
         title: 'Invalid file type',
         description: 'Please upload PDF, Word, Excel, or image files only.',

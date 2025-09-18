@@ -1,4 +1,4 @@
-import { onCLS, onFCP, onLCP, onTTFB, type Metric } from 'web-vitals';
+import { onCLS, onFCP, onLCP, onTTFB } from 'web-vitals';
 
 interface PerformanceMetrics {
   name: string;
@@ -46,7 +46,7 @@ function sendToAnalytics(metric: PerformanceMetrics): void {
   }
 }
 
-function handleMetric(metric: Metric): void {
+function handleMetric(metric: any): void {
   const performanceMetric: PerformanceMetrics = {
     name: metric.name,
     value: metric.value,
@@ -97,25 +97,31 @@ export function observePageLoad(): void {
   window.addEventListener('load', () => {
     // Measure page load time
     const loadTime = performance.now();
-    handleMetric({
+    const customMetric: PerformanceMetrics = {
       name: 'PAGE_LOAD',
       value: loadTime,
+      rating: getRating('PAGE_LOAD', loadTime),
       delta: loadTime,
       id: self.crypto?.randomUUID() || Math.random().toString(36),
-      navigationType: 'navigation'
-    } as Metric);
+      navigationType: 'navigation',
+      timestamp: Date.now()
+    };
+    sendToAnalytics(customMetric);
 
     // Measure DOM content loaded time
     const domContentLoadedTime = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
     if (domContentLoadedTime) {
-      const dcl = domContentLoadedTime.domContentLoadedEventEnd - domContentLoadedTime.navigationStart;
-      handleMetric({
+      const dcl = domContentLoadedTime.domContentLoadedEventEnd - domContentLoadedTime.fetchStart;
+      const dclMetric: PerformanceMetrics = {
         name: 'DOM_CONTENT_LOADED',
         value: dcl,
+        rating: getRating('DOM_CONTENT_LOADED', dcl),
         delta: dcl,
         id: self.crypto?.randomUUID() || Math.random().toString(36),
-        navigationType: 'navigation'
-      } as Metric);
+        navigationType: 'navigation',
+        timestamp: Date.now()
+      };
+      sendToAnalytics(dclMetric);
     }
   });
 }
@@ -131,13 +137,16 @@ export function observeResourceLoading(): void {
 
         // Only track slow resources (>1s)
         if (resourceEntry.duration > 1000) {
-          handleMetric({
+          const slowResourceMetric: PerformanceMetrics = {
             name: 'SLOW_RESOURCE',
             value: resourceEntry.duration,
+            rating: 'poor',
             delta: resourceEntry.duration,
             id: self.crypto?.randomUUID() || Math.random().toString(36),
-            navigationType: 'navigation'
-          } as Metric);
+            navigationType: 'navigation',
+            timestamp: Date.now()
+          };
+          sendToAnalytics(slowResourceMetric);
         }
       }
     }

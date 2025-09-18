@@ -1,4 +1,3 @@
-
 import { useEffect, useCallback } from 'react';
 import { useIsMobile, useIsIOS } from '@/hooks/use-mobile';
 
@@ -28,14 +27,14 @@ export const useMobileOptimizations = () => {
 
       // Optimize touch interactions
       document.body.style.touchAction = 'manipulation';
-      document.body.style.webkitTouchCallout = 'none';
-      document.body.style.webkitUserSelect = 'none';
+      (document.body.style as any).webkitTouchCallout = 'none';
+      (document.body.style as any).webkitUserSelect = 'none';
       document.body.style.userSelect = 'none';
 
       // iOS specific optimizations
       if (isIOS) {
-        document.body.style.webkitOverflowScrolling = 'touch';
-        document.documentElement.style.webkitTextSizeAdjust = '100%';
+        (document.body.style as any).webkitOverflowScrolling = 'touch';
+        (document.documentElement.style as any).webkitTextSizeAdjust = '100%';
 
         // Disable iOS double-tap zoom
         let lastTouchEnd = 0;

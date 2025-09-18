@@ -65,4 +65,3 @@ ButtonComponent.displayName = "Button";
 
 // Export as Button to maintain API compatibility
 export { ButtonComponent as Button, buttonVariants };
-export type { ButtonProps };

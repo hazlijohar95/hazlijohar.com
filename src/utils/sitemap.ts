@@ -1,72 +1,77 @@
+// Enhanced sitemap generation utility
+export interface SitemapUrl {
+  loc: string;
+  lastmod?: string;
+  changefreq?: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never';
+  priority?: number;
+}
 
-export const generateSitemap = () => {
-  const baseUrl = 'https://hjc-malaysia.com';
-  const pages = [
-    { url: '/', changefreq: 'weekly', priority: '1.0' },
-    { url: '/contact', changefreq: 'monthly', priority: '0.8' },
-    { url: '/culture', changefreq: 'monthly', priority: '0.7' },
-    { url: '/#services', changefreq: 'weekly', priority: '0.9' },
-    { url: '/#leadership', changefreq: 'monthly', priority: '0.8' },
-    { url: '/#faq', changefreq: 'weekly', priority: '0.6' }
-  ];
+export const sitemapUrls: SitemapUrl[] = [
+  {
+    loc: '/',
+    lastmod: new Date().toISOString().split('T')[0],
+    changefreq: 'weekly',
+    priority: 1.0
+  },
+  {
+    loc: '/contact',
+    lastmod: new Date().toISOString().split('T')[0],
+    changefreq: 'monthly',
+    priority: 0.8
+  },
+  {
+    loc: '/culture',
+    lastmod: new Date().toISOString().split('T')[0],
+    changefreq: 'monthly',
+    priority: 0.7
+  },
+  {
+    loc: '/#services',
+    lastmod: new Date().toISOString().split('T')[0],
+    changefreq: 'weekly',
+    priority: 0.9
+  },
+  {
+    loc: '/#leadership',
+    lastmod: new Date().toISOString().split('T')[0],
+    changefreq: 'monthly',
+    priority: 0.8
+  },
+  {
+    loc: '/#faq',
+    lastmod: new Date().toISOString().split('T')[0],
+    changefreq: 'weekly',
+    priority: 0.8
+  }
+];
 
-  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${pages.map(page => `
+export const generateSitemap = (baseUrl: string = 'https://hazijohar.com'): string => {
+  const urlsetItems = sitemapUrls.map(url => `
   <url>
-    <loc>${baseUrl}${page.url}</loc>
-    <changefreq>${page.changefreq}</changefreq>
-    <priority>${page.priority}</priority>
-    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
-  </url>`).join('')}
-</urlset>`;
+    <loc>${baseUrl}${url.loc}</loc>
+    ${url.lastmod ? `<lastmod>${url.lastmod}</lastmod>` : ''}
+    ${url.changefreq ? `<changefreq>${url.changefreq}</changefreq>` : ''}
+    ${url.priority ? `<priority>${url.priority}</priority>` : ''}
+  </url>`).join('');
 
-  return sitemap;
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urlsetItems}
+</urlset>`;
 };
 
-export const generateRobotsTxt = () => `User-agent: *
+export const generateRobotsTxt = (baseUrl: string = 'https://hazijohar.com'): string => {
+  return `User-agent: *
 Allow: /
 
-User-agent: Googlebot
-Allow: /
-Crawl-delay: 1
-
-User-agent: Bingbot  
-Allow: /
-Crawl-delay: 1
-
-User-agent: Slurp
-Allow: /
-Crawl-delay: 1
-
-User-agent: DuckDuckBot
-Allow: /
-Crawl-delay: 1
-
-User-agent: Baiduspider
-Allow: /
-Crawl-delay: 2
-
-User-agent: facebookexternalhit
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: LinkedInBot
-Allow: /
-
-User-agent: WhatsApp
-Allow: /
-
-User-agent: TelegramBot
-Allow: /
-
-Disallow: /api/
+# Block access to admin areas
 Disallow: /admin/
-Disallow: /*.json$
-Disallow: /*?*utm_*
-Disallow: /*?*ref=*
+Disallow: /dashboard/
+Disallow: /api/
 
-Sitemap: https://hjc-malaysia.com/sitemap.xml
-`;
+# Sitemap location
+Sitemap: ${baseUrl}/sitemap.xml
+
+# Crawl delay for respectful crawling
+Crawl-delay: 1`;
+};

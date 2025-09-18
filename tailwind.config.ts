@@ -63,21 +63,20 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-                // Brand colors
+                // Brand colors - consistent with black/white theme
                 brand: {
-                    DEFAULT: '#9b87f5',
-                    light: '#b3a4f7',
-                    dark: '#7e69ab',
-                    50: '#f5f2ff',
-                    100: '#ede5ff',
-                    200: '#d6cbff',
-                    300: '#b3a4f7',
-                    400: '#9b87f5',
-                    500: '#7e69ab',
-                    600: '#6E59A5',
-                    700: '#5a4883',
-                    800: '#413463',
-                    900: '#1A1F2C'
+                    DEFAULT: 'hsl(var(--brand))',
+                    foreground: 'hsl(var(--brand-foreground))',
+                    50: '0 0% 98%',
+                    100: '0 0% 95%',
+                    200: '0 0% 90%',
+                    300: '0 0% 80%',
+                    400: '0 0% 70%',
+                    500: '0 0% 50%',
+                    600: '0 0% 30%',
+                    700: '0 0% 20%',
+                    800: '0 0% 10%',
+                    900: '0 0% 5%'
                 }
 			},
 			borderRadius: {

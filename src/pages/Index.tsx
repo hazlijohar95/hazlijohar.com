@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react';
 import { SEOHead } from '../components/SEOHead';
 import { seoConfig } from '../data/seo-config';
 import HeroSection from '../components/HeroSection';
-import ExpectSection from '../components/ExpectSection';
+import OptimizedExpectSection from '../components/performance/OptimizedExpectSection';
 import FeaturedSpeakers from '../components/FeaturedSpeakers';
 import FeaturedSessions from '../components/FeaturedSessions';
 import GetTicketsCTA from '../components/GetTicketsCTA';
@@ -12,73 +12,63 @@ import LastYearSection from '../components/LastYearSection';
 import Navbar from '../components/Navbar';
 import ScrollToTop from '../components/ui/ScrollToTop';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { LazySection } from '../components/performance/LazySection';
 
 const Index = () => {
   const isMobile = useIsMobile();
   const pageRef = useRef<HTMLDivElement>(null);
 
-  // Add smooth scrolling behavior with optimized performance
+  // Enhanced performance monitoring and smooth scrolling
   useEffect(() => {
-    // Track sections for animation triggers
-    const observedSections = document.querySelectorAll('section');
-    
-    // Create intersection observer for scroll animations
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          // Add animation classes when section comes into view
-          if (entry.isIntersecting) {
-            entry.target.classList.add('animate-fade-in-up');
-            // Stop observing after animation is triggered
-            observer.unobserve(entry.target);
+    // Performance observer for Core Web Vitals
+    if ('PerformanceObserver' in window) {
+      const observer = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          if (entry.entryType === 'largest-contentful-paint') {
+            console.log('LCP:', entry.startTime);
           }
-        });
-      },
-      {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.1
+        }
+      });
+      
+      try {
+        observer.observe({ entryTypes: ['largest-contentful-paint'] });
+      } catch (e) {
+        // Observer not supported for this entry type
       }
-    );
-    
-    // Observe all sections except hero (which is already visible)
-    observedSections.forEach((section) => {
-      if (section.id !== 'hero') {
-        observer.observe(section);
-      }
-    });
-    
-    // Handle smooth scroll for anchor links
+    }
+
+    // Enhanced smooth scroll handler with performance optimization
     const handleHashClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       const anchor = target.closest('a');
       
-      if (anchor && anchor.hash && anchor.hash.startsWith('#')) {
+      if (anchor?.hash?.startsWith('#')) {
         e.preventDefault();
         const targetId = anchor.hash.substring(1);
         const targetElement = document.getElementById(targetId);
         
         if (targetElement) {
-          const navbarHeight = 70; // Approximate navbar height
+          const navbarHeight = 70;
           const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
           
-          window.scrollTo({
-            top: targetPosition,
-            behavior: 'smooth'
+          // Use requestAnimationFrame for smoother scrolling
+          window.requestAnimationFrame(() => {
+            window.scrollTo({
+              top: targetPosition,
+              behavior: 'smooth'
+            });
           });
           
-          // Update URL without page jump
-          history.pushState(null, '', anchor.hash);
+          // Update URL without triggering navigation
+          history.replaceState(null, '', anchor.hash);
         }
       }
     };
 
-    // Add passive event listener for better scroll performance
     document.addEventListener('click', handleHashClick, { passive: false });
     
     return () => {
       document.removeEventListener('click', handleHashClick);
-      observer.disconnect();
     };
   }, []);
   
@@ -90,39 +80,70 @@ const Index = () => {
         keywords={seoConfig.home.keywords}
         image={seoConfig.home.image}
         url={seoConfig.home.url}
-        canonical="https://hjc-malaysia.com/"
+        canonical="https://hazijohar.com/"
       />
       <Navbar />
+      
+      {/* Hero section - immediately visible */}
       <div id="hero" className="mobile-touch-scroll">
         <HeroSection />
       </div>
+      
+      {/* Lazy-loaded sections for better performance */}
       <div className="mobile-sections-container">
-        <ExpectSection />
-        <div id="leadership" className="mobile-touch-scroll">
+        <OptimizedExpectSection />
+        
+        <LazySection 
+          id="leadership" 
+          className="mobile-touch-scroll"
+          threshold={0.2}
+          animationDelay={100}
+        >
           <FeaturedSpeakers />
-        </div>
-        <div id="services" className="mobile-touch-scroll">
+        </LazySection>
+        
+        <LazySection 
+          id="services" 
+          className="mobile-touch-scroll"
+          threshold={0.2}
+          animationDelay={200}
+        >
           <FeaturedSessions />
-        </div>
-        <div id="contact">
+        </LazySection>
+        
+        <LazySection 
+          id="contact"
+          threshold={0.2}
+          animationDelay={100}
+        >
           <GetTicketsCTA />
-        </div>
-        <div id="faq">
+        </LazySection>
+        
+        <LazySection 
+          id="faq"
+          threshold={0.2}
+          animationDelay={150}
+        >
           <FAQSection />
-        </div>
-        <div id="culture">
+        </LazySection>
+        
+        <LazySection 
+          id="culture"
+          threshold={0.2}
+          animationDelay={100}
+        >
           <LastYearSection />
-        </div>
+        </LazySection>
       </div>
       
-      {/* Scroll to top button */}
       <ScrollToTop />
       
-      {/* Preload critical assets for better performance */}
+      {/* Preload critical resources */}
       {!isMobile && (
-        <div className="hidden">
-          <link rel="preload" as="image" href="/placeholder.svg" />
-        </div>
+        <>
+          <link rel="preload" as="image" href="/og-image-home.jpg" />
+          <link rel="prefetch" as="document" href="/contact" />
+        </>
       )}
     </div>
   );
